@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.3
+Version: 0.7.4
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Wed Apr 12 2006 Tim Waugh <twaugh@redhat.com> 0.7.4-1
+- Updated to system-config-printer-0.7.4.
+
 * Fri Apr  7 2006 Tim Waugh <twaugh@redhat.com> 0.7.3-1
 - Added threads patch from pycups CVS.
 - Updated to system-config-printer-0.7.3.
