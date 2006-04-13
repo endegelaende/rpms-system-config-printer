@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.4
-Release: 1
+Release: 2
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -19,6 +19,8 @@ PreReq: rhpl >= 0.81
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
+
+Obsoletes: system-config-printer-gui <= 0.6.152
 
 %description
 system-config-mouse is a graphical user interface that allows
@@ -60,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Thu Apr 13 2006 Tim Waugh <twaugh@redhat.com> 0.7.4-2
+- Obsoletes: system-config-printer-gui <= 0.6.152
+
 * Wed Apr 12 2006 Tim Waugh <twaugh@redhat.com> 0.7.4-1
 - Updated to system-config-printer-0.7.4.
 
