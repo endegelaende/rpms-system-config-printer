@@ -1,4 +1,4 @@
-%define pycups_version 1.9.6
+%define pycups_version 1.9.7
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Sat Apr 15 2006 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.7.
+
 * Thu Apr 13 2006 Tim Waugh <twaugh@redhat.com> 0.7.4-2
 - Obsoletes: system-config-printer-gui <= 0.6.152
 
