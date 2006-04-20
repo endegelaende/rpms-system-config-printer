@@ -1,4 +1,4 @@
-%define pycups_version 1.9.7
+%define pycups_version 1.9.8
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -8,8 +8,6 @@ License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
-
-Patch0: pycups-threads.patch
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -28,9 +26,6 @@ the user to configure a CUPS print server.
 
 %prep
 %setup -q -a 1
-pushd pycups-%{pycups_version}
-%patch0 -p1 -b .threads
-popd
 
 %build
 pushd pycups-%{pycups_version}
@@ -62,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Thu Apr 20 2006 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.8.  No longer need threads patch.
+
 * Sat Apr 15 2006 Tim Waugh <twaugh@redhat.com>
 - Updated to pycups-1.9.7.
 
