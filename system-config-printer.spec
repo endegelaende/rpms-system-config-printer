@@ -11,7 +11,8 @@ Source1: pycups-%{pycups_version}.tar.bz2
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
-BuildRequires: cups-devel, python-devel
+BuildRequires: cups-devel >= 1.2
+BuildRequires: python-devel
 PreReq: python, python-abi = %{pyver}
 PreReq: rhpl >= 0.81
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -57,6 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Fri Apr 21 2006 Tim Waugh <twaugh@redhat.com>
+- Build requires CUPS 1.2.
+
 * Thu Apr 20 2006 Tim Waugh <twaugh@redhat.com> 0.7.5-1
 - Updated to pycups-1.9.8.  No longer need threads patch.
 - Updated to system-config-printer-0.7.5.
