@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.5
+Version: 0.7.6
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -58,6 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}
 
 %changelog
+* Fri Apr 28 2006 Tim Waugh <twaugh@redhat.com>
+- Make it actually run.
+
 * Fri Apr 21 2006 Tim Waugh <twaugh@redhat.com>
 - Build requires CUPS 1.2.
 
