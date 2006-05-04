@@ -8,16 +8,19 @@ License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
+Source2: system-config-printer.desktop
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel
+BuildRequires: desktop-file-utils >= 0.2.92
 PreReq: python, python-abi = %{pyver}
 PreReq: rhpl >= 0.81
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
+Requires: PyXML
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 
@@ -46,6 +49,15 @@ install -m0644 *.glade %buildroot%{_datadir}/%{name}/
 chmod 755 %buildroot%{_datadir}/%{name}/%{name}.py
 install -m0755 %{name} %buildroot%{_bindir}/
 
+# Desktop file installation.
+mkdir $RPM_BUILD_ROOT%{_datadir}/applications
+desktop-file-install --vendor redhat \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications        \
+  --add-category X-Red-Hat-Base                        \
+  --add-category SystemSetup                           \
+  --add-category Application                           \
+  %{SOURCE2}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -56,8 +68,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/python*/*/*.so
 %{_bindir}/%{name}
 %{_datadir}/%{name}
+%{_datadir}/applications/redhat-system-config-printer.desktop
 
 %changelog
+* Thu May  4 2006 Tim Waugh <twaugh@redhat.com>
+- Desktop file.
+- Requires PyXML.
+
 * Fri Apr 28 2006 Tim Waugh <twaugh@redhat.com>
 - Make it actually run.
 
