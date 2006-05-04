@@ -8,7 +8,6 @@ License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
-Source2: system-config-printer.desktop
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -56,7 +55,7 @@ desktop-file-install --vendor redhat \
   --add-category X-Red-Hat-Base                        \
   --add-category SystemSetup                           \
   --add-category Application                           \
-  %{SOURCE2}
+  system-config-printer.desktop
 
 %clean
 rm -rf $RPM_BUILD_ROOT
