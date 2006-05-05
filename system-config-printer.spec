@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.7
-Release: 1
+Release: 2
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -86,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
-* Fri May  5 2006 Tim Waugh <twaugh@redhat.com>
+* Fri May  5 2006 Tim Waugh <twaugh@redhat.com> 0.7.7-2
 - Ship PAM and userhelper files.
 - Requires usermode.
 - Added missing options.py file.
