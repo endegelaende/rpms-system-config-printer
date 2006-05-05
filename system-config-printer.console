@@ -1,0 +1,4 @@
+USER=root
+PROGRAM=/usr/sbin/system-config-printer
+SESSION=true
+FALLBACK=true

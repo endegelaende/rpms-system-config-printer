@@ -8,7 +8,9 @@ License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
-Source2: options.py
+Source2: system-config-printer.pam
+Source3: system-config-printer.console
+Source4: options.py
 Patch0: pycups-no-classes.patch
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
@@ -22,6 +24,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: PyXML
+Requires: usermode >= 1.37
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 
@@ -48,10 +51,15 @@ popd
 
 mkdir -p %buildroot%{_datadir}/%{name}
 mkdir -p %buildroot%{_bindir}
-install -m0644 *.py %{SOURCE2} %buildroot%{_datadir}/%{name}/
+mkdir -p %buildroot%{_sbindir}
+mkdir -p %buildroot%{_sysconfdir}/pam.d
+mkdir -p %buildroot%{_sysconfdir}/security/console.apps
+install -m0755 *.py %{SOURCE4} %buildroot%{_datadir}/%{name}/
 install -m0644 *.glade %buildroot%{_datadir}/%{name}/
-chmod 755 %buildroot%{_datadir}/%{name}/%{name}.py
-install -m0755 %{name} %buildroot%{_bindir}/
+install -m0755 %{name} %buildroot%{_sbindir}/
+install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
+install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
+ln -s consolehelper %buildroot%{_bindir}/%{name}
 
 # Desktop file installation.
 mkdir $RPM_BUILD_ROOT%{_datadir}/applications
@@ -71,11 +79,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog README NEWS TODO
 %{_libdir}/python*/*/*.so
 %{_bindir}/%{name}
+%{_sbindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/redhat-system-config-printer.desktop
+%{_sysconfdir}/pam.d/%{name}
+%{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
 * Fri May  5 2006 Tim Waugh <twaugh@redhat.com>
+- Ship PAM and userhelper files.
+- Requires usermode.
 - Added missing options.py file.
 - Fix getClasses() in pycups.
 
