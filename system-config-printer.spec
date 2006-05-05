@@ -12,6 +12,7 @@ Source2: system-config-printer.pam
 Source3: system-config-printer.console
 Source4: options.py
 Patch0: pycups-no-classes.patch
+Patch1: pycups-segfault.patch
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -36,6 +37,7 @@ the user to configure a CUPS print server.
 %setup -q -a 1
 pushd pycups-%{pycups_version}
 %patch0 -p1 -b .no-classes
+%patch1 -p1 -b .segfault
 popd
 
 %build
@@ -86,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Fri May  5 2006 Tim Waugh <twaugh@redhat.com>
+- Fix pycups segfault.
+
 * Fri May  5 2006 Tim Waugh <twaugh@redhat.com> 0.7.7-2
 - Ship PAM and userhelper files.
 - Requires usermode.
