@@ -8,6 +8,8 @@ License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
+Source2: options.py
+Patch0: pycups-no-classes.patch
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -29,6 +31,9 @@ the user to configure a CUPS print server.
 
 %prep
 %setup -q -a 1
+pushd pycups-%{pycups_version}
+%patch0 -p1 -b .no-classes
+popd
 
 %build
 pushd pycups-%{pycups_version}
@@ -43,7 +48,7 @@ popd
 
 mkdir -p %buildroot%{_datadir}/%{name}
 mkdir -p %buildroot%{_bindir}
-install -m0644 *.py %buildroot%{_datadir}/%{name}/
+install -m0644 *.py %{SOURCE2} %buildroot%{_datadir}/%{name}/
 install -m0644 *.glade %buildroot%{_datadir}/%{name}/
 chmod 755 %buildroot%{_datadir}/%{name}/%{name}.py
 install -m0755 %{name} %buildroot%{_bindir}/
@@ -70,6 +75,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/redhat-system-config-printer.desktop
 
 %changelog
+* Fri May  5 2006 Tim Waugh <twaugh@redhat.com>
+- Added missing options.py file.
+- Fix getClasses() in pycups.
+
 * Thu May  4 2006 Tim Waugh <twaugh@redhat.com> 0.7.7-1
 - Updated to system-config-printer-0.7.7.
 - Updated to pycups-1.9.9.
