@@ -10,7 +10,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Source4: options.py
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -50,7 +49,7 @@ mkdir -p %buildroot%{_bindir}
 mkdir -p %buildroot%{_sbindir}
 mkdir -p %buildroot%{_sysconfdir}/pam.d
 mkdir -p %buildroot%{_sysconfdir}/security/console.apps
-install -m0755 *.py %{SOURCE4} %buildroot%{_datadir}/%{name}/
+install -m0755 *.py %buildroot%{_datadir}/%{name}/
 install -m0644 *.glade %buildroot%{_datadir}/%{name}/
 install -m0755 %{name} %buildroot%{_sbindir}/
 install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
