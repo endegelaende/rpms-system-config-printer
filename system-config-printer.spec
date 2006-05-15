@@ -1,4 +1,4 @@
-%define pycups_version 1.9.9
+%define pycups_version 1.9.10
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -11,8 +11,6 @@ Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
 Source4: options.py
-Patch0: pycups-no-classes.patch
-Patch1: pycups-segfault.patch
 
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
@@ -35,10 +33,6 @@ the user to configure a CUPS print server.
 
 %prep
 %setup -q -a 1
-pushd pycups-%{pycups_version}
-%patch0 -p1 -b .no-classes
-%patch1 -p1 -b .segfault
-popd
 
 %build
 pushd pycups-%{pycups_version}
@@ -88,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Mon May 15 2006 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.10.
+
 * Fri May  5 2006 Tim Waugh <twaugh@redhat.com>
 - Fix pycups segfault.
 
