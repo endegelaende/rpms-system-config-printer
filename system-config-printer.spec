@@ -23,6 +23,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: PyXML
 Requires: usermode >= 1.37
+Requires: foomatic
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 
@@ -81,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Fri May 26 2006 Tim Waugh <twaugh@redhat.com>
+- Require foomatic (bug #192764).
+
 * Thu May 25 2006 Tim Waugh <twaugh@redhat.com> 0.7.9-1
 - Updated to pycups-1.9.11.
 - Updated to system-config-printer-0.7.9.
