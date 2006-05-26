@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.9
+Version: 0.7.10
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -82,8 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
-* Fri May 26 2006 Tim Waugh <twaugh@redhat.com>
+* Fri May 26 2006 Tim Waugh <twaugh@redhat.com> 0.7.10-1
 - Require foomatic (bug #192764).
+- Updated to system-config-printer-0.7.10.
 
 * Thu May 25 2006 Tim Waugh <twaugh@redhat.com> 0.7.9-1
 - Updated to pycups-1.9.11.
