@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.10
-Release: 1
+Release: 2
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -21,6 +21,7 @@ PreReq: rhpl >= 0.81
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
+Requires: pygobject2
 Requires: PyXML
 Requires: usermode >= 1.37
 Requires: foomatic
@@ -82,6 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Sat May 27 2006 Tim Waugh <twaugh@redhat.com> 0.7.10-2
+- Requires gobject2 (bug #192764).
+
 * Fri May 26 2006 Tim Waugh <twaugh@redhat.com> 0.7.10-1
 - Require foomatic (bug #192764).
 - Updated to system-config-printer-0.7.10.
