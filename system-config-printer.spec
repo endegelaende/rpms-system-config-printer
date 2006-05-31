@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.10
-Release: 2
+Version: 0.7.11
+Release: 1
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -106,8 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
-* Wed May 31 2006 Tim Waugh <twaugh@redhat.com>
+* Wed May 31 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-1
 - Split out system-config-printer-libs.
+- Updated to system-config-printer-0.7.11.
 
 * Sat May 27 2006 Tim Waugh <twaugh@redhat.com> 0.7.10-2
 - Requires gobject2 (bug #192764).
