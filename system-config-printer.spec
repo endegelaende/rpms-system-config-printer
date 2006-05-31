@@ -16,21 +16,30 @@ Source3: system-config-printer.console
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel
 BuildRequires: desktop-file-utils >= 0.2.92
-PreReq: python, python-abi = %{pyver}
-PreReq: rhpl >= 0.81
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
-Requires: PyXML
 Requires: usermode >= 1.37
-Requires: foomatic
+PreReq: system-config-printer-libs = %{epoch}:%{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 
 %description
 system-config-mouse is a graphical user interface that allows
 the user to configure a CUPS print server.
+
+%package libs
+Summary: Common code for the graphical and non-graphical pieces.
+Group: System Environment/Base
+PreReq: python, python-abi = %{pyver}
+Requires: rhpl >= 0.81
+Requires: foomatic
+Requires: PyXML
+
+%description libs
+The common code used by both the graphical and non-graphical parts of
+the configuration tool.
 
 %prep
 %setup -q -a 1
@@ -70,19 +79,36 @@ desktop-file-install --vendor redhat \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files libs
 %defattr(-,root,root)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
-%doc ChangeLog README NEWS TODO
 %{_libdir}/python*/*/*.so
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/foomatic.py*
+%{_datadir}/%{name}/cupshelpers.py*
+
+%files
+%defattr(-,root,root)
+%doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
 %{_sbindir}/%{name}
-%{_datadir}/%{name}
+%{_datadir}/%{name}/cupsd.py*
+%{_datadir}/%{name}/nametree.py*
+%{_datadir}/%{name}/options.py*
+%{_datadir}/%{name}/optionwidgets.py*
+%{_datadir}/%{name}/probe_printer.py*
+%{_datadir}/%{name}/system-config-printer.py*
+%{_datadir}/%{name}/gtk_label_autowrap.py*
+%{_datadir}/%{name}/gtk_html2pango.py*
+%{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Wed May 31 2006 Tim Waugh <twaugh@redhat.com>
+- Split out system-config-printer-libs.
+
 * Sat May 27 2006 Tim Waugh <twaugh@redhat.com> 0.7.10-2
 - Requires gobject2 (bug #192764).
 
