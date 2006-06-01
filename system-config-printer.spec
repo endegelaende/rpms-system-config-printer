@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.11
-Release: 2
+Release: 3
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -21,7 +21,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
 Requires: usermode >= 1.37
-PreReq: system-config-printer-libs = %{epoch}:%{version}-%{release}
+PreReq: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Thu Jun  1 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-3
+- Fix libs dependency.
+
 * Thu Jun  1 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-2
 - Moved the gtk_html2pango module to the libs package (needed by
   foomatic.py).
