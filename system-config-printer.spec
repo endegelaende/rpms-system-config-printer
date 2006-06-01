@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.11
-Release: 1
+Release: 2
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -86,6 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/foomatic.py*
 %{_datadir}/%{name}/cupshelpers.py*
+%{_datadir}/%{name}/gtk_html2pango.py*
 
 %files
 %defattr(-,root,root)
@@ -99,13 +100,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
-%{_datadir}/%{name}/gtk_html2pango.py*
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Thu Jun  1 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-2
+- Moved the gtk_html2pango module to the libs package (needed by
+  foomatic.py).
+
 * Wed May 31 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-1
 - Split out system-config-printer-libs.
 - Updated to system-config-printer-0.7.11.
