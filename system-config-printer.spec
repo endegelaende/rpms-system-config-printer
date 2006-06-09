@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.11
-Release: 3
+Version: 0.7.12
+Release: 1
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Fri Jun  9 2006 Tim Waugh <twaugh@redhat.com> 0.7.12-1
+- 0.7.12.
+
 * Thu Jun  1 2006 Tim Waugh <twaugh@redhat.com> 0.7.11-3
 - Fix libs dependency.
 
