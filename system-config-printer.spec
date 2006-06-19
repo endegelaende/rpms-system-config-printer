@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.12
+Version: 0.7.13
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -45,30 +45,29 @@ the configuration tool.
 %setup -q -a 1
 
 %build
+%configure
+
 pushd pycups-%{pycups_version}
 make
 popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
+%makeinstall
+
 pushd pycups-%{pycups_version}
 make install DESTDIR=%buildroot
 popd
 
-mkdir -p %buildroot%{_datadir}/%{name}
 mkdir -p %buildroot%{_bindir}
-mkdir -p %buildroot%{_sbindir}
 mkdir -p %buildroot%{_sysconfdir}/pam.d
 mkdir -p %buildroot%{_sysconfdir}/security/console.apps
-install -m0755 *.py %buildroot%{_datadir}/%{name}/
-install -m0644 *.glade %buildroot%{_datadir}/%{name}/
-install -m0755 %{name} %buildroot%{_sbindir}/
 install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
 install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
 
 # Desktop file installation.
-mkdir $RPM_BUILD_ROOT%{_datadir}/applications
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install --vendor redhat \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications        \
   --add-category X-Red-Hat-Base                        \
@@ -106,6 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Mon Jun 19 2006 Tim Waugh <twaugh@redhat.com> 0.7.13-1
+- 0.7.13.
+
 * Fri Jun  9 2006 Tim Waugh <twaugh@redhat.com> 0.7.12-1
 - 0.7.12.
 
