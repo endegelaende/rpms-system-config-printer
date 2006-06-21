@@ -76,10 +76,12 @@ desktop-file-install --vendor redhat \
   --add-category Application                           \
   system-config-printer.desktop
 
+%find_lang system-config-printer
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files libs
+%files libs -f system-config-printer.lang
 %defattr(-,root,root)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
 %{_libdir}/python*/*/*.so
@@ -93,6 +95,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
 %{_sbindir}/%{name}
+%{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupsd.py*
 %{_datadir}/%{name}/nametree.py*
 %{_datadir}/%{name}/options.py*
@@ -108,6 +111,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Wed Jun 21 2006 Tim Waugh <twaugh@redhat.com>
 - Build requires gettext-devel.
+- Ship translations.
 
 * Tue Jun 20 2006 Tim Waugh <twaugh@redhat.com> 0.7.14-1
 - 0.7.14.
