@@ -81,7 +81,7 @@ desktop-file-install --vendor redhat \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files libs -f system-config-printer.lang
+%files libs
 %defattr(-,root,root)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
 %{_libdir}/python*/*/*.so
@@ -90,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/gtk_html2pango.py*
 
-%files
+%files -f system-config-printer.lang
 %defattr(-,root,root)
 %doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
