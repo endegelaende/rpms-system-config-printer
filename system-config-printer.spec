@@ -16,6 +16,7 @@ Source3: system-config-printer.console
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel
 BuildRequires: desktop-file-utils >= 0.2.92
+BuildRequires: gettext-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
@@ -105,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Wed Jun 21 2006 Tim Waugh <twaugh@redhat.com>
+- Build requires gettext-devel.
+
 * Tue Jun 20 2006 Tim Waugh <twaugh@redhat.com> 0.7.14-1
 - 0.7.14.
 
