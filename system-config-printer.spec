@@ -101,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/probe_printer.py*
+%{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/*.glade
