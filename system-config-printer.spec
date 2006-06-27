@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.17
+Version: 0.7.18
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -110,7 +110,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
-* Tue Jun 27 2006 Tim Waugh <twaugh@redhat.com>
+* Tue Jun 27 2006 Tim Waugh <twaugh@redhat.com> 0.7.18-1
+- 0.7.18.
 - Ship translations with libs subpackage.
 
 * Fri Jun 23 2006 Tim Waugh <twaugh@redhat.com> 0.7.17-1
