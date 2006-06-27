@@ -81,7 +81,7 @@ desktop-file-install --vendor redhat \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files libs
+%files libs -f system-config-printer.lang
 %defattr(-,root,root)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
 %{_libdir}/python*/*/*.so
@@ -90,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/gtk_html2pango.py*
 
-%files -f system-config-printer.lang
+%files
 %defattr(-,root,root)
 %doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
@@ -110,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/security/console.apps/%{name}
 
 %changelog
+* Tue Jun 27 2006 Tim Waugh <twaugh@redhat.com>
+- Ship translations with libs subpackage.
+
 * Fri Jun 23 2006 Tim Waugh <twaugh@redhat.com> 0.7.17-1
 - 0.7.17.
 
