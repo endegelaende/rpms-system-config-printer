@@ -109,7 +109,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
 
+%post
+/bin/rm -f /var/cache/foomatic/foomatic.pickle
+exit 0
+
 %changelog
+* Fri Jun 30 2006 Tim Waugh <twaugh@redhat.com>
+- Remove foomatic pickle file post-install.
+
 * Tue Jun 27 2006 Tim Waugh <twaugh@redhat.com> 0.7.18-1
 - 0.7.18.
 - Ship translations with libs subpackage.
