@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.19
+Version: 0.7.20
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -114,6 +114,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
+* Mon Jul  3 2006 Tim Waugh <twaugh@redhat.com> 0.7.20-1
+- 0.7.20.
+
 * Fri Jun 30 2006 Tim Waugh <twaugh@redhat.com> 0.7.19-1
 - 0.7.19.
 - Remove foomatic pickle file post-install.
