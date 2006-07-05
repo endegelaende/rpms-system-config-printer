@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.20
+Version: 0.7.21
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -114,8 +114,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
-* Wed Jul  5 2006 Tim Waugh <twaugh@redhat.com>
+* Wed Jul  5 2006 Tim Waugh <twaugh@redhat.com> 0.7.21-1
 - Updated to pycups-1.9.12.
+- 0.7.21.
 
 * Mon Jul  3 2006 Tim Waugh <twaugh@redhat.com> 0.7.20-1
 - 0.7.20.
