@@ -27,7 +27,7 @@ PreReq: system-config-printer-libs = %{version}-%{release}
 Obsoletes: system-config-printer-gui <= 0.6.152
 
 %description
-system-config-mouse is a graphical user interface that allows
+system-config-printer is a graphical user interface that allows
 the user to configure a CUPS print server.
 
 %package libs
@@ -114,6 +114,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
+* Fri Aug 11 2006 Tim Waugh <twaugh@redhat.com>
+- Fixed description (bug #202189).
+
 * Thu Aug  3 2006 Tim Waugh <twaugh@redhat.com> 0.7.24-1
 - 0.7.24.
 
