@@ -17,6 +17,7 @@ BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
+BuildRequires: intltool
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
@@ -106,6 +107,7 @@ exit 0
 
 %changelog
 * Wed Aug 30 2006 Tim Waugh <twaugh@redhat.com> 0.7.27-1
+- Build requires intltool.
 - 0.7.27.
 
 * Wed Aug 23 2006 Tim Waugh <twaugh@redhat.com> 0.7.26-1
