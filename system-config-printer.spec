@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.26
+Version: 0.7.27
 Release: 1
 License: GPL
 Group: System Environment/Base
@@ -67,15 +67,6 @@ install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
 install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
 
-# Desktop file installation.
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-desktop-file-install --vendor redhat \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications        \
-  --add-category X-Red-Hat-Base                        \
-  --add-category SystemSetup                           \
-  --add-category Application                           \
-  system-config-printer.desktop
-
 %find_lang system-config-printer
 
 %clean
@@ -114,6 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
+* Wed Aug 30 2006 Tim Waugh <twaugh@redhat.com> 0.7.27-1
+- 0.7.27.
+
 * Wed Aug 23 2006 Tim Waugh <twaugh@redhat.com> 0.7.26-1
 - 0.7.26.  Fixes bug # 203149.
 
