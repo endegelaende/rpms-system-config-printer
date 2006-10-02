@@ -1,4 +1,4 @@
-%define pycups_version 1.9.12
+%define pycups_version 1.9.13
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
+* Mon Oct  2 2006 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.13 for HTTP_FORBIDDEN.
+
 * Fri Sep 29 2006 Tim Waugh <twaugh@redhat.com> 0.7.31-1
 - 0.7.31:
   - Select recommended driver automatically (bug #208606).
