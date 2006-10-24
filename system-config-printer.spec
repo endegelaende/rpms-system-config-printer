@@ -14,7 +14,7 @@ Source3: system-config-printer.console
 %{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
 BuildRequires: cups-devel >= 1.2
-BuildRequires: python-devel
+BuildRequires: python-devel >= 2.4
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 exit 0
 
 %changelog
+* Tue Oct 24 2006 Tim Waugh <twaugh@redhat.com>
+- Build requires Python 2.4.
+
 * Mon Oct  2 2006 Tim Waugh <twaugh@redhat.com> 0.7.32-1
 - Updated to pycups-1.9.13 for HTTP_FORBIDDEN.
 - 0.7.32:
