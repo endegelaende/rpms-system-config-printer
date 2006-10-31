@@ -23,6 +23,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
 Requires: usermode >= 1.37
+Requires: desktop-file-utils >= 0.2.92
 PreReq: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
@@ -103,9 +104,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
+/usr/bin/update-desktop-database &>/dev/null ||:
 exit 0
 
+%postun
+if [ "$1" = "0" ]; then
+  /usr/bin/update-desktop-database &>/dev/null ||:
+fi
+
 %changelog
+* Tue Oct 31 2006 Tim Waugh <twaugh@redhat.com>
+- Update desktop database (bug #213249).
+
 * Tue Oct 24 2006 Tim Waugh <twaugh@redhat.com>
 - Build requires Python 2.4.
 
