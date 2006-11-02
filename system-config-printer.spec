@@ -1,4 +1,4 @@
-%define pycups_version 1.9.13
+%define pycups_version 1.9.14
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -113,6 +113,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Nov  2 2006 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.14 (bug #213136).
+
 * Tue Oct 31 2006 Tim Waugh <twaugh@redhat.com>
 - Update desktop database (bug #213249).
 
