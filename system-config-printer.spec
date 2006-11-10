@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.35
+Version: 0.7.36
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -113,6 +113,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Nov 10 2006 Tim Waugh <twaugh@redhat.com> 0.7.36-1
+- 0.7.36:
+  - Match against commandset (bug #214181).
+  - Parse 'ieee1284' foomatic autodetect entries (bug #214761).
+  - Don't remove foomatic PPDs from the list (bug #197331).
+
 * Tue Nov  7 2006 Tim Waugh <twaugh@redhat.com> 0.7.35-1
 - 0.7.35.
 
