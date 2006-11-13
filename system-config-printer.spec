@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.36
+Version: 0.7.37
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -113,6 +113,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Nov 13 2006 Tim Waugh <twaugh@redhat.com> 0.7.37-1
+- 0.7.37:
+  - Allow cancellation of test pages (bug #215054).
+
 * Fri Nov 10 2006 Tim Waugh <twaugh@redhat.com> 0.7.36-1
 - 0.7.36:
   - Match against commandset (bug #214181).
