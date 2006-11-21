@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.38
+Version: 0.7.39
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -113,6 +113,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Nov 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.39-1
+- 0.7.39:
+  - Busy cursor while loading foomatic and PPD list (bug #215527).
+  - Make PPD NickName selectable.
+  - Added SMB hint label on device screen (bug #212759).
+
 * Tue Nov 14 2006 Tim Waugh <twaugh@redhat.com> 0.7.38-1
 - Updated pycups to 1.9.15.
 - 0.7.38:
