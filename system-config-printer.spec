@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.39
+Version: 0.7.40
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -113,6 +113,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Nov 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.40-1
+- 0.7.40:
+  - Removed username:password from hint string because we add that in
+    afterwards.
+  - Don't set button widths in create-printer dialog (bug #217025).
+
 * Tue Nov 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.39-1
 - 0.7.39:
   - Busy cursor while loading foomatic and PPD list (bug #215527).
