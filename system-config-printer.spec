@@ -39,6 +39,7 @@ PreReq: python, python-abi = %{pyver}
 Requires: rhpl >= 0.81
 Requires: foomatic
 Requires: PyXML
+Provides: pycups = %{pycups_version}
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
@@ -113,6 +114,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Nov 30 2006 Tim Waugh <twaugh@redhat.com>
+- Provide pycups feature.
+
 * Tue Nov 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.40-1
 - 0.7.40:
   - Removed username:password from hint string because we add that in
