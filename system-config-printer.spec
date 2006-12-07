@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.40
+Version: 0.7.41
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -114,8 +114,23 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Thu Dec  7 2006 Tim Waugh <twaugh@redhat.com>
+* Thu Dec  7 2006 Tim Waugh <twaugh@redhat.com> 0.7.41-1
 - Updated pycups to 1.9.16.
+- 0.7.41:
+  - Reconnect smoothly after uploading new configuration.
+  - Update lpoptions when setting default printer if it conflicts with
+    the new setting (bug #217395).
+  - Fixed typo in show_HTTP_Error (bug #217537).
+  - Don't pre-select make and model when not discoverable for chosen
+    device (bug #217518).
+  - Set Forward button sensitive on Device screen in new-printer
+    dialog (bug #217515).
+  - Keep Server Settings selected after applying changes if it was selected
+    before.
+  - Set Connecting dialog transient for main window.
+  - Center Connecting dialog on parent.
+  - Optional 'reason' argument for cupshelpers.Printer.setEnabled.
+  - Describe devices that have no optional parameters.
 
 * Thu Nov 30 2006 Tim Waugh <twaugh@redhat.com>
 - Provide pycups feature.
