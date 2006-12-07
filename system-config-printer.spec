@@ -3,15 +3,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.41
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-
-%{expand: %%define pyver %(python -c 'import sys;print(sys.version[0:3])')}
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -35,7 +33,7 @@ the user to configure a CUPS print server.
 %package libs
 Summary: Common code for the graphical and non-graphical pieces.
 Group: System Environment/Base
-PreReq: python, python-abi = %{pyver}
+PreReq: python
 Requires: rhpl >= 0.81
 Requires: foomatic
 Requires: PyXML
@@ -114,6 +112,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.7.41-2
+- build against python 2.5
+
 * Thu Dec  7 2006 Tim Waugh <twaugh@redhat.com> 0.7.41-1
 - Updated pycups to 1.9.16.
 - 0.7.41:
