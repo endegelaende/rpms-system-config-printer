@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.41
-Release: 2%{?dist}
+Version: 0.7.42
+Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -112,6 +112,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Dec 11 2006 Tim Waugh <twaugh@redhat.com> 0.7.42-1
+- 0.7.42:
+  - Fixed typo in command set matching code.
+  - Case-insensitive matching when Device ID not known to database.
+
 * Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.7.41-2
 - build against python 2.5
 
