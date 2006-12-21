@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.42
+Version: 0.7.43
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,13 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Dec 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.43-1
+  - Don't check against IEEE 1284 DES field at all.
+  - Merged device matching code (bug #219518).
+  - Catch non-fatal errors when auto-matching device.
+  - Fixed driver checking bug involving pipelines (bug #220347).
+  - Show PPD errors (bug #220136).
+
 * Mon Dec 11 2006 Tim Waugh <twaugh@redhat.com> 0.7.42-1
 - 0.7.42:
   - Fixed typo in command set matching code.
