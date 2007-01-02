@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.43
+Version: 0.7.44
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,7 +112,13 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Jan  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.44-1
+- 0.7.44:
+  - Fixed traceback in error display (bug #220136).
+  - Preserve case in model string when dumping debug output.
+
 * Thu Dec 21 2006 Tim Waugh <twaugh@redhat.com> 0.7.43-1
+- 0.7.43:
   - Don't check against IEEE 1284 DES field at all.
   - Merged device matching code (bug #219518).
   - Catch non-fatal errors when auto-matching device.
