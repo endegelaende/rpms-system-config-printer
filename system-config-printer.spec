@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.44
+Version: 0.7.45
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,8 +112,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Wed Jan  3 2007 Tim Waugh <twaugh@redhat.com>
+* Wed Jan  3 2007 Tim Waugh <twaugh@redhat.com> 0.7.45-1
 - Updated to pycups-1.9.17.
+- 0.7.45:
+  - Fixed traceback in driver check.
 
 * Tue Jan  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.44-1
 - 0.7.44:
