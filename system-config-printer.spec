@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.45
+Version: 0.7.46
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Jan  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.46-1
+- 0.7.46:
+  - Fixed page size problem (bug #221702).
+  - Added 'ro' to ALL_LINGUAS.
+
 * Wed Jan  3 2007 Tim Waugh <twaugh@redhat.com> 0.7.45-1
 - Updated to pycups-1.9.17.
 - 0.7.45:
