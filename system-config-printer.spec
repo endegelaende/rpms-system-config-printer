@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.46
+Version: 0.7.47
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Jan 12 2007 Tim Waugh <twaugh@redhat.com> 0.7.47-1
+- 0.7.47:
+  - Fixed minor text bugs (bug #177433).
+  - Handle shell builtins in the driver check (bug #222413).
+
 * Mon Jan  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.46-1
 - 0.7.46:
   - Fixed page size problem (bug #221702).
