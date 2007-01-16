@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.48
+Version: 0.7.49
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Jan 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.49-1
+- 0.7.49:
+  - Fixed a traceback in the driver check code.
+  - Fixed a typo in the conflicts message.
+  - Handle InputSlot/ManualFeed specially because libcups does (bug #222490).
+
 * Mon Jan 15 2007 Tim Waugh <twaugh@redhat.com> 0.7.48-1
 - 0.7.48:
   - Updated translations.
