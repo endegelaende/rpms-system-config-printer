@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.49
+Version: 0.7.50
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,18 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Feb  7 2007 Tim Waugh <twaugh@redhat.com> 0.7.50-1
+- 0.7.50:
+  - Fixed hex digits list (bug #223770).
+  - Added bs translation.
+  - Don't put the ellipsis in the real device URI (bug #227643).
+  - Don't check for existing drivers for complex command lines (bug #225104).
+  - Allow floating point job options (bug #224651).
+  - Prevent shared/published confusion (bug #225081).
+  - Fixed PPD page size setting.
+  - Avoid os.remove exception (bug #226703).
+  - Handle unknown job options (bug #225538).
+
 * Tue Jan 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.49-1
 - 0.7.49:
   - Fixed a traceback in the driver check code.
