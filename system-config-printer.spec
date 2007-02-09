@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.50
+Version: 0.7.51
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,15 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Feb  9 2007 Tim Waugh <twaugh@redhat.com> 0.7.51-1
+- 0.7.51:
+  - Prevent display glitch in job options list when clicking on a printer
+    repeatedly.
+  - List conflicting PPD options, and embolden the relevant tab
+    labels (bug #226368).
+  - Fixed typo in 'set default' handling that caused a traceback (bug #227936).
+  - Handle interactive search a little better (bug #227935).
+
 * Wed Feb  7 2007 Tim Waugh <twaugh@redhat.com> 0.7.50-1
 - 0.7.50:
   - Fixed hex digits list (bug #223770).
