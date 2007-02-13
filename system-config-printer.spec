@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.51
+Version: 0.7.52
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -112,6 +112,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Feb 13 2007 Tim Waugh <twaugh@redhat.com> 0.7.52-1
+- 0.7.52:
+  - Sort models using cups.modelSort before scanning for a close
+    match (bug #228505).
+  - Fixed matching logic (bug #228505).
+
 * Fri Feb  9 2007 Tim Waugh <twaugh@redhat.com> 0.7.51-1
 - 0.7.51:
   - Prevent display glitch in job options list when clicking on a printer
