@@ -34,7 +34,6 @@ the user to configure a CUPS print server.
 Summary: Common code for the graphical and non-graphical pieces.
 Group: System Environment/Base
 PreReq: python
-Requires: rhpl >= 0.81
 Requires: foomatic
 Requires: PyXML
 Provides: pycups = %{pycups_version}
@@ -112,6 +111,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Feb 14 2007 Tim Waugh <twaugh@redhat.com>
+- No longer requires rhpl (since 0.7.53).
+
 * Tue Feb 13 2007 Tim Waugh <twaugh@redhat.com> 0.7.52-1
 - 0.7.52:
   - Sort models using cups.modelSort before scanning for a close
