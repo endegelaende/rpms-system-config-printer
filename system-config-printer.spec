@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.54
+Version: 0.7.55
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -111,6 +111,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Feb 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.55-1
+- 0.7.55:
+  - Use converted value for job option widgets.
+
 * Tue Feb 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.54-1
 - 0.7.54:
   - Removed debugging code.
