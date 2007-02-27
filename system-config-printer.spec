@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.53
+Version: 0.7.54
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -111,7 +111,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Wed Feb 14 2007 Tim Waugh <twaugh@redhat.com> 0.7.53-1
+* Tue Feb 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.54-1
+- 0.7.54:
+  - Removed debugging code.
+
+* Tue Feb 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.53-1
 - No longer requires rhpl (since 0.7.53).
 - 0.7.53:
   - Use gettext instead of rhpl.translate.
