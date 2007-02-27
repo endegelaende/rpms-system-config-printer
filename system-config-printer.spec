@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.52
+Version: 0.7.53
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -111,8 +111,19 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Wed Feb 14 2007 Tim Waugh <twaugh@redhat.com>
+* Wed Feb 14 2007 Tim Waugh <twaugh@redhat.com> 0.7.53-1
 - No longer requires rhpl (since 0.7.53).
+- 0.7.53:
+  - Use gettext instead of rhpl.translate.
+  - Better layout for PPD options.
+  - Added scrollbars to main printer list (bug #229453).
+  - Set maximum width of default printer label (bug #229453).
+  - Handle applying changes correctly when switching to another
+    printer (bug #229378).
+  - Don't crash when failing to fetch the PPD (bug #229406).
+  - Make the text entry boxes sensitive but not editable for remote
+    printers (bug #229381).
+  - Better job options screen layout (bug #222272).
 
 * Tue Feb 13 2007 Tim Waugh <twaugh@redhat.com> 0.7.52-1
 - 0.7.52:
