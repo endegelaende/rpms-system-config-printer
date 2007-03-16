@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.55
+Version: 0.7.56
 Release: 1%{?dist}
 License: GPL
 Group: System Environment/Base
@@ -111,6 +111,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Mar 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.56-1
+- 0.7.56:
+  - Parse Boolean strings correctly in job options.
+  - Small command-set list/string fix (bug #230665).
+  - Handle hostname look-up failures.
+  - Updated filter-to-driver map.
+  - Don't parse printers.conf (bug #231826).
+
 * Tue Feb 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.55-1
 - 0.7.55:
   - Use converted value for job option widgets.
