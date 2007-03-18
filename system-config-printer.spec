@@ -1,9 +1,9 @@
-%define pycups_version 1.9.17
+%define pycups_version 1.9.18
 
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.56
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -111,6 +111,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Sun Mar 18 2007 Tim Waugh <twaugh@redhat.com> 0.7.56-2
+- Updated to pycups-1.9.18.
+
 * Fri Mar 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.56-1
 - 0.7.56:
   - Parse Boolean strings correctly in job options.
