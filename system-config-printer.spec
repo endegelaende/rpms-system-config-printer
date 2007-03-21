@@ -5,6 +5,7 @@ Name: system-config-printer
 Version: 0.7.56
 Release: 2%{?dist}
 License: GPL
+URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
@@ -111,6 +112,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Mar 21 2007 Tim Waugh <twaugh@redhat.com>
+- Added URL tag.
+
 * Sun Mar 18 2007 Tim Waugh <twaugh@redhat.com> 0.7.56-2
 - Updated to pycups-1.9.18.
 
