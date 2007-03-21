@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.56
-Release: 2%{?dist}
+Version: 0.7.57
+Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -68,6 +68,9 @@ install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
 install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
 
+# The applet desktop file gets shipped by desktop-printing.
+rm -f %buildroot%{_datadir}/applications/redhat-print-applet.desktop
+
 %find_lang system-config-printer
 
 %clean
@@ -81,6 +84,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/foomatic.py*
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/gtk_html2pango.py*
+%{_datadir}/%{name}/applet.glade
+%{_datadir}/%{name}/applet.py*
+%{_datadir}/%{name}/applet.png
 
 %files
 %defattr(-,root,root)
@@ -112,8 +118,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Wed Mar 21 2007 Tim Waugh <twaugh@redhat.com>
+* Wed Mar 21 2007 Tim Waugh <twaugh@redhat.com> 0.7.57-1
 - Added URL tag.
+- 0.7.57:
+  - Prevent traceback when removing temporary file (Ubuntu #92914).
+  - Added print applet.
 
 * Sun Mar 18 2007 Tim Waugh <twaugh@redhat.com> 0.7.56-2
 - Updated to pycups-1.9.18.
