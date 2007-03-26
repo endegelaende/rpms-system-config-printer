@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.57
+Version: 0.7.59
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -118,6 +118,15 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Mar 26 2007 Tim Waugh <twaugh@redhat.com> 0.7.59-1
+- 0.7.59:
+  - Fixed a translatable string.
+  - Set a window icon (bug #233899).
+  - Handle failure to start the D-Bus service.
+  - Ellipsize the document and printer named (bug #233899).
+  - Removed the status bar (bug #233899).
+  - Added an icon pop-up menu for 'Hide' (bug #233899).
+
 * Wed Mar 21 2007 Tim Waugh <twaugh@redhat.com> 0.7.57-1
 - Added URL tag.
 - 0.7.57:
