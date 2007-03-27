@@ -1,8 +1,8 @@
-%define pycups_version 1.9.18
+%define pycups_version 1.9.19
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.59
+Version: 0.7.60
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -55,10 +55,10 @@ popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%makeinstall
+make DESTDIR=%buildroot install
 
 pushd pycups-%{pycups_version}
-make install DESTDIR=%buildroot
+make DESTDIR=%buildroot install
 popd
 
 mkdir -p %buildroot%{_bindir}
@@ -69,7 +69,16 @@ install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
 
 # The applet desktop file gets shipped by desktop-printing.
-rm -f %buildroot%{_datadir}/applications/redhat-print-applet.desktop
+rm -f %buildroot%{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
+
+# Add 'SystemSetup' desktop-file category so that 'Printing' shows
+# up in the System->Administration menu.
+desktop-file-install --vendor redhat \
+  --dir %buildroot%{_datadir}/applications/ \
+  --add-category X-Red-Hat-Base \
+  --add-category SystemSetup \
+  --add-category Application \
+  system-config-printer.desktop
 
 %find_lang system-config-printer
 
@@ -92,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
+%{_bindir}/%{name}-applet
 %{_sbindir}/%{name}
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupsd.py*
@@ -118,6 +128,13 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Mar 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.60-1
+- Updated to pycups-1.9.19.
+- Avoid %%makeinstall.
+- 0.7.60:
+  - Handle reconnection failure.
+  - New applet name.
+
 * Mon Mar 26 2007 Tim Waugh <twaugh@redhat.com> 0.7.59-1
 - 0.7.59:
   - Fixed a translatable string.
