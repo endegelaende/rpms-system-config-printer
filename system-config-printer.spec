@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.60
+Version: 0.7.61
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -128,6 +128,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Mar 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.61-1
+- 0.7.61:
+  - Fixed retrieval of SMB authentication details (bug #203539).
+
 * Tue Mar 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.60-1
 - Updated to pycups-1.9.19.
 - Avoid %%makeinstall.
