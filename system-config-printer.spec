@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.61
+Version: 0.7.62
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -114,6 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
+%{_datadir}/applications/redhat-manage-print-jobs.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
 
@@ -128,6 +129,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Apr  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.62-1
+- 0.7.62:
+  - Use standard icon for admin tool desktop file.
+  - Fixed env path in Python scripts.
+  - Applet: stop running when the session ends.
+  - Prevent a traceback in the SMB browser (bug #225351).
+  - 'Manage print jobs' desktop file.
+
 * Fri Mar 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.61-1
 - 0.7.61:
   - Fixed retrieval of SMB authentication details (bug #203539).
