@@ -1,4 +1,4 @@
-%define pycups_version 1.9.19
+%define pycups_version 1.9.20
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -129,6 +129,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Apr  4 2007 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.20 for printer-state-reasons fix.
+
 * Mon Apr  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.62-1
 - 0.7.62:
   - Use standard icon for admin tool desktop file.
