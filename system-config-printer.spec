@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.63.1
+Version: 0.7.65
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -117,6 +117,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
+%{_mandir}/man1/*
 
 %post
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
@@ -129,7 +130,7 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Tue May 22 2007 Tim Waugh <twaugh@redhat.com>
+* Tue May 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.65-1
 - Updated to pycups-1.9.22.
 
 * Mon Apr 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.63.1-1
