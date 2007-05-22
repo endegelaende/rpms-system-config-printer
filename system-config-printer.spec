@@ -132,6 +132,14 @@ fi
 %changelog
 * Tue May 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.65-1
 - Updated to pycups-1.9.22.
+- 0.7.65:
+  - Use urllib for quoting/unquoting (Val Henson, Ubuntu #105022).
+  - Added kn translation.
+  - Better permissions on non-scripts.
+  - Added man pages.
+  - Applet: status feedback.
+  - Applet: fixed relative time descriptions.
+  - Applet: limit refresh frequency.
 
 * Mon Apr 16 2007 Tim Waugh <twaugh@redhat.com> 0.7.63.1-1
 - 0.7.63.1:
