@@ -17,6 +17,7 @@ BuildRequires: python-devel >= 2.4
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
+BuildRequires: xmlto
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
@@ -131,6 +132,7 @@ fi
 
 %changelog
 * Tue May 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.65-1
+- Build requires xmlto.
 - Updated to pycups-1.9.22.
 - 0.7.65:
   - Use urllib for quoting/unquoting (Val Henson, Ubuntu #105022).
