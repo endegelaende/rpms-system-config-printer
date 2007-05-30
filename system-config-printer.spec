@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.65
+Version: 0.7.66
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -89,6 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 %files libs -f system-config-printer.lang
 %defattr(-,root,root)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
+%{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{_libdir}/python*/*/*.so
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/foomatic.py*
@@ -97,6 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/applet.glade
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/applet.png
+%{_datadir}/%{name}/inspecting-printer.png
 
 %files
 %defattr(-,root,root)
@@ -131,6 +133,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed May 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.66-1
+- 0.7.66:
+  - Allow job-hold-until to be set (bug #239776).
+  - Implement new printer notifications.
+
 * Tue May 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.65-1
 - Build requires xmlto.
 - Updated to pycups-1.9.22.
