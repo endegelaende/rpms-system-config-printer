@@ -1,4 +1,4 @@
-%define pycups_version 1.9.22
+%define pycups_version 1.9.24
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -133,6 +133,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.24.
+
 * Wed May 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.66-1
 - 0.7.66:
   - Allow job-hold-until to be set (bug #239776).
