@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.66
+Version: 0.7.67
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -94,6 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/foomatic.py*
 %{_datadir}/%{name}/cupshelpers.py*
+%{_datadir}/%{name}/ppds.py*
 %{_datadir}/%{name}/gtk_html2pango.py*
 %{_datadir}/%{name}/applet.glade
 %{_datadir}/%{name}/applet.py*
@@ -133,8 +134,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com>
+* Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.67-1
 - Updated pycups to 1.9.24.
+- 0.7.67:
+  - Fixed desktop files to have capital letters at the start of each
+    word in the Name field (bug #242859).
+  - Fixed crash when saving unapplied changes.
+  - Fixed Device ID parser to always split the CMD field at commas.
+  - New PPDs class means we no longer parse the foomatic XML database.
 
 * Wed May 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.66-1
 - 0.7.66:
