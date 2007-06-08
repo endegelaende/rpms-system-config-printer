@@ -48,6 +48,10 @@ the configuration tool.
 %prep
 %setup -q -a 1
 %patch0 -p1 -b .trayicon
+pushd pycups-%{pycups_version}
+mkdir examples
+mv cupstree.py examples
+popd
 
 %build
 %configure
@@ -74,15 +78,6 @@ ln -s consolehelper %buildroot%{_bindir}/%{name}
 # The applet desktop file gets shipped by desktop-printing.
 rm -f %buildroot%{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
 
-# Add 'SystemSetup' desktop-file category so that 'Printing' shows
-# up in the System->Administration menu.
-desktop-file-install --vendor redhat \
-  --dir %buildroot%{_datadir}/applications/ \
-  --add-category X-Red-Hat-Base \
-  --add-category SystemSetup \
-  --add-category Application \
-  system-config-printer.desktop
-
 %find_lang system-config-printer
 
 %clean
@@ -90,7 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files libs -f system-config-printer.lang
 %defattr(-,root,root)
-%doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO}
+%doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples}
 %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{_libdir}/python*/*/*.so
 %dir %{_datadir}/%{name}
@@ -137,7 +132,7 @@ fi
 
 %changelog
 * Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.67-1
-- Don't put TrayIcon category in the desktop file.
+- Don't put TrayIcon or SystemSetup categories in the desktop file.
 - Updated pycups to 1.9.24.
 - 0.7.67:
   - Fixed desktop files to have capital letters at the start of each
