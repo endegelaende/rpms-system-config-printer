@@ -11,6 +11,7 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
+Patch0: system-config-printer-trayicon.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -46,6 +47,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
+%patch0 -p1 -b .trayicon
 
 %build
 %configure
@@ -135,6 +137,7 @@ fi
 
 %changelog
 * Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.67-1
+- Don't put TrayIcon category in the desktop file.
 - Updated pycups to 1.9.24.
 - 0.7.67:
   - Fixed desktop files to have capital letters at the start of each

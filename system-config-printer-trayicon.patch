@@ -1,0 +1,20 @@
+--- system-config-printer-0.7.67/Makefile.am.trayicon	2007-06-08 17:39:31.000000000 +0100
++++ system-config-printer-0.7.67/Makefile.am	2007-06-08 17:39:37.000000000 +0100
+@@ -64,7 +64,6 @@
+ 	  --add-category X-Red-Hat-Base		\
+ 	  --add-category System			\
+ 	  --add-category Monitor		\
+-	  --add-category TrayIcon		\
+ 	  --add-category GTK			\
+ 	  print-applet.desktop
+ 
+--- system-config-printer-0.7.67/Makefile.in.trayicon	2007-06-08 17:39:43.000000000 +0100
++++ system-config-printer-0.7.67/Makefile.in	2007-06-08 17:39:48.000000000 +0100
+@@ -880,7 +880,6 @@
+ 	  --add-category X-Red-Hat-Base		\
+ 	  --add-category System			\
+ 	  --add-category Monitor		\
+-	  --add-category TrayIcon		\
+ 	  --add-category GTK			\
+ 	  print-applet.desktop
+ 
