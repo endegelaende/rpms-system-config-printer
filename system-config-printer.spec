@@ -11,7 +11,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Patch0: system-config-printer-trayicon.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -47,7 +46,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-%patch0 -p1 -b .trayicon
 pushd pycups-%{pycups_version}
 mkdir examples
 mv cupstree.py examples
@@ -103,9 +101,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog README NEWS TODO
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
+%{_bindir}/my-default-printer
 %{_sbindir}/%{name}
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupsd.py*
+%{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/nametree.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
@@ -116,6 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
+%{_datadir}/applications/redhat-my-default-printer.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
 %{_mandir}/man1/*
