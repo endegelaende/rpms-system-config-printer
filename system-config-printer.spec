@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.67
+Version: 0.7.68
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -131,6 +131,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Jun 15 2007 Tim Waugh <twaugh@redhat.com> 0.7.68-1
+- 0.7.68:
+  - Fixed the notification bubbles.
+  - Ship my-default-printer utility.
+
 * Fri Jun  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.67-1
 - Don't put TrayIcon or SystemSetup categories in the desktop file.
 - Updated pycups to 1.9.24.
