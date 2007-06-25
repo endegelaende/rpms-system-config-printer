@@ -38,6 +38,7 @@ Group: System Environment/Base
 PreReq: python
 Requires: foomatic
 Requires: PyXML
+Requires: dbus-x11
 Provides: pycups = %{pycups_version}
 
 %description libs
@@ -132,6 +133,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Jun 25 2007 Tim Waugh <twaugh@redhat.com>
+- The applet requires dbus-x11 (Ubuntu #119570).
+
 * Fri Jun 15 2007 Tim Waugh <twaugh@redhat.com> 0.7.68-1
 - 0.7.68:
   - Fixed the notification bubbles.
