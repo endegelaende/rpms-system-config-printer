@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.68
+Version: 0.7.69
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -106,7 +106,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
-%{_datadir}/%{name}/applet.glade
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/applet.png
 %{_datadir}/%{name}/inspecting-printer.png
@@ -129,9 +128,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com>
+* Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com> 0.7.69-1
 - No longer requires PyXML (bug #233146).
 - Moved applet to main package.
+- 0.7.69:
+  - Use HardwareSettings category for my-default-printer desktop
+    file (bug #244935).
+  - Removed unused code.
+  - Filter PPDs by natural language (bug #244173).
 
 * Mon Jun 25 2007 Tim Waugh <twaugh@redhat.com>
 - The applet requires dbus-x11 (Ubuntu #119570).
