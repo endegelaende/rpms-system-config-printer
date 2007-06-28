@@ -24,6 +24,7 @@ Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
 Requires: usermode >= 1.37
 Requires: desktop-file-utils >= 0.2.92
+Requires: dbus-x11
 PreReq: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
@@ -38,7 +39,6 @@ Group: System Environment/Base
 PreReq: python
 Requires: foomatic
 Requires: PyXML
-Requires: dbus-x11
 Provides: pycups = %{pycups_version}
 
 %description libs
@@ -88,14 +88,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{_libdir}/python*/*/*.so
 %dir %{_datadir}/%{name}
-%{_datadir}/%{name}/foomatic.py*
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/ppds.py*
-%{_datadir}/%{name}/gtk_html2pango.py*
-%{_datadir}/%{name}/applet.glade
-%{_datadir}/%{name}/applet.py*
-%{_datadir}/%{name}/applet.png
-%{_datadir}/%{name}/inspecting-printer.png
 
 %files
 %defattr(-,root,root)
@@ -107,13 +101,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupsd.py*
 %{_datadir}/%{name}/my-default-printer.py*
-%{_datadir}/%{name}/nametree.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
+%{_datadir}/%{name}/applet.glade
+%{_datadir}/%{name}/applet.py*
+%{_datadir}/%{name}/applet.png
+%{_datadir}/%{name}/inspecting-printer.png
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
@@ -133,6 +130,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com>
+- Moved applet to main package.
+
 * Mon Jun 25 2007 Tim Waugh <twaugh@redhat.com>
 - The applet requires dbus-x11 (Ubuntu #119570).
 
