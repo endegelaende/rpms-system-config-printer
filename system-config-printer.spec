@@ -38,7 +38,6 @@ Summary: Common code for the graphical and non-graphical pieces.
 Group: System Environment/Base
 PreReq: python
 Requires: foomatic
-Requires: PyXML
 Provides: pycups = %{pycups_version}
 
 %description libs
@@ -131,6 +130,7 @@ fi
 
 %changelog
 * Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com>
+- No longer requires PyXML (bug #233146).
 - Moved applet to main package.
 
 * Mon Jun 25 2007 Tim Waugh <twaugh@redhat.com>
