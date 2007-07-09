@@ -16,7 +16,7 @@ BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
-BuildRequires: intltool
+BuildRequires: intltool, perl-XML-Parser
 BuildRequires: xmlto
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
@@ -128,6 +128,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Jul  9 2007 Tim Waugh <twaugh@redhat.com>
+- Build requires perl-XML-Parser for intltool.
+
 * Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com> 0.7.69-1
 - No longer requires PyXML (bug #233146).
 - Moved applet to main package.
