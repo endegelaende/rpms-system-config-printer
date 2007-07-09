@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.69
+Version: 0.7.70
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -25,6 +25,7 @@ Requires: pygobject2
 Requires: usermode >= 1.37
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
+Requires: pirut
 PreReq: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
@@ -128,6 +129,15 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Jul  9 2007 Tim Waugh <twaugh@redhat.com> 0.7.70-1
+- Requires pirut for system-install-packages.
+- 0.7.70:
+  - Increased GetReady->NewPrinter timeout.
+  - More binary names mapped to package named.
+  - Run system-install-packages to install missing drivers (bug #246726).
+  - Less debug output.
+  - Desktop file fixes for KDE (bug #247299).
+
 * Thu Jun 28 2007 Tim Waugh <twaugh@redhat.com> 0.7.69-1
 - No longer requires PyXML (bug #233146).
 - Moved applet to main package.
