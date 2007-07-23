@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.70
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -29,6 +29,9 @@ Requires: pirut
 PreReq: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
+
+Obsoletes: desktop-printing <= 0.20-7.fc7
+Provides: desktop-printing = 0.20-7.fc7
 
 %description
 system-config-printer is a graphical user interface that allows
@@ -129,6 +132,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Mon Jul 23 2007 Tim Waugh <twaugh@redhat.com> 0.7.70-2
+- Obsoletes/provides desktop-printing.
+
 * Mon Jul  9 2007 Tim Waugh <twaugh@redhat.com> 0.7.70-1
 - Requires pirut for system-install-packages.
 - 0.7.70:
