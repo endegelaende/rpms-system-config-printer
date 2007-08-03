@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.70
-Release: 2%{?dist}
+Version: 0.7.71
+Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -132,6 +132,16 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Aug  3 2007 Tim Waugh <twaugh@redhat.com> 0.7.71-1
+- 0.7.71:
+  - Don't discard make/model-matched devices when there are ID-matched
+    devices (Till Kamppeter).
+  - Fixed fallback if no text-only driver is available (Till Kamppeter).
+  - Initialise the make/model list when an ID match failed (Till Kamppeter).
+  - Better error-handling in default-print application (Ubuntu #129901).
+  - UI tweak in admin tool (Ubuntu #128263).
+  - Handle socket: URIs (Ubuntu #127074).
+
 * Mon Jul 23 2007 Tim Waugh <twaugh@redhat.com> 0.7.70-2
 - Obsoletes/provides desktop-printing.
 
