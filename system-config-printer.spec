@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.71
+Version: 0.7.72
 Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -132,6 +132,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Aug  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.72-1
+- 0.7.72:
+  - Fixed my-default-printer traceback.
+  - Improvements to New Printer wizard (Till Kamppeter).
+
 * Fri Aug  3 2007 Tim Waugh <twaugh@redhat.com> 0.7.71-1
 - 0.7.71:
   - Don't discard make/model-matched devices when there are ID-matched
