@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.72
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -77,9 +77,6 @@ install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
 install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
 
-# The applet desktop file gets shipped by desktop-printing.
-rm -f %buildroot%{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
-
 %find_lang system-config-printer
 
 %clean
@@ -119,6 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/redhat-my-default-printer.desktop
 %{_sysconfdir}/pam.d/%{name}
 %{_sysconfdir}/security/console.apps/%{name}
+%{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
 %{_mandir}/man1/*
 
 %post
@@ -132,6 +130,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Aug 10 2007 Tim Waugh <twaugh@redhat.com> 0.7.72-2
+- Ship the applet's desktop file.
+
 * Wed Aug  8 2007 Tim Waugh <twaugh@redhat.com> 0.7.72-1
 - 0.7.72:
   - Fixed my-default-printer traceback.
