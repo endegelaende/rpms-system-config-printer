@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.72
-Release: 2%{?dist}
+Version: 0.7.73
+Release: 1%{?dist}
 License: GPL
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -130,6 +130,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Aug 24 2007 Tim Waugh <twaugh@redhat.com> 0.7.73-1
+- 0.7.73.
+
 * Fri Aug 10 2007 Tim Waugh <twaugh@redhat.com> 0.7.72-2
 - Ship the applet's desktop file.
 
