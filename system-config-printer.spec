@@ -4,7 +4,7 @@ Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.73
 Release: 1%{?dist}
-License: GPL
+License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: system-config-printer-%{version}.tar.bz2
@@ -130,6 +130,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Sat Aug 25 2007 Tim Waugh <twaugh@redhat.com>
+- More specific license tag.
+
 * Fri Aug 24 2007 Tim Waugh <twaugh@redhat.com> 0.7.73-1
 - 0.7.73.
 
