@@ -1,4 +1,4 @@
-%define pycups_version 1.9.24
+%define pycups_version 1.9.25
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -50,10 +50,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-pushd pycups-%{pycups_version}
-mkdir examples
-mv cupstree.py examples
-popd
 
 %build
 %configure
@@ -130,6 +126,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Aug 30 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.25.
+
 * Sat Aug 25 2007 Tim Waugh <twaugh@redhat.com>
 - More specific license tag.
 
