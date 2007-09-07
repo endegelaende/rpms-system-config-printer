@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.74
+Version: 0.7.74.1
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -126,6 +126,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Sep  7 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.1-1
+- 0.7.74.1:
+  - Updated Polish translation (bug #263001).
+  - Don't select the default printer after changes to another printer have
+    been made.
+  - Always construct URI from input fields when changing device (bug #281551).
+  - Avoid busy-cursor traceback when window is not yet displayed.
+
 * Thu Aug 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.74-1
 - Updated pycups to 1.9.25.
 - 0.7.74:
