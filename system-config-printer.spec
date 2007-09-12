@@ -1,4 +1,4 @@
-%define pycups_version 1.9.25
+%define pycups_version 1.9.26
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -18,6 +18,7 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: xmlto
+BuildRequires: epydoc
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
@@ -56,6 +57,7 @@ the configuration tool.
 
 pushd pycups-%{pycups_version}
 make
+make doc
 popd
 
 %install
@@ -80,7 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files libs -f system-config-printer.lang
 %defattr(-,root,root)
-%doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples}
+%doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
 %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{_libdir}/python*/*/*.so
 %dir %{_datadir}/%{name}
@@ -126,6 +128,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Sep 12 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.26.
+- Build requires epydoc.  Ship HTML documentation.
+
 * Fri Sep  7 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.1-1
 - 0.7.74.1:
   - Updated Polish translation (bug #263001).
