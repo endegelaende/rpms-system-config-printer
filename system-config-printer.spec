@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.74.1
+Version: 0.7.74.2
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -128,8 +128,18 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
-* Wed Sep 19 2007 Tim Waugh <twaugh@redhat.com>
+* Wed Sep 19 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-1
 - Updated pycups to 1.9.27.
+- 0.7.74.2:
+  - When a class is removed on the server, remove it from the UI.
+  - When deleting a printer, select the default printer again.
+  - Select newly-copied printer.
+  - Updated translation (fi).
+  - Better --help message.
+  - Use strcoll to sort manufacturer names.
+  - Avoid duplicate 'recommended' marks.
+  - Remove duplicate device URIs.
+  - Handle IPP_TAG_NOVALUE attributes (for CUPS 1.3.x).
 
 * Wed Sep 12 2007 Tim Waugh <twaugh@redhat.com>
 - Updated pycups to 1.9.26.
