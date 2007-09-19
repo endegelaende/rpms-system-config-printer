@@ -1,4 +1,4 @@
-%define pycups_version 1.9.26
+%define pycups_version 1.9.27
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -128,6 +128,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Sep 19 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.27.
+
 * Wed Sep 12 2007 Tim Waugh <twaugh@redhat.com>
 - Updated pycups to 1.9.26.
 - Build requires epydoc.  Ship HTML documentation.
