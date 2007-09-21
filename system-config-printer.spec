@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.74.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -11,6 +11,7 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
+Patch0: system-config-printer-0.7.74.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -51,6 +52,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
+%patch0 -p0 -b .0.7.74.x
 
 %build
 %configure
@@ -128,6 +130,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Fri Sep 21 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-2
+- Pull in SVN patch from stable branch for 'Allow printing from
+  the Internet' check-box (bug #221003).
+
 * Wed Sep 19 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-1
 - Updated pycups to 1.9.27.
 - 0.7.74.2:
