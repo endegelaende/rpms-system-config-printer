@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.74.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -130,6 +130,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Sep 25 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-3
+- Pull in SVN patch from stable branch for foomatic recommended
+  drivers (bug #292021).
+
 * Fri Sep 21 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-2
 - Pull in SVN patch from stable branch for 'Allow printing from
   the Internet' check-box (bug #221003).
