@@ -2,8 +2,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.74.2
-Release: 3%{?dist}
+Version: 0.7.74.3
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -11,7 +11,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Patch0: system-config-printer-0.7.74.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -52,7 +51,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-%patch0 -p0 -b .0.7.74.x
 
 %build
 %configure
@@ -130,6 +128,11 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Thu Sep 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.3-1
+- 0.7.74.3:
+  - Updated translations.
+  - Other small bug fixes.
+
 * Tue Sep 25 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.2-3
 - Pull in SVN patch from stable branch for foomatic recommended
   drivers (bug #292021).
