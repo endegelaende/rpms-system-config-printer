@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.74.3
+Version: 0.7.74.4
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -19,7 +19,7 @@ BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: xmlto
 BuildRequires: epydoc
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
@@ -27,9 +27,10 @@ Requires: usermode >= 1.37
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: pirut
-PreReq: system-config-printer-libs = %{version}-%{release}
+Requires: system-config-printer-libs = %{version}-%{release}
 
 Obsoletes: system-config-printer-gui <= 0.6.152
+Provides: system-config-printer-gui = 0.6.152
 
 Obsoletes: desktop-printing <= 0.20-7.fc7
 Provides: desktop-printing = 0.20-7.fc7
@@ -39,9 +40,9 @@ system-config-printer is a graphical user interface that allows
 the user to configure a CUPS print server.
 
 %package libs
-Summary: Common code for the graphical and non-graphical pieces.
+Summary: Common code for the graphical and non-graphical pieces
 Group: System Environment/Base
-PreReq: python
+Requires: python
 Requires: foomatic
 Provides: pycups = %{pycups_version}
 
@@ -65,15 +66,17 @@ rm -rf $RPM_BUILD_ROOT
 make DESTDIR=%buildroot install
 
 pushd pycups-%{pycups_version}
+chmod 644 examples/cupstree.py
 make DESTDIR=%buildroot install
 popd
 
 mkdir -p %buildroot%{_bindir}
 mkdir -p %buildroot%{_sysconfdir}/pam.d
 mkdir -p %buildroot%{_sysconfdir}/security/console.apps
-install -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
-install -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
+install -p -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
+install -p -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
+chmod 755 %buildroot%{_datadir}/%{name}/cupsd.py
 
 %find_lang system-config-printer
 
@@ -81,17 +84,17 @@ ln -s consolehelper %buildroot%{_bindir}/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %files libs -f system-config-printer.lang
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
-%{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{_libdir}/python*/*/*.so
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/ppds.py*
 
 %files
-%defattr(-,root,root)
-%doc ChangeLog README NEWS TODO
+%defattr(-,root,root,-)
+%doc ChangeLog README TODO
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
@@ -112,8 +115,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
 %{_datadir}/applications/redhat-my-default-printer.desktop
-%{_sysconfdir}/pam.d/%{name}
-%{_sysconfdir}/security/console.apps/%{name}
+%config(noreplace) %{_sysconfdir}/pam.d/%{name}
+%config(noreplace) %{_sysconfdir}/security/console.apps/%{name}
 %{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
 %{_mandir}/man1/*
 
@@ -128,6 +131,23 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Tue Oct  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.4-1
+- Changed PreReq to Requires.
+- Mark console.apps file as a config file.
+- Mark pam file as a config file (not replaceable).
+- No need to ship empty NEWS file.
+- Give cupsd.py executable permissions to satisfy rpmlint.
+- Provides system-config-printer-gui.
+- Mark D-Bus configuration file as a config file.
+- Fixed libs summary.
+- Better buildroot tag.
+- Better defattr.
+- Preserve timestamps on explicitly install files.
+- Make example pycups program non-executable.
+- 0.7.74.4:
+  - Updated translations.
+  - Several small bugs fixed.
+
 * Thu Sep 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.3-1
 - 0.7.74.3:
   - Updated translations.
