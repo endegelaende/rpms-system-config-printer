@@ -62,7 +62,7 @@ make doc
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %buildroot
 make DESTDIR=%buildroot install
 
 pushd pycups-%{pycups_version}
@@ -81,7 +81,7 @@ chmod 755 %buildroot%{_datadir}/%{name}/cupsd.py
 %find_lang system-config-printer
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %buildroot
 
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
@@ -131,6 +131,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %changelog
+* Wed Oct  3 2007 Tim Waugh <twaugh@redhat.com>
+- Consistent macro style.
+
 * Tue Oct  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.4-1
 - Changed PreReq to Requires.
 - Mark console.apps file as a config file.
