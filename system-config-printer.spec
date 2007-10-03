@@ -122,16 +122,12 @@ rm -rf %buildroot
 
 %post
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
-/usr/bin/update-desktop-database &>/dev/null ||:
 exit 0
-
-%postun
-if [ "$1" = "0" ]; then
-  /usr/bin/update-desktop-database &>/dev/null ||:
-fi
 
 %changelog
 * Wed Oct  3 2007 Tim Waugh <twaugh@redhat.com>
+- No need to run update-desktop-database because there are no MimeKey
+  lines in the desktop files.
 - Consistent macro style.
 
 * Tue Oct  2 2007 Tim Waugh <twaugh@redhat.com> 0.7.74.4-1
