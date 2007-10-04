@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.74.4
+Version: 0.7.75
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -76,7 +76,6 @@ mkdir -p %buildroot%{_sysconfdir}/security/console.apps
 install -p -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
 install -p -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
 ln -s consolehelper %buildroot%{_bindir}/%{name}
-chmod 755 %buildroot%{_datadir}/%{name}/cupsd.py
 
 %find_lang system-config-printer
 
@@ -108,6 +107,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
+%{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/applet.png
 %{_datadir}/%{name}/inspecting-printer.png
@@ -125,6 +125,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Oct  4 2007 Tim Waugh <twaugh@redhat.com> 0.7.75-1
+- 0.7.75.
+
 * Wed Oct  3 2007 Tim Waugh <twaugh@redhat.com>
 - No need to run update-desktop-database because there are no MimeKey
   lines in the desktop files.
