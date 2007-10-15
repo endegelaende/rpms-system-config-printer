@@ -99,7 +99,6 @@ rm -rf %buildroot
 %{_bindir}/my-default-printer
 %{_sbindir}/%{name}
 %{_datadir}/%{name}/config.py*
-%{_datadir}/%{name}/cupsd.py*
 %{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
