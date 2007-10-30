@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.76
+Version: 0.7.77
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -108,8 +108,6 @@ rm -rf %buildroot
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
-%{_datadir}/%{name}/applet.png
-%{_datadir}/%{name}/inspecting-printer.png
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
@@ -124,6 +122,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Oct 30 2007 Tim Waugh <twaugh@redhat.com> 0.7.77-1
+- 0.7.77:
+  - Tooltips for the button bar buttons (bug #335601).
+
 * Mon Oct 15 2007 Tim Waugh <twaugh@redhat.com> 0.7.76-1
 - 0.7.76.
 
