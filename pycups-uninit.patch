@@ -1,0 +1,65 @@
+diff -up pycups-1.9.30/cupsconnection.c.uninit pycups-1.9.30/cupsconnection.c
+--- pycups-1.9.30/cupsconnection.c.uninit	2007-11-19 16:41:14.000000000 +0000
++++ pycups-1.9.30/cupsconnection.c	2007-11-21 11:18:20.000000000 +0000
+@@ -2334,7 +2334,7 @@ Connection_printTestPage (Connection *se
+     return NULL;
+   }
+     
+-  if (!file) {
++  if (!fileobj) {
+     if ((datadir = getenv ("CUPS_DATADIR")) == NULL)
+       datadir = "/usr/share/cups";
+ 
+@@ -2342,13 +2342,13 @@ Connection_printTestPage (Connection *se
+     file = filename;
+   }
+ 
+-  if (!title)
++  if (!titleobj)
+     title = "Test Page";
+ 
+-  if (!format)
++  if (!formatobj)
+     format = "application/postscript";
+ 
+-  if (!user)
++  if (!userobj)
+     user = "guest";
+ 
+   snprintf (uri, sizeof (uri), "ipp://localhost/printers/%s", printer);
+diff -U0 pycups-1.9.30/ChangeLog.uninit pycups-1.9.30/ChangeLog
+--- pycups-1.9.30/ChangeLog.uninit	2007-11-19 16:41:14.000000000 +0000
++++ pycups-1.9.30/ChangeLog	2007-11-21 11:18:20.000000000 +0000
+@@ -0,0 +1,7 @@
++2007-11-21  Tim Waugh  <twaugh@redhat.com>
++
++	* cupsmodule.c (cups_require): Don't read uninitialised memory.
++
++	* cupsconnection.c (Connection_printTestPage): Don't use
++	uninitialised variables (bug #390431).
++
+diff -up pycups-1.9.30/cupsmodule.c.uninit pycups-1.9.30/cupsmodule.c
+--- pycups-1.9.30/cupsmodule.c.uninit	2007-09-12 14:12:11.000000000 +0100
++++ pycups-1.9.30/cupsmodule.c	2007-11-21 11:18:20.000000000 +0000
+@@ -253,13 +253,18 @@ cups_require (PyObject *self, PyObject *
+   nreq = strtoul (preq, &end, 0);
+   while (preq != end)
+   {
+-    preq = end + 1;
++    preq = end;
++    if (*preq == '.')
++      preq++;
+ 
+     nver = strtoul (pver, &end, 0);
+     if (pver == end)
+       goto fail;
+-    else
+-      pver = end + 1;
++    else {
++      pver = end;
++      if (*pver == '.')
++	pver++;
++    }
+ 
+     if (nver < nreq)
+       goto fail;
