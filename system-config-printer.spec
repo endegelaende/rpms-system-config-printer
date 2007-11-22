@@ -2,7 +2,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.77
+Version: 0.7.78
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -126,9 +126,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Thu Nov 22 2007 Tim Waugh <twaugh@redhat.com>
+* Thu Nov 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-1
 - pycups: Fix job-sheets-default attribute.
 - Updated pycups to 1.9.31.
+- 0.7.78.
 
 * Wed Nov 21 2007 Tim Waugh <twaugh@redhat.com>
 - Applied patch to pycups to avoid reading uninitialised
