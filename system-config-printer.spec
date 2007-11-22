@@ -11,6 +11,7 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
+Patch0: pycups-job-sheets.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -52,6 +53,9 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
+pushd pycups-%{pycups_version}
+%patch0 -p1 -b .job-sheets
+popd
 
 %build
 %configure
@@ -123,6 +127,7 @@ exit 0
 
 %changelog
 * Thu Nov 22 2007 Tim Waugh <twaugh@redhat.com>
+- pycups: Fix job-sheets-default attribute.
 - Updated pycups to 1.9.31.
 
 * Wed Nov 21 2007 Tim Waugh <twaugh@redhat.com>
