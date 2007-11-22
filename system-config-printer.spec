@@ -1,4 +1,4 @@
-%define pycups_version 1.9.30
+%define pycups_version 1.9.31
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -11,7 +11,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Patch0: pycups-uninit.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -53,9 +52,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-pushd pycups-%{pycups_version}
-%patch0 -p1 -b .uninit
-popd
 
 %build
 %configure
@@ -126,6 +122,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Nov 22 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.31.
+
 * Wed Nov 21 2007 Tim Waugh <twaugh@redhat.com>
 - Applied patch to pycups to avoid reading uninitialised
   memory (bug #390431).
