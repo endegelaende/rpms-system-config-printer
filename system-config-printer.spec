@@ -12,6 +12,7 @@ Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
 Patch0: pycups-job-sheets.patch
+Patch1: pycups-attributes-uri.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -55,6 +56,7 @@ the configuration tool.
 %setup -q -a 1
 pushd pycups-%{pycups_version}
 %patch0 -p1 -b .job-sheets
+%patch1 -p1 -b .attributes-uri
 popd
 
 %build
@@ -126,6 +128,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Nov 27 2007 Tim Waugh <twaugh@redhat.com>
+- pycups: Applied patch from SVN to allow fetching printer attributes by URI.
+
 * Thu Nov 22 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-1
 - pycups: Fix job-sheets-default attribute.
 - Updated pycups to 1.9.31.
