@@ -32,6 +32,7 @@ Requires: dbus-x11
 Requires: pirut
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
+Requires: gnome-python2
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -130,6 +131,7 @@ exit 0
 
 %changelog
 * Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com>
+- Requires gnome-python2 for theme support (Ubuntu #176929).
 - Requires gnome-icon-theme for printer icon (Ubuntu #176929).
 
 * Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-3
