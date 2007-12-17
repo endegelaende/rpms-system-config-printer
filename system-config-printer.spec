@@ -3,7 +3,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.78
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -125,7 +125,7 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com>
+* Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-3
 - Updated pycups to 1.9.32.
 
 * Tue Nov 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-2
