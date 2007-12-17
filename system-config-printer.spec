@@ -1,5 +1,4 @@
 %define pycups_version 1.9.32
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
@@ -93,7 +92,7 @@ rm -rf %buildroot
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{python_sitearch}/cups.so
-%{python_sitelib}/cups-1.0-py%{pyver}.egg-info
+%{python_sitearch}/cups-1.0-py%{pyver}.egg-info
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/ppds.py*
