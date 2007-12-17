@@ -1,4 +1,7 @@
 %define pycups_version 1.9.32
+%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -89,7 +92,8 @@ rm -rf %buildroot
 %defattr(-,root,root,-)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
-%{_libdir}/python*/*/*.so
+%{python_sitearch}/cups.so
+%{python_sitelib}/cups-%{version}-py%{pyver}.egg-info
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/ppds.py*
@@ -126,6 +130,7 @@ exit 0
 
 %changelog
 * Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-3
+- Install Python egg-info file.
 - Updated pycups to 1.9.32.
 
 * Tue Nov 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-2
