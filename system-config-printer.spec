@@ -31,6 +31,7 @@ Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: pirut
 Requires: system-config-printer-libs = %{version}-%{release}
+Requires: gnome-icon-theme
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -128,6 +129,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com>
+- Requires gnome-icon-theme for printer icon (Ubuntu #176929).
+
 * Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-3
 - Install Python egg-info file.
 - Updated pycups to 1.9.32.
