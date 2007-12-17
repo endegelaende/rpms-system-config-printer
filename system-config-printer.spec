@@ -1,4 +1,4 @@
-%define pycups_version 1.9.31
+%define pycups_version 1.9.32
 
 Summary: A printer administration tool
 Name: system-config-printer
@@ -11,8 +11,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Patch0: pycups-job-sheets.patch
-Patch1: pycups-attributes-uri.patch
 Patch100: system-config-printer-0.7.x.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -55,10 +53,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-pushd pycups-%{pycups_version}
-%patch0 -p1 -b .job-sheets
-%patch1 -p1 -b .attributes-uri
-popd
 
 %patch100 -p1 -b .0.7.x
 
@@ -131,6 +125,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.32.
+
 * Tue Nov 27 2007 Tim Waugh <twaugh@redhat.com> 0.7.78-2
 - pycups: Applied patch from SVN to allow fetching printer attributes by URI.
 - Sync to SVN 1748.
