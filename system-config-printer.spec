@@ -33,6 +33,7 @@ Requires: pirut
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: gnome-python2
+Requires: notification-daemon
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -130,7 +131,8 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Dec 17 2007 Tim Waugh <twaugh@redhat.com>
+* Thu Dec 20 2007 Tim Waugh <twaugh@redhat.com>
+- Requires notification-daemon (Ubuntu #176929).
 - Requires gnome-python2 for theme support (Ubuntu #176929).
 - Requires gnome-icon-theme for printer icon (Ubuntu #176929).
 
