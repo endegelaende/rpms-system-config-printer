@@ -5,7 +5,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.7.78
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -26,7 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
-Requires: usermode >= 1.37
+Requires: usermode >= 1.94
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: pirut
@@ -131,6 +131,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jan 16 2008 Tim Waugh <twaugh@redhat.com> 0.7.78-4
+- Use config-util from new usermode (bug #428406).
+
 * Thu Dec 20 2007 Tim Waugh <twaugh@redhat.com>
 - Requires notification-daemon (Ubuntu #176929).
 - Requires gnome-python2 for theme support (Ubuntu #176929).
