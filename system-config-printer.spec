@@ -4,8 +4,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.78
-Release: 5%{?dist}
+Version: 0.7.79
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -13,7 +13,6 @@ Source0: system-config-printer-%{version}.tar.bz2
 Source1: pycups-%{pycups_version}.tar.bz2
 Source2: system-config-printer.pam
 Source3: system-config-printer.console
-Patch100: system-config-printer-0.7.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -58,8 +57,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-
-%patch100 -p1 -b .0.7.x
 
 %build
 %configure
@@ -109,6 +106,7 @@ rm -rf %buildroot
 %{_sbindir}/%{name}
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/my-default-printer.py*
+%{_datadir}/%{name}/openprinting.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/probe_printer.py*
@@ -131,6 +129,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jan 25 2008 Tim Waugh <twaugh@redhat.com> 0.7.79-1
+- 0.7.79.
+
 * Wed Jan 23 2008 Tim Waugh <twaugh@redhat.com> 0.7.78-5
 - Updated to pycups-1.9.33.
 
