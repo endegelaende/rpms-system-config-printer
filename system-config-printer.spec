@@ -4,8 +4,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.80
-Release: 2%{?dist}
+Version: 0.7.81
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -130,6 +130,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 13 2008 Tim Waugh <twaugh@redhat.com> 0.7.81-1
+- 0.7.81:
+  - Trouble-shooting improvements and other minor fixes.
+
 * Mon Feb 11 2008 Tim Waugh <twaugh@redhat.com> 0.7.80-2
 - Rebuild for GCC 4.3.
 
