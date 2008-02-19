@@ -1,4 +1,4 @@
-%define pycups_version 1.9.34
+%define pycups_version 1.9.35
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
@@ -130,6 +130,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Feb 19 2008 Tim Waugh <twaugh@redhat.com>
+- Updated to pycups-1.9.35.
+
 * Wed Feb 13 2008 Tim Waugh <twaugh@redhat.com> 0.7.81-1
 - 0.7.81:
   - Trouble-shooting improvements and other minor fixes.
