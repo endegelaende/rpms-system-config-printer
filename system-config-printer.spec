@@ -112,10 +112,11 @@ rm -rf %buildroot
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/system-config-printer.py*
+%{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
-%{_datadir}/%{name}/troubleshoot.py*
+%{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/*.glade
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
