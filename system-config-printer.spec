@@ -4,7 +4,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.82
+Version: 0.7.82.1
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -131,8 +131,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Mar  3 2008 Tim Waugh <twaugh@redhat.com>
+* Mon Mar  3 2008 Tim Waugh <twaugh@redhat.com> 0.7.82.1-1
 - Requires /usr/bin/system-install-packages not pirut (bug #435622).
+- 0.7.82.1:
+  - More trouble-shooting improvements.
+  - applet: notify user about failed jobs (bug #168370).
 
 * Tue Feb 19 2008 Tim Waugh <twaugh@redhat.com> 0.7.82-1
 - Updated to pycups-1.9.35.
