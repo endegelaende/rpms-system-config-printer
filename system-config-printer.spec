@@ -28,7 +28,7 @@ Requires: pygobject2
 Requires: usermode >= 1.94
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
-Requires: pirut
+Requires: /usr/bin/system-install-packages
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: gnome-python2
@@ -131,6 +131,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Mar  3 2008 Tim Waugh <twaugh@redhat.com>
+- Requires /usr/bin/system-install-packages not pirut (bug #435622).
+
 * Tue Feb 19 2008 Tim Waugh <twaugh@redhat.com> 0.7.82-1
 - Updated to pycups-1.9.35.
 - 0.7.82:
