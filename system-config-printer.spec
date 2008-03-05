@@ -58,7 +58,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1
-%patch0 -p1 -z .0.7.82.x
+%patch0 -p1 -b .0.7.82.x
 
 %build
 %configure
