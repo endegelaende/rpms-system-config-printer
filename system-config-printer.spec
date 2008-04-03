@@ -4,7 +4,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.7.82.2
+Version: 0.9.90
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -104,20 +104,27 @@ rm -rf %buildroot
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
 %{_sbindir}/%{name}
+%{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
+%{_datadir}/%{name}/contextmenu.py*
+%{_datadir}/%{name}/debug.py*
+%{_datadir}/%{name}/jobviewer.py*
+%{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/openprinting.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
-%{_datadir}/%{name}/system-config-printer.py*
+%{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
+%{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/*.glade
+%{_datadir}/%{name}/icons
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
 %{_datadir}/applications/redhat-my-default-printer.desktop
@@ -131,8 +138,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Thu Apr  3 2008 Tim Waugh <twaugh@redhat.com>
+* Thu Apr  3 2008 Tim Waugh <twaugh@redhat.com> 0.9.90-1
 - Updated pycups to 1.9.38.
+- 0.9.90:
+  - User interface overhaul, part 1.
 
 * Thu Apr  3 2008 Tim Waugh <twaugh@redhat.com> 0.7.82.2-1
 - 0.7.82.2:
