@@ -1,21 +1,22 @@
 %define pycups_version 1.9.38
+%define pysmbc_version 1.0.0
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.9.90
+Version: 0.9.91
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
-Source0: system-config-printer-%{version}.tar.bz2
-Source1: pycups-%{pycups_version}.tar.bz2
-Source2: system-config-printer.pam
-Source3: system-config-printer.console
+Source0: http://cyberelk.net/tim/data/system-config-printer/system-config-printer-%{version}.tar.bz2
+Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
+Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
+BuildRequires: libsmbclient-devel >= 2.4
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
@@ -50,13 +51,14 @@ Group: System Environment/Base
 Requires: python
 Requires: foomatic
 Provides: pycups = %{pycups_version}
+Provides: pysmbc = %{pysmbc_version}
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
 
 %prep
-%setup -q -a 1
+%setup -q -a 1 -a 2
 
 %build
 %configure
@@ -66,21 +68,22 @@ make
 make doc
 popd
 
+pushd pysmbc-%{pysmbc_version}
+make
+make doc
+popd
+
 %install
 rm -rf %buildroot
 make DESTDIR=%buildroot install
 
 pushd pycups-%{pycups_version}
-chmod 644 examples/cupstree.py
 make DESTDIR=%buildroot install
 popd
 
-mkdir -p %buildroot%{_bindir}
-mkdir -p %buildroot%{_sysconfdir}/pam.d
-mkdir -p %buildroot%{_sysconfdir}/security/console.apps
-install -p -m0644 %{SOURCE2} %buildroot%{_sysconfdir}/pam.d/%{name}
-install -p -m0644 %{SOURCE3} %buildroot%{_sysconfdir}/security/console.apps/%{name}
-ln -s consolehelper %buildroot%{_bindir}/%{name}
+pushd pysmbc-%{pysmbc_version}
+make DESTDIR=%buildroot install
+popd
 
 %find_lang system-config-printer
 
@@ -90,9 +93,12 @@ rm -rf %buildroot
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
+%doc --parents pysmbc-%{pysmbc_version}/{ChangeLog,README,NEWS,TODO,test.py,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %{python_sitearch}/cups.so
 %{python_sitearch}/cups-1.0-py%{pyver}.egg-info
+%{python_sitearch}/smbc.so
+%{python_sitearch}/smbc-1.0-py%{pyver}.egg-info
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/cupshelpers.py*
 %{_datadir}/%{name}/ppds.py*
@@ -103,7 +109,6 @@ rm -rf %buildroot
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
-%{_sbindir}/%{name}
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/contextmenu.py*
@@ -128,8 +133,6 @@ rm -rf %buildroot
 %{_datadir}/applications/redhat-system-config-printer.desktop
 %{_datadir}/applications/redhat-manage-print-jobs.desktop
 %{_datadir}/applications/redhat-my-default-printer.desktop
-%config(noreplace) %{_sysconfdir}/pam.d/%{name}
-%config(noreplace) %{_sysconfdir}/security/console.apps/%{name}
 %{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
 %{_mandir}/man1/*
 
@@ -138,6 +141,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri May 16 2008 Tim Waugh <twaugh@redhat.com> 0.9.91-1
+- Added pysmbc.  Build requires libsmbclient-devel.
+- Don't install consolehelper bits any more as they are no longer needed.
+- 0.9.91:
+  - User interface overhaul, part 2.
+
 * Thu Apr  3 2008 Tim Waugh <twaugh@redhat.com> 0.9.90-1
 - Updated pycups to 1.9.38.
 - 0.9.90:
