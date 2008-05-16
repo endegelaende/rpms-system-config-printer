@@ -29,7 +29,6 @@ Requires: pygobject2
 Requires: usermode >= 1.94
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
-Requires: /usr/bin/system-install-packages
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: gnome-python2
@@ -142,6 +141,7 @@ exit 0
 
 %changelog
 * Fri May 16 2008 Tim Waugh <twaugh@redhat.com> 0.9.91-1
+- No longer requires system-install-packages (bug #444645).
 - Added pysmbc.  Build requires libsmbclient-devel.
 - Don't install consolehelper bits any more as they are no longer needed.
 - 0.9.91:
