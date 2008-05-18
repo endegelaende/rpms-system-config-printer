@@ -6,7 +6,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 0.9.91
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -142,7 +142,7 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Sun May 18 2008 Tim Waugh <twaugh@redhat.com>
+* Sun May 18 2008 Tim Waugh <twaugh@redhat.com> 0.9.91-2
 - Fixed icon search path.
 
 * Fri May 16 2008 Tim Waugh <twaugh@redhat.com> 0.9.91-1
