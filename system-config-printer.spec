@@ -1,5 +1,5 @@
 %define pycups_version 1.9.38
-%define pysmbc_version 1.0.0
+%define pysmbc_version 1.0.2
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
@@ -142,6 +142,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue May 20 2008 Tim Waugh <twaugh@redhat.com>
+- Updated pysmbc to 1.0.2.
+
 * Sun May 18 2008 Tim Waugh <twaugh@redhat.com> 0.9.91-2
 - Fixed icon search path.
 
