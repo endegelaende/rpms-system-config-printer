@@ -1,0 +1,712 @@
+diff -up system-config-printer-0.9.91/pysmb.py.0.9.x system-config-printer-0.9.91/pysmb.py
+--- system-config-printer-0.9.91/pysmb.py.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/pysmb.py	2008-05-20 14:54:39.000000000 +0100
+@@ -33,14 +33,14 @@ import pwd
+ from debug import *
+ 
+ class AuthContext:
+-    def __init__ (self, parent):
++    def __init__ (self, parent=None, workgroup='', user='', passwd=''):
+         self.passes = 0
+         self.has_failed = False
+         self.auth_called = False
+         self.tried_guest = False
+-        self.use_user = ''
+-        self.use_password = ''
+-        self.use_workgroup = ''
++        self.use_user = user
++        self.use_password = passwd
++        self.use_workgroup = workgroup
+         self.parent = parent
+ 
+     def perform_authentication (self):
+@@ -52,11 +52,16 @@ class AuthContext:
+             return 0
+ 
+         debugprint ("pysmb: authentication pass: %d" % self.passes)
++        if not self.auth_called:
++            debugprint ("pysmb: auth callback not called?!")
++            return 0
++
+         self.has_failed = False
+         if self.auth_called and not self.tried_guest:
+             self.use_user = 'guest'
+             self.use_password = ''
+             self.tried_guest = True
++            debugprint ("pysmb: try auth as guest")
+             return 1
+ 
+         # After that, prompt
+@@ -120,8 +125,10 @@ class AuthContext:
+     def initial_authentication (self):
+         pass
+ 
+-    def failed (self):
++    def failed (self, exc=None):
+         self.has_failed = True
++        if exc and not self.auth_called:
++            raise exc
+ 
+     def callback (self, server, share, workgroup, user, password):
+         debugprint ("pysmb: got password callback")
+diff -up system-config-printer-0.9.91/jobviewer.py.0.9.x system-config-printer-0.9.91/jobviewer.py
+--- system-config-printer-0.9.91/jobviewer.py.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/jobviewer.py	2008-05-20 14:54:39.000000000 +0100
+@@ -106,7 +106,6 @@ class JobViewer (monitor.Watcher):
+         self.MainWindow.hide ()
+ 
+         if parent:
+-            debugprint ("Set transient for" + repr (parent))
+             self.MainWindow.set_transient_for (parent)
+ 
+         self.statusbar = self.xml.get_widget ('statusbar')
+diff -up system-config-printer-0.9.91/system-config-printer.py.0.9.x system-config-printer-0.9.91/system-config-printer.py
+--- system-config-printer-0.9.91/system-config-printer.py.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/system-config-printer.py	2008-05-20 14:54:39.000000000 +0100
+@@ -23,6 +23,7 @@
+ # config is generated from config.py.in by configure
+ import config
+ 
++import errno
+ import sys, os, tempfile, time, traceback, re, httplib
+ import signal, thread
+ try:
+@@ -82,7 +83,7 @@ import gettext
+ gettext.textdomain (domain)
+ gtk.glade.bindtextdomain (domain)
+ pkgdata = config.Paths ().get_path ('pkgdatadir')
+-iconpath = os.path.join (pkgdata, '/icons/')
++iconpath = os.path.join (pkgdata, 'icons/')
+ glade_file = os.path.join (pkgdata, domain + '.glade')
+ sys.path.append (pkgdata)
+ 
+@@ -242,7 +243,7 @@ class GUI(GtkGUI, monitor.Watcher):
+                         "entNewJobOption", "btnNewJobOption",
+                         # small dialogs
+                         "ConnectDialog", "chkEncrypted", "cmbServername",
+-                        "entUser", "btnConnect",
++                        "btnConnect",
+                         "ConnectingDialog", "lblConnecting",
+                         "NewPrinterName", "entCopyName", "btnCopyOk",
+                         "ErrorDialog", "lblError",
+@@ -560,7 +561,16 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+     def dests_iconview_button_release_event (self, iconview, event):
+         if event.button > 1:
++            click_path = iconview.get_path_at_pos (int (event.x),
++                                                   int (event.y))
+             paths = iconview.get_selected_items ()
++            if click_path == None:
++                iconview.unselect_all ()
++                paths = []
++            elif click_path not in paths:
++                iconview.unselect_all ()
++                iconview.select_path (click_path)
++                paths = [click_path]
+             self.printer_context_menu.popup (event, iconview, paths)
+         return False
+ 
+@@ -718,6 +728,7 @@ class GUI(GtkGUI, monitor.Watcher):
+                     pixbuf = theme.load_icon (icon, w, 0)
+                 except gobject.GError:
+                     # Not in theme.
++                    pixbuf = None
+                     for p in [iconpath, 'icons/']:
+                         try:
+                             pixbuf = gtk.gdk.pixbuf_new_from_file ("%s%s.png" %
+@@ -761,7 +772,6 @@ class GUI(GtkGUI, monitor.Watcher):
+         self.cmbServername.show()
+ 
+         self.cmbServername.child.set_text (current_server)
+-        self.entUser.set_text (cups.getUser())
+         self.chkEncrypted.set_active (cups.getEncryption() ==
+                                       cups.HTTP_ENCRYPT_ALWAYS)
+ 
+@@ -780,7 +790,6 @@ class GUI(GtkGUI, monitor.Watcher):
+             cups.setEncryption(cups.HTTP_ENCRYPT_IF_REQUESTED)
+ 
+         servername = self.cmbServername.child.get_text()
+-        user = self.entUser.get_text()
+ 
+         self.lblConnecting.set_text(_("Connecting to server:\n%s") %
+                                     servername)
+@@ -788,10 +797,10 @@ class GUI(GtkGUI, monitor.Watcher):
+         self.ConnectingDialog.set_transient_for(self.MainWindow)
+         self.ConnectingDialog.show()
+         self.connect_server = servername
+-        self.connect_user = user
+         # We need to set the connecting user in this thread as well.
+         cups.setServer(self.connect_server)
+-        cups.setUser(self.connect_user)
++        cups.setUser('')
++        self.connect_user = cups.getUser()
+         # Now start a new thread for connection.
+         args = []
+         if self.printer:
+@@ -3353,6 +3362,14 @@ class NewPrinterGUI(GtkGUI):
+         store.clear ()
+         if pysmb.USE_OLD_CODE:
+             store.append(None, (_('Scanning...'), '', None, None))
++        else:
++            class X:
++                pass
++            dummy = X()
++            dummy.smbc_type = pysmb.smbc.PRINTER_SHARE
++            dummy.name = _('Scanning...')
++            dummy.comment = ''
++            store.append(None, [dummy])
+         try:
+             self.busy(self.SMBBrowseDialog)
+         except:
+@@ -3362,16 +3379,24 @@ class NewPrinterGUI(GtkGUI):
+         if pysmb.USE_OLD_CODE:
+             domains = pysmb.get_domain_list ()
+         else:
+-            self.smbcc = pysmb.smbc.Context (debug=0,
+-                                             flags=pysmb.smbc.FLAG_NO_AUTO_ANONYMOUS_LOGON,
++            debug = 0
++            if get_debugging ():
++                debug = 1
++            self.smbcc = pysmb.smbc.Context (debug=debug,
+                                              auth_fn=self.browse_smb_hosts_thread_auth_callback)
+             self.smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+-            while self.smbc_auth.perform_authentication () > 0:
+-                try:
+-                    workgroups = self.smbcc.opendir ("smb://").getdents ()
+-                except:
+-                    self.smbc_auth.failed ()
++            try:
++                while self.smbc_auth.perform_authentication () > 0:
++                    try:
++                        workgroups = self.smbcc.opendir ("smb://").getdents ()
++                    except Exception, e:
++                        self.smbc_auth.failed (e)
++            except RuntimeError, (e, s):
++                if e == errno.ENOENT:
+                     workgroups = None
++                else:
++                    debugprint ("Runtime error: %s" % repr ((e, s)))
++                    raise
+ 
+         gtk.gdk.threads_enter()
+         store.clear ()
+@@ -3384,7 +3409,6 @@ class NewPrinterGUI(GtkGUI):
+                 store.set_value (iter, 0, d['DOMAIN'])
+                 store.set_value (iter, 2, d)
+         else:
+-            store.clear ()
+             if workgroups:
+                 for workgroup in workgroups:
+                     iter = store.append (None, [workgroup])
+@@ -3510,12 +3534,19 @@ class NewPrinterGUI(GtkGUI):
+ 
+                 uri = "smb://%s" % entry.name
+                 self.smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+-                while self.smbc_auth.perform_authentication () > 0:
+-                    try:
+-                        servers = self.smbcc.opendir (uri).getdents ()
+-                    except:
+-                        self.smbc_auth.failed ()
++                try:
++                    while self.smbc_auth.perform_authentication () > 0:
++                        try:
++                            servers = self.smbcc.opendir (uri).getdents ()
++                        except Exception, e:
++                            self.smbc_auth.failed (e)
++                except RuntimeError, (e, s):
++                    if e == errno.ENOENT:
+                         servers = None
++                    else:
++                        debugprint ("Runtime error: %s" % repr ((e, s)))
++                        del self.expanding_row
++                        raise
+ 
+                 if servers:
+                     for server in servers:
+@@ -3539,15 +3570,17 @@ class NewPrinterGUI(GtkGUI):
+                 uri = "smb://%s" % entry.name
+ 
+                 self.smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+-                while self.smbc_auth.perform_authentication () > 0:
+-                    try:
+-                        shares = self.smbcc.opendir (uri).getdents ()
+-                    except RuntimeError, (e, m):
+-                        self.smbc_auth.failed ()
+-                        shares = None
+-                        if e != 13 and e != 1:
+-                            del self.expanding_row
+-                            raise
++                try:
++                    while self.smbc_auth.perform_authentication () > 0:
++                        try:
++                            shares = self.smbcc.opendir (uri).getdents ()
++                        except Exception, e:
++                            self.smbc_auth.failed (e)
++                except RuntimeError, (e, s):
++                    shares = None
++                    if e != errno.EACCES and e != errno.EPERM:
++                        del self.expanding_row
++                        raise
+ 
+                 if shares:
+                     for share in shares:
+@@ -3622,14 +3655,50 @@ class NewPrinterGUI(GtkGUI):
+         (group, host, share, u, p) = SMBURI (uri=uri).separate ()
+         user = ''
+         passwd = ''
+-        if self.rbtnSMBAuthSet.get_active():
++        auth_set = self.rbtnSMBAuthSet.get_active()
++        if auth_set:
+             user = self.entSMBUsername.get_text ()
+             passwd = self.entSMBPassword.get_text ()
+-        accessible = pysmb.printer_share_accessible ("//%s/%s" %
+-                                                     (host, share),
+-                                                     group = group,
+-                                                     user = user,
+-                                                     passwd = passwd)
++
++        if pysmb.USE_OLD_CODE:
++            accessible = pysmb.printer_share_accessible ("//%s/%s" %
++                                                         (host, share),
++                                                         group = group,
++                                                         user = user,
++                                                         passwd = passwd)
++        else:
++            accessible = False
++            try:
++                debug = 0
++                if get_debugging ():
++                    debug = 1
++
++                if auth_set:
++                    def do_auth (svr, shr, wg, un, pw):
++                        return (group, user, passwd)
++                    ctx = pysmb.smbc.Context (debug=debug, auth_fn=do_auth)
++                    f = ctx.open ("smb://%s/%s" % (host, share),
++                                  os.O_RDWR, 0777)
++                    accessible = True
++                else:
++                    auth_fn = self.browse_smb_hosts_thread_auth_callback
++                    ctx = pysmb.smbc.Context (debug=debug, auth_fn=auth_fn)
++                    self.smbc_auth = pysmb.AuthContext (self.NewPrinterWindow,
++                                                        workgroup=group,
++                                                        user=user,
++                                                        passwd=passwd)
++                    while self.smbc_auth.perform_authentication () > 0:
++                        try:
++                            f = ctx.open ("smb://%s/%s" % (host, share),
++                                          os.O_RDWR, 0777)
++                            accessible = True
++                        except Exception, e:
++                            self.smbc_auth.failed (e)
++            except RuntimeError, (e, s):
++                debugprint ("Error accessing share: %s" % repr ((e, s)))
++            except:
++                nonfatalException()
++
+         if accessible:
+             self.lblInfo.set_markup ('<span weight="bold" size="larger">' +
+                                      _("Verified") + '</span>\n\n' +
+@@ -3835,18 +3904,18 @@ class NewPrinterGUI(GtkGUI):
+ 
+             self.lblNPDeviceDescription.set_text (text)
+         elif device.type=="socket":
+-            if device.uri.startswith ("socket"):
+-                host = device.uri[9:]
+-                i = host.find (":")
+-                if i != -1:
+-                    port = int (host[i + 1:])
+-                    host = host[:i]
+-                else:
+-                    port = 9100
+-
+-                self.entNPTDirectJetHostname.set_text (host)
+-                self.entNPTDirectJetPort.set_text (str (port))
++            (scheme, rest) = urllib.splittype (device.uri)
++            host = ''
++            port = 9100
++            debugprint ("socket: scheme is %s" % scheme)
++            if scheme == "socket":
++                (hostport, rest) = urllib.splithost (rest)
++                (host, port) = urllib.splitnport (hostport, defport=port)
++                debugprint ("socket: host is %s, port is %s" % (host,
++                                                                repr (port)))
+                 location = host
++            self.entNPTDirectJetHostname.set_text (host)
++            self.entNPTDirectJetPort.set_text (str (port))
+         elif device.type=="serial":
+             if not device.is_class:
+                 options = device.uri.split("?")[1]
+diff -up system-config-printer-0.9.91/po/pl.po.0.9.x system-config-printer-0.9.91/po/pl.po
+--- system-config-printer-0.9.91/po/pl.po.0.9.x	2008-05-16 16:44:00.000000000 +0100
++++ system-config-printer-0.9.91/po/pl.po	2008-05-20 14:54:39.000000000 +0100
+@@ -8,7 +8,7 @@ msgstr ""
+ "Project-Id-Version: pl\n"
+ "Report-Msgid-Bugs-To: https://bugzilla.redhat.com/bugzilla\n"
+ "POT-Creation-Date: 2008-05-14 17:05+0100\n"
+-"PO-Revision-Date: 2008-04-25 16:09+0200\n"
++"PO-Revision-Date: 2008-05-18 23:42+0200\n"
+ "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
+ "Language-Team: Polish <pl@li.org>\n"
+ "MIME-Version: 1.0\n"
+@@ -240,9 +240,8 @@ msgstr "Jest w konflikcie z:"
+ 
+ #. Set up "Problems?" link button
+ #: ../system-config-printer.py:272
+-#, fuzzy
+ msgid "Problems?"
+-msgstr "Wykryj"
++msgstr "Problemy?"
+ 
+ #: ../system-config-printer.py:312 ../system-config-printer.py:314
+ msgid "Members of this class"
+@@ -281,9 +280,9 @@ msgid "Automatic rotation"
+ msgstr "Automatyczne obracanie"
+ 
+ #: ../system-config-printer.py:521
+-#, fuzzy, python-format
++#, python-format
+ msgid "Printer Properties - `%s' on %s"
+-msgstr "Właściwości drukarki"
++msgstr "Właściwości drukarki - `%s' na %s"
+ 
+ #: ../system-config-printer.py:615
+ #, python-format
+@@ -522,13 +521,12 @@ msgid "Fax"
+ msgstr "Fax"
+ 
+ #: ../system-config-printer.py:2750
+-#, fuzzy
+ msgid ""
+ "This printer supports both printing and sending faxes.  Which functionality "
+ "should be used for this queue?"
+ msgstr ""
+-"Ta drukarka obsługuje zarówno drukowanie, jak i wysyłanie faksów.\n"
+-"Dla której funkcji ma być używa ta kolejka wydruku?"
++"Ta drukarka obsługuje zarówno drukowanie, jak i wysyłanie faksów. Dla której "
++"funkcji ma być używana ta kolejka?"
+ 
+ #: ../system-config-printer.py:3067
+ msgid "Searching for printers"
+@@ -668,7 +666,7 @@ msgstr "Sterowniki do pobrania"
+ 
+ #: ../system-config-printer.py:4231
+ msgid "Failed to download PPD."
+-msgstr ""
++msgstr "Pobranie PPD nie powiodło się."
+ 
+ #: ../system-config-printer.py:4281 ../system-config-printer.py:4318
+ msgid "No Installable Options"
+@@ -725,11 +723,8 @@ msgstr ""
+ "16"
+ 
+ #: ../system-config-printer.glade.h:8
+-#, fuzzy
+ msgid "72 points per inch"
+-msgstr ""
+-"punkty\n"
+-"(72 punkty na cal)"
++msgstr "72 punkty na cal"
+ 
+ #: ../system-config-printer.glade.h:9
+ msgid "<b>Banner</b>"
+@@ -896,9 +891,8 @@ msgstr ""
+ "własnego)"
+ 
+ #: ../system-config-printer.glade.h:50
+-#, fuzzy
+ msgid "Authentication required"
+-msgstr "Uwierzytelnianie"
++msgstr "Wymagane jest uwierzytelnienie"
+ 
+ #: ../system-config-printer.glade.h:51
+ msgid "Basic Server Settings"
+@@ -1211,9 +1205,8 @@ msgid "Make and Model:"
+ msgstr "Producent i model:"
+ 
+ #: ../system-config-printer.glade.h:142
+-#, fuzzy
+ msgid "Make:"
+-msgstr "Producenci"
++msgstr "Producent:"
+ 
+ #: ../system-config-printer.glade.h:143
+ msgid ""
+@@ -1477,9 +1470,8 @@ msgid "Serial"
+ msgstr "Szeregowo"
+ 
+ #: ../system-config-printer.glade.h:228
+-#, fuzzy
+ msgid "Set As De_fault"
+-msgstr "Ustaw jako domyślną drukarkę"
++msgstr "_Ustaw jako domyślną drukarkę"
+ 
+ #: ../system-config-printer.glade.h:229
+ msgid "Set As Default"
+@@ -1683,9 +1675,8 @@ msgid "_Install"
+ msgstr "Za_instaluj"
+ 
+ #: ../system-config-printer.glade.h:267
+-#, fuzzy
+ msgid "_Rename"
+-msgstr "_Zwolnij"
++msgstr "Zmień _nazwę"
+ 
+ #: ../system-config-printer.glade.h:268
+ msgid "_Search"
+@@ -2104,12 +2095,12 @@ msgstr "Nie"
+ 
+ #: ../troubleshoot/PrintTestPage.py:287
+ msgid "Error submitting test page"
+-msgstr ""
++msgstr "Błąd podczas wysyłania strony próbnej"
+ 
+ #: ../troubleshoot/PrintTestPage.py:292
+ #, python-format
+ msgid "Error submitting test page: %s"
+-msgstr ""
++msgstr "Błąd podczas wysyłania strony próbnej: %s"
+ 
+ #: ../troubleshoot/QueueNotEnabled.py:57
+ #: ../troubleshoot/QueueRejectingJobs.py:67
+@@ -2335,24 +2326,3 @@ msgstr "Zarządzanie zadaniami wydruku"
+ #: ../my-default-printer.desktop.in.h:2
+ msgid "Select default printer"
+ msgstr "Wybór domyślnej drukarki"
+-
+-#, fuzzy
+-#~ msgid "<b>Authentication</b>"
+-#~ msgstr "Uwierzytelnianie"
+-
+-#, fuzzy
+-#~ msgid "Prompt user if authentication is required"
+-#~ msgstr "Wymagane jest uwierzytelnienie"
+-
+-#, fuzzy
+-#~ msgid "Set authentication details now"
+-#~ msgstr "Wymagane jest uwierzytelnienie"
+-
+-#~ msgid "Support for downloadable drivers is not yet completed."
+-#~ msgstr "Obsługa pobierania sterowników nie została jeszcze ukończona."
+-
+-#~ msgid "Enter some search terms for the model of your printer."
+-#~ msgstr "Podaj część nazwy modelu drukarki."
+-
+-#~ msgid "Search terms:"
+-#~ msgstr "Znajdź termin:"
+diff -up system-config-printer-0.9.91/configure.in.0.9.x system-config-printer-0.9.91/configure.in
+--- system-config-printer-0.9.91/configure.in.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/configure.in	2008-05-20 14:54:39.000000000 +0100
+@@ -1,4 +1,4 @@
+-AC_INIT(system-config-printer, 0.9.91)
++AC_INIT(system-config-printer, 0.9.92)
+ AC_CONFIG_SRCDIR(system-config-printer.py)
+ AM_INIT_AUTOMAKE([dist-bzip2 subdir-objects 1.6])
+ IT_PROG_INTLTOOL
+diff -U0 system-config-printer-0.9.91/ChangeLog.0.9.x system-config-printer-0.9.91/ChangeLog
+--- system-config-printer-0.9.91/ChangeLog.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/ChangeLog	2008-05-20 14:54:39.000000000 +0100
+@@ -0,0 +1,53 @@
++2008-05-20  Tim Waugh  <twaugh@redhat.com>
++
++	* configure.in: Version 0.9.92.
++
++2008-05-20  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py
++	(GUI.dests_iconview_button_release_event): Fix right-click
++	behaviour.
++
++	* system-config-printer.glade: Removed user entry box in the
++	connection dialog.
++	* system-config-printer.py (GUI.on_connect_activate): Removed
++	references to user entry box.
++
++	* system-config-printer.py
++	(NewPrinterGUI.on_btnSMBVerify_clicked): Don't use
++	pysmb.printer_share_accessible for access checks unless we are
++	using the old browsing code.
++
++	* pysmb.py (AuthContext.__init__): Allow initial credentials to be
++	set.
++
++	* system-config-printer.py
++	(NewPrinterGUI.browse_smb_hosts_thread): Fixed 'scanning...'
++	message for new SMB browse code.
++
++2008-05-19  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py
++	(NewPrinterGUI.browse_smb_hosts_thread): Don't set no-anon-login
++	flag as it seems to break browsing.
++
++	* pysmb.py (AuthContext.failed): Raise exception if authentication
++	details were not asked for.
++
++	* system-config-printer.py
++	(NewPrinterGUI.browse_smb_hosts_thread): Better exception
++	handling.
++	(NewPrinterGUI.on_tvSMBBrowser_row_expanded): Likewise.
++
++2008-05-18  Tim Waugh  <twaugh@redhat.com>
++
++	* pysmb.py (AuthContext.perform_authentication): More debugging.
++
++	* system-config-printer.py
++	(NewPrinterGUI.on_tvNPDevices_cursor_changed): Better parsing of
++	socket: URIs (Ubuntu bug #222616).
++	(iconpath): Fixed icon search path.
++	(GUI.populateList): Fail if an icon is not available.
++	(NewPrinterGUI.browse_smb_hosts_thread): Enable smbc debugging if
++	debugging is enabled.
++
+diff -up system-config-printer-0.9.91/system-config-printer.glade.0.9.x system-config-printer-0.9.91/system-config-printer.glade
+--- system-config-printer-0.9.91/system-config-printer.glade.0.9.x	2008-05-16 16:42:41.000000000 +0100
++++ system-config-printer-0.9.91/system-config-printer.glade	2008-05-20 14:54:39.000000000 +0100
+@@ -4947,55 +4947,13 @@ DTR/DSR (Hardware)</property>
+ 	<widget class="GtkTable" id="table5">
+ 	  <property name="border_width">6</property>
+ 	  <property name="visible">True</property>
+-	  <property name="n_rows">3</property>
++	  <property name="n_rows">2</property>
+ 	  <property name="n_columns">2</property>
+ 	  <property name="homogeneous">False</property>
+ 	  <property name="row_spacing">6</property>
+ 	  <property name="column_spacing">12</property>
+ 
+ 	  <child>
+-	    <widget class="GtkCheckButton" id="chkEncrypted">
+-	      <property name="visible">True</property>
+-	      <property name="can_focus">True</property>
+-	      <property name="label" translatable="yes">Require encryption</property>
+-	      <property name="use_underline">True</property>
+-	      <property name="relief">GTK_RELIEF_NORMAL</property>
+-	      <property name="focus_on_click">True</property>
+-	      <property name="active">False</property>
+-	      <property name="inconsistent">False</property>
+-	      <property name="draw_indicator">True</property>
+-	    </widget>
+-	    <packing>
+-	      <property name="left_attach">0</property>
+-	      <property name="right_attach">2</property>
+-	      <property name="top_attach">2</property>
+-	      <property name="bottom_attach">3</property>
+-	      <property name="x_options">fill</property>
+-	      <property name="y_options"></property>
+-	    </packing>
+-	  </child>
+-
+-	  <child>
+-	    <widget class="GtkEntry" id="entUser">
+-	      <property name="visible">True</property>
+-	      <property name="can_focus">True</property>
+-	      <property name="editable">True</property>
+-	      <property name="visibility">True</property>
+-	      <property name="max_length">0</property>
+-	      <property name="text"></property>
+-	      <property name="has_frame">True</property>
+-	      <property name="activates_default">True</property>
+-	    </widget>
+-	    <packing>
+-	      <property name="left_attach">1</property>
+-	      <property name="right_attach">2</property>
+-	      <property name="top_attach">1</property>
+-	      <property name="bottom_attach">2</property>
+-	      <property name="y_options"></property>
+-	    </packing>
+-	  </child>
+-
+-	  <child>
+ 	    <widget class="GtkAlignment" id="alignment4">
+ 	      <property name="visible">True</property>
+ 	      <property name="xalign">0.5</property>
+@@ -5038,6 +4996,25 @@ DTR/DSR (Hardware)</property>
+ 	  </child>
+ 
+ 	  <child>
++	    <widget class="GtkComboBoxEntry" id="cmbServername">
++	      <property name="visible">True</property>
++	      <property name="items">dummy</property>
++	      <property name="add_tearoffs">False</property>
++	      <property name="has_frame">True</property>
++	      <property name="focus_on_click">True</property>
++	      <signal name="changed" handler="on_connect_servername_changed" last_modification_time="Mon, 01 Oct 2007 15:43:51 GMT"/>
++	    </widget>
++	    <packing>
++	      <property name="left_attach">1</property>
++	      <property name="right_attach">2</property>
++	      <property name="top_attach">0</property>
++	      <property name="bottom_attach">1</property>
++	      <property name="x_options">fill</property>
++	      <property name="y_options">fill</property>
++	    </packing>
++	  </child>
++
++	  <child>
+ 	    <widget class="GtkAlignment" id="alignment5">
+ 	      <property name="visible">True</property>
+ 	      <property name="xalign">0.5</property>
+@@ -5050,53 +5027,28 @@ DTR/DSR (Hardware)</property>
+ 	      <property name="right_padding">6</property>
+ 
+ 	      <child>
+-		<widget class="GtkLabel" id="label54">
++		<widget class="GtkCheckButton" id="chkEncrypted">
+ 		  <property name="visible">True</property>
+-		  <property name="label" translatable="yes">User name:</property>
+-		  <property name="use_underline">False</property>
+-		  <property name="use_markup">False</property>
+-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+-		  <property name="wrap">False</property>
+-		  <property name="selectable">False</property>
+-		  <property name="xalign">0</property>
+-		  <property name="yalign">0.5</property>
+-		  <property name="xpad">0</property>
+-		  <property name="ypad">0</property>
+-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+-		  <property name="width_chars">-1</property>
+-		  <property name="single_line_mode">False</property>
+-		  <property name="angle">0</property>
++		  <property name="can_focus">True</property>
++		  <property name="label" translatable="yes">Require encryption</property>
++		  <property name="use_underline">True</property>
++		  <property name="relief">GTK_RELIEF_NORMAL</property>
++		  <property name="focus_on_click">True</property>
++		  <property name="active">False</property>
++		  <property name="inconsistent">False</property>
++		  <property name="draw_indicator">True</property>
+ 		</widget>
+ 	      </child>
+ 	    </widget>
+ 	    <packing>
+ 	      <property name="left_attach">0</property>
+-	      <property name="right_attach">1</property>
++	      <property name="right_attach">2</property>
+ 	      <property name="top_attach">1</property>
+ 	      <property name="bottom_attach">2</property>
+ 	      <property name="x_options">fill</property>
+ 	      <property name="y_options">fill</property>
+ 	    </packing>
+ 	  </child>
+-
+-	  <child>
+-	    <widget class="GtkComboBoxEntry" id="cmbServername">
+-	      <property name="visible">True</property>
+-	      <property name="items">dummy</property>
+-	      <property name="add_tearoffs">False</property>
+-	      <property name="has_frame">True</property>
+-	      <property name="focus_on_click">True</property>
+-	      <signal name="changed" handler="on_connect_servername_changed" last_modification_time="Mon, 01 Oct 2007 15:43:51 GMT"/>
+-	    </widget>
+-	    <packing>
+-	      <property name="left_attach">1</property>
+-	      <property name="right_attach">2</property>
+-	      <property name="top_attach">0</property>
+-	      <property name="bottom_attach">1</property>
+-	      <property name="x_options">fill</property>
+-	      <property name="y_options">fill</property>
+-	    </packing>
+-	  </child>
+ 	</widget>
+ 	<packing>
+ 	  <property name="padding">0</property>
