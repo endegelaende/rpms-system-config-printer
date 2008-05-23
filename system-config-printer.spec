@@ -5,7 +5,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 0.9.92
+Version: 0.9.93
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -112,6 +112,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/contextmenu.py*
 %{_datadir}/%{name}/debug.py*
+%{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/my-default-printer.py*
@@ -140,6 +141,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri May 23 2008 Tim Waugh <twaugh@redhat.com> 0.9.93-1
+- 0.9.93.
+
 * Tue May 20 2008 Tim Waugh <twaugh@redhat.com> 0.9.92-1
 - 0.9.92.
 
