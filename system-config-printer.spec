@@ -45,7 +45,7 @@ system-config-printer is a graphical user interface that allows
 the user to configure a CUPS print server.
 
 %package libs
-Summary: Common code for the graphical and non-graphical pieces
+Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
 Requires: foomatic
@@ -141,6 +141,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu May 29 2008 Tim Waugh <twaugh@redhat.com>
+- Updated libs summary.
+
 * Tue May 27 2008 Tim Waugh <twaugh@redhat.com> 1.0.0-1
 - 1.0.0.
 
