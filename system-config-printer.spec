@@ -1,4 +1,4 @@
-%define pycups_version 1.9.38
+%define pycups_version 1.9.39
 %define pysmbc_version 1.0.2
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
@@ -142,6 +142,7 @@ exit 0
 
 %changelog
 * Thu May 29 2008 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.39.
 - Updated libs summary.
 
 * Tue May 27 2008 Tim Waugh <twaugh@redhat.com> 1.0.0-1
