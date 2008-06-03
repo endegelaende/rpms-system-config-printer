@@ -60,6 +60,7 @@ the configuration tool.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .1.0.x
+./bootstrap
 
 %build
 %configure
