@@ -34,6 +34,7 @@ Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: gnome-python2
 Requires: notification-daemon
+Requires: notify-python
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -144,6 +145,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jun  5 2008 Tim Waugh <twaugh@redhat.com>
+- Requires notify-python (bug #450139).
+
 * Thu Jun  5 2008 Tim Waugh <twaugh@redhat.com> 1.0.0-3
 - Applied patches from upstream (bug #450120).
 
