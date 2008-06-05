@@ -1552,3 +1552,711 @@ index 9cf8438..685777b 100755
 -- 
 1.5.4.3
 
+
+From 373b0abf9872545ca7dee9a236f33711b6e6c47e Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Tue, 3 Jun 2008 17:12:26 +0100
+Subject: [PATCH] Made printer properties dialog tab labels slightly wider.
+
+	* system-config-printer.glade: Adjust left hpane width in the
+	printer properties dialog to be slightly wider.
+(cherry picked from commit 213dabdfa14193cb0b8bee01f1498b56bc2dc72d)
+---
+ ChangeLog                   |    5 +++++
+ system-config-printer.glade |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 38fc8b8..54ff986 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,5 +1,10 @@
+ 2008-06-03  Tim Waugh  <twaugh@redhat.com>
+ 
++	* system-config-printer.glade: Adjust left hpane width in the
++	printer properties dialog to be slightly wider.
++
++2008-06-03  Tim Waugh  <twaugh@redhat.com>
++
+ 	* system-config-printer.py (GUI.on_btnPrintTestPage_clicked):
+ 	Don't automatically try authenticating as root if asked for a
+ 	password when printing a test page, as the authentication is
+diff --git a/system-config-printer.glade b/system-config-printer.glade
+index 1ee987a..52b7713 100644
+--- a/system-config-printer.glade
++++ b/system-config-printer.glade
+@@ -6484,7 +6484,7 @@ Till Kamppeter &lt;till.kamppeter@gmail.com&gt;</property>
+ 
+ 	  <child>
+ 	    <widget class="GtkScrolledWindow" id="swtvPrinterProperties">
+-	      <property name="width_request">126</property>
++	      <property name="width_request">135</property>
+ 	      <property name="visible">True</property>
+ 	      <property name="can_focus">True</property>
+ 	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+-- 
+1.5.4.3
+
+
+From df6ba562fa09d481ac8f2675aae04618faf75418 Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Wed, 4 Jun 2008 09:08:36 +0100
+Subject: [PATCH] Fixed 'install driver' dialog (bug #449860).
+
+	* system-config-printer.py (GUI.__init__): Don't fetch
+	InstallDialog widget here...
+	(NewPrinterGUI.__init__): ...fetch it here instead (bug #449860).
+	(NewPrinterGUI.checkDriverExists): Fixed traceback.
+(cherry picked from commit bc597966c98b27fabb55e4fc4f864f541d781a41)
+(cherry picked from commit cb6a6d423677cd8d1a1c765389d9c45814a76401)
+---
+ ChangeLog                |    7 +++++++
+ system-config-printer.py |    8 ++++----
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 54ff986..8ebe6f7 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,10 @@
++2008-06-04  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (GUI.__init__): Don't fetch
++	InstallDialog widget here...
++	(NewPrinterGUI.__init__): ...fetch it here instead (bug #449860).
++	(NewPrinterGUI.checkDriverExists): Fixed traceback.
++
+ 2008-06-03  Tim Waugh  <twaugh@redhat.com>
+ 
+ 	* system-config-printer.glade: Adjust left hpane width in the
+diff --git a/system-config-printer.py b/system-config-printer.py
+index 685777b..904d6fe 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -253,7 +253,6 @@ class GUI(GtkGUI, monitor.Watcher):
+                         "ConnectingDialog", "lblConnecting",
+                         "NewPrinterName", "entCopyName", "btnCopyOk",
+                         "InfoDialog", "lblInfo",
+-                        "InstallDialog", "lblInstall",
+                         "AboutDialog",
+                         "WaitWindow", "lblWait",
+                         )
+@@ -2363,7 +2362,8 @@ class NewPrinterGUI(GtkGUI):
+                         "rbtnNPDownloadLicenseYes",
+                         "rbtnNPDownloadLicenseNo",
+                         "NewPrinterName", "entCopyName", "btnCopyOk",
+-                        "InfoDialog", "lblInfo")
++                        "InfoDialog", "lblInfo",
++                        "InstallDialog", "lblInstall")
+         # share with mainapp
+         self.WaitWindow = mainapp.WaitWindow
+         self.lblWait = mainapp.lblWait
+@@ -4722,7 +4722,7 @@ class NewPrinterGUI(GtkGUI):
+                                 (name, pkg))
+                 dialog = self.InstallDialog
+                 self.lblInstall.set_markup(install_text)
+-                dialog.set_transient_for (self.MainWindow)
++                dialog.set_transient_for (self.mainapp.MainWindow)
+                 response = dialog.run ()
+                 dialog.hide ()
+                 if response == gtk.RESPONSE_OK:
+@@ -4747,7 +4747,7 @@ class NewPrinterGUI(GtkGUI):
+                                      "but it is not currently installed.  "
+                                      "Please install it before using this "
+                                      "printer.") % (name, (exes + pkgs)[0]),
+-                                   self.MainWindow)
++                                   self.mainapp.MainWindow)
+ 
+ 
+ def main(configure_printer = None, change_ppd = False):
+-- 
+1.5.4.3
+
+
+From 22c6f509fc43f896db83950c177d037b32237bd6 Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Wed, 4 Jun 2008 11:00:18 +0100
+Subject: [PATCH] Show tracebacks for unhandled exceptions in threads.
+
+	* system-config-printer.py (GUI.connect): Always show traceback
+	for unhandled exceptions if debugging.
+	(NewPrinterGUI.getDevices_thread): Likewise.
+(cherry picked from commit d56fa2b0abe5be781b63e08f056679a7ea92fa3e)
+---
+ ChangeLog                |    6 ++++++
+ system-config-printer.py |    8 +++++++-
+ 2 files changed, 13 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 8ebe6f7..ad38111 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,5 +1,11 @@
+ 2008-06-04  Tim Waugh  <twaugh@redhat.com>
+ 
++	* system-config-printer.py (GUI.connect): Always show traceback
++	for unhandled exceptions if debugging.
++	(NewPrinterGUI.getDevices_thread): Likewise.
++
++2008-06-04  Tim Waugh  <twaugh@redhat.com>
++
+ 	* system-config-printer.py (GUI.__init__): Don't fetch
+ 	InstallDialog widget here...
+ 	(NewPrinterGUI.__init__): ...fetch it here instead (bug #449860).
+diff --git a/system-config-printer.py b/system-config-printer.py
+index 904d6fe..aa2d46f 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -887,6 +887,8 @@ class GUI(GtkGUI, monitor.Watcher):
+             except RuntimeError:
+                 # When we connect, avoid the domain socket.
+                 cups.setServer ("localhost")
++            except:
++                nonfatalException ()
+ 
+         try:
+             connection = authconn.Connection(parent)
+@@ -905,6 +907,8 @@ class GUI(GtkGUI, monitor.Watcher):
+             show_IPP_Error(e, s, parent)
+             gtk.gdk.threads_leave()
+             return
++        except:
++            nonfatalException ()
+ 
+         if self.connect_thread != thread.get_ident(): return
+         gtk.gdk.threads_enter()
+@@ -919,6 +923,8 @@ class GUI(GtkGUI, monitor.Watcher):
+             self.setConnected()
+             self.populateList()
+             show_HTTP_Error(s, parent)
++        except:
++            nonfatalException ()
+ 
+         gtk.gdk.threads_leave()
+ 
+@@ -3055,7 +3061,7 @@ class NewPrinterGUI(GtkGUI):
+         except cups.IPPError, (e, msg):
+             self.devices_result = cups.IPPError (e, msg)
+         except:
+-            debugprint ("Exception in getDevices_thread")
++            nonfatalException ()
+             self.devices_result = {}
+ 
+         try:
+-- 
+1.5.4.3
+
+
+From bd352db6120e549b54de724b11ef4e38d0abadae Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Thu, 5 Jun 2008 09:36:19 +0100
+Subject: [PATCH] Added show_info_dialog().
+
+	* errordialogs.py (show_dialog): New function.
+	(show_error_dialog): Use it.
+	(show_info_dialog): New function.
+(cherry picked from commit 73c7ffe570293a898b257c4da938d147a0ab97db)
+---
+ ChangeLog       |    6 ++++++
+ errordialogs.py |   10 ++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index ad38111..5ddda89 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,9 @@
++2008-06-05  Tim Waugh  <twaugh@redhat.com>
++
++	* errordialogs.py (show_dialog): New function.
++	(show_error_dialog): Use it.
++	(show_info_dialog): New function.
++
+ 2008-06-04  Tim Waugh  <twaugh@redhat.com>
+ 
+ 	* system-config-printer.py (GUI.connect): Always show traceback
+diff --git a/errordialogs.py b/errordialogs.py
+index 6590c88..900b4a3 100755
+--- a/errordialogs.py
++++ b/errordialogs.py
+@@ -28,7 +28,7 @@ def set_gettext_function (fn):
+     global _
+     _ = fn
+ 
+-def show_error_dialog (title, text, parent=None):
++def show_dialog (title, text, icon, parent=None):
+     dialog = gtk.Dialog (title, parent,
+                          gtk.DIALOG_MODAL |
+                          gtk.DIALOG_DESTROY_WITH_PARENT,
+@@ -39,7 +39,7 @@ def show_error_dialog (title, text, parent=None):
+     hbox = gtk.HBox (False, 12)
+     hbox.set_border_width (6)
+     image = gtk.Image ()
+-    image.set_from_stock ('gtk-dialog-error', gtk.ICON_SIZE_DIALOG)
++    image.set_from_stock (icon, gtk.ICON_SIZE_DIALOG)
+     image.set_alignment (0.0, 0.0)
+     hbox.pack_start (image, False, False, 0)
+     label = gtk.Label ()
+@@ -54,6 +54,12 @@ def show_error_dialog (title, text, parent=None):
+     dialog.run ()
+     dialog.hide ()
+ 
++def show_info_dialog (title, text, parent=None):
++    return show_dialog (title, text, 'gtk-dialog-info', parent=parent)
++
++def show_error_dialog (title, text, parent=None):
++    return show_dialog (title, text, 'gtk-dialog-error', parent=parent)
++
+ def show_IPP_Error(exception, message, parent=None):
+     if exception == cups.IPP_NOT_AUTHORIZED:
+         title = _('Not authorized')
+-- 
+1.5.4.3
+
+
+From 3ec292e6cb2fabda0dae46fac50828167c65a1ac Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Thu, 5 Jun 2008 09:38:09 +0100
+Subject: [PATCH] Added Firewall Review dialog.
+
+	* system-config-printer.py (GUI.save_serversettings): Show a
+	dialog advising the user to review the firewall if sharing has
+	been enabled.
+(cherry picked from commit b17f98e2d9f42eb2a27643a081ff0317a1f50d6f)
+---
+ ChangeLog                |    6 ++++++
+ system-config-printer.py |   20 ++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 5ddda89..080efbb 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,5 +1,11 @@
+ 2008-06-05  Tim Waugh  <twaugh@redhat.com>
+ 
++	* system-config-printer.py (GUI.save_serversettings): Show a
++	dialog advising the user to review the firewall if sharing has
++	been enabled.
++
++2008-06-05  Tim Waugh  <twaugh@redhat.com>
++
+ 	* errordialogs.py (show_dialog): New function.
+ 	(show_error_dialog): Use it.
+ 	(show_info_dialog): New function.
+diff --git a/system-config-printer.py b/system-config-printer.py
+index aa2d46f..8a1609f 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -2189,6 +2189,26 @@ class GUI(GtkGUI, monitor.Watcher):
+             return True
+         self.changed = set()
+         self.setDataButtonState()
++
++        old_setting = self.server_settings.get (cups.CUPS_SERVER_SHARE_PRINTERS,
++                                                '0')
++        new_setting = setting_dict.get (cups.CUPS_SERVER_SHARE_PRINTERS, '0')
++        if (old_setting == '0' and new_setting != '0'):
++            # We have just enabled print queue sharing.
++            # Ideally, this is the time we would check the firewall
++            # settings on this machine and request that the IPP TCP port
++            # be unblocked.  Unfortunately, this is not yet possible
++            # (bug #440469).  However, we can display a dialog to suggest
++            # that now might be a good time to review the firewall settings.
++            show_info_dialog (_("Review Firewall"),
++                              _("You may need to adjust the firewall "
++                                "to allow network printing to this "
++                                "computer.") + '\n\n' +
++                              _("To do this, select "
++                                "System->Administration->Firewall "
++                                "from the main menu."),
++                              parent=self.ServerSettingsDialog)
++
+         time.sleep(1) # give the server a chance to process our request
+ 
+         # Now reconnect, in case the server needed to reload.
+-- 
+1.5.4.3
+
+
+From e19c238a85fc422ed5cfedd3ddcaa8a3d4714e0d Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Thu, 5 Jun 2008 15:08:43 +0100
+Subject: [PATCH] Don't show non-fatal exception message for IPP browse errors.
+
+	* system-config-printer.py
+	(NewPrinterGUI.browse_ipp_queues_thread): IPP errors are fine
+	here.
+(cherry picked from commit 376bea144c59c302456b4e3a14fc31063a87411f)
+---
+ ChangeLog                |    6 ++++++
+ system-config-printer.py |    3 +++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 080efbb..591ffe0 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,5 +1,11 @@
+ 2008-06-05  Tim Waugh  <twaugh@redhat.com>
+ 
++	* system-config-printer.py
++	(NewPrinterGUI.browse_ipp_queues_thread): IPP errors are fine
++	here.
++
++2008-06-05  Tim Waugh  <twaugh@redhat.com>
++
+ 	* system-config-printer.py (GUI.save_serversettings): Show a
+ 	dialog advising the user to review the firewall if sharing has
+ 	been enabled.
+diff --git a/system-config-printer.py b/system-config-printer.py
+index 8a1609f..14b6c9a 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -3831,6 +3831,9 @@ class NewPrinterGUI(GtkGUI):
+             c = cups.Connection()
+             printers = c.getPrinters ()
+             del c
++        except cups.IPPError, (e, m):
++            debugprint ("IPP browser: %s" % m)
++            failed = True
+         except:
+             nonfatalException()
+             failed = True
+-- 
+1.5.4.3
+
+
+From 3a444b7cdd0a892ebf176a32c0242ea362490516 Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Thu, 5 Jun 2008 15:15:32 +0100
+Subject: [PATCH] Better exception handling in threads.
+
+	* system-config-printer.py
+	(NewPrinterGUI.browse_ipp_queues_thread): Better exception
+	handling.
+	(NewPrinterGUI.browse_smb_hosts_thread): Likewise.
+	(NewPrinterGUI.openprinting_printers_found): Likewise.
+(cherry picked from commit d2bb9fa39787d0dd5c78163ae31c9a6bdf63720b)
+---
+ ChangeLog                |    8 ++
+ system-config-printer.py |  198 ++++++++++++++++++++++++---------------------
+ 2 files changed, 114 insertions(+), 92 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 591ffe0..0868e62 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,14 @@
+ 2008-06-05  Tim Waugh  <twaugh@redhat.com>
+ 
+ 	* system-config-printer.py
++	(NewPrinterGUI.browse_ipp_queues_thread): Better exception
++	handling.
++	(NewPrinterGUI.browse_smb_hosts_thread): Likewise.
++	(NewPrinterGUI.openprinting_printers_found): Likewise.
++
++2008-06-05  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py
+ 	(NewPrinterGUI.browse_ipp_queues_thread): IPP errors are fine
+ 	here.
+ 
+diff --git a/system-config-printer.py b/system-config-printer.py
+index 14b6c9a..149a93d 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -3379,20 +3379,23 @@ class NewPrinterGUI(GtkGUI):
+         """Initialise the SMB tree store."""
+ 
+         gtk.gdk.threads_enter()
+-        store = self.smb_store
+-        store.clear ()
+-        if pysmb.USE_OLD_CODE:
+-            store.append(None, (_('Scanning...'), '', None, None))
+-        else:
+-            class X:
+-                pass
+-            dummy = X()
+-            dummy.smbc_type = pysmb.smbc.PRINTER_SHARE
+-            dummy.name = _('Scanning...')
+-            dummy.comment = ''
+-            store.append(None, [dummy])
+         try:
+-            self.busy(self.SMBBrowseDialog)
++            store = self.smb_store
++            store.clear ()
++            if pysmb.USE_OLD_CODE:
++                store.append(None, (_('Scanning...'), '', None, None))
++            else:
++                class X:
++                    pass
++                dummy = X()
++                dummy.smbc_type = pysmb.smbc.PRINTER_SHARE
++                dummy.name = _('Scanning...')
++                dummy.comment = ''
++                store.append(None, [dummy])
++            try:
++                self.busy(self.SMBBrowseDialog)
++            except:
++                nonfatalException()
+         except:
+             nonfatalException()
+         gtk.gdk.threads_leave()
+@@ -3420,28 +3423,31 @@ class NewPrinterGUI(GtkGUI):
+                 nonfatalException()
+ 
+         gtk.gdk.threads_enter()
+-        if pysmb.USE_OLD_CODE:
+-            store.clear ()
+-            for domain in domains.keys ():
+-                d = domains[domain]
+-                iter = store.append (None)
+-                if iter:
+-                    dummy = store.append (iter)
+-                store.set_value (iter, 0, d['DOMAIN'])
+-                store.set_value (iter, 2, d)
+-        else:
+-            store.clear ()
+-            if workgroups:
+-                for workgroup in workgroups:
+-                    iter = store.append (None, [workgroup])
+-                    i = store.append (iter)
+-
+         try:
+-            self.ready(self.SMBBrowseDialog)
++            if pysmb.USE_OLD_CODE:
++                store.clear ()
++                for domain in domains.keys ():
++                    d = domains[domain]
++                    iter = store.append (None)
++                    if iter:
++                        dummy = store.append (iter)
++                    store.set_value (iter, 0, d['DOMAIN'])
++                    store.set_value (iter, 2, d)
++            else:
++                store.clear ()
++                if workgroups:
++                    for workgroup in workgroups:
++                        iter = store.append (None, [workgroup])
++                        i = store.append (iter)
++
++            try:
++                self.ready(self.SMBBrowseDialog)
++            except:
++                nonfatalException()
++
++            self.smb_lock.release()
+         except:
+             nonfatalException()
+-
+-        self.smb_lock.release()
+         gtk.gdk.threads_leave()
+ 
+     def smb_select_function (self, path):
+@@ -3813,15 +3819,18 @@ class NewPrinterGUI(GtkGUI):
+ 
+     def browse_ipp_queues_thread(self):
+         gtk.gdk.threads_enter()
+-        store = self.ipp_store
+-        store.clear ()
+-        store.append(None, (_('Scanning...'), '', None))
+         try:
+-            self.busy(self.IPPBrowseDialog)
++            store = self.ipp_store
++            store.clear ()
++            store.append(None, (_('Scanning...'), '', None))
++            try:
++                self.busy(self.IPPBrowseDialog)
++            except:
++                nonfatalException()
++
++            host = self.entNPTIPPHostname.get_text()
+         except:
+             nonfatalException()
+-
+-        host = self.entNPTIPPHostname.get_text()
+         gtk.gdk.threads_leave()
+ 
+         cups.setServer (host)
+@@ -3839,33 +3848,35 @@ class NewPrinterGUI(GtkGUI):
+             failed = True
+ 
+         gtk.gdk.threads_enter()
++        try:
++            store.clear ()
++            for printer, dict in printers.iteritems ():
++                iter = store.append (None)
++                store.set_value (iter, 0, printer)
++                store.set_value (iter, 1, dict.get ('printer-location', ''))
++                store.set_value (iter, 2, dict)
++
++            if len (printers) + len (classes) == 0:
++                # Display 'No queues' dialog
++                if failed:
++                    title = _("Not possible")
++                    text = (_("It is not possible to obtain a list of queues "
++                              "from this host."))
++                else:
++                    title = _("No queues")
++                    text = _("There are no queues available.")
+ 
+-        store.clear ()
+-        for printer, dict in printers.iteritems ():
+-            iter = store.append (None)
+-            store.set_value (iter, 0, printer)
+-            store.set_value (iter, 1, dict.get ('printer-location', ''))
+-            store.set_value (iter, 2, dict)
+-
+-        if len (printers) + len (classes) == 0:
+-            # Display 'No queues' dialog
+-            if failed:
+-                title = _("Not possible")
+-                text = (_("It is not possible to obtain a list of queues "
+-                          "from this host."))
+-            else:
+-                title = _("No queues")
+-                text = _("There are no queues available.")
++                self.show_error_dialog (title, text, self.IPPBrowseDialog)
++                self.IPPBrowseDialog.hide ()
+ 
+-            self.show_error_dialog (title, text, self.IPPBrowseDialog)
+-            self.IPPBrowseDialog.hide ()
++            try:
++                self.ready(self.IPPBrowseDialog)
++            except:
++                nonfatalException()
+ 
+-        try:
+-            self.ready(self.IPPBrowseDialog)
++            self.ipp_lock.release()
+         except:
+             nonfatalException()
+-
+-        self.ipp_lock.release()
+         gtk.gdk.threads_leave()
+ 
+     def on_tvIPPBrowser_cursor_changed(self, widget):
+@@ -4152,39 +4163,42 @@ class NewPrinterGUI(GtkGUI):
+         button = self.btnNPDownloadableDriverSearch
+         label = self.btnNPDownloadableDriverSearch_label
+         gtk.gdk.threads_enter ()
+-        label.set_text (_("Search"))
+-        button.set_sensitive (True)
+-        if status != 0:
+-            # Should report error.
+-            print printers
+-            print traceback.extract_tb(printers[2], limit=None)
+-            gtk.gdk.threads_leave ()
+-            return
+-
+-        model = gtk.ListStore (str, str)
+-        if len (printers) != 1:
+-            if len (printers) > 1:
+-                first = _("-- Select printer model --")
+-            else:
+-                first = _("-- No matches found --")
+-
+-            iter = model.append (None)
+-            model.set_value (iter, 0, first)
+-            model.set_value (iter, 1, None)
+-
+-        sorted_list = []
+-        for id, name in printers.iteritems ():
+-            sorted_list.append ((id, name))
++        try:
++            label.set_text (_("Search"))
++            button.set_sensitive (True)
++            if status != 0:
++                # Should report error.
++                print printers
++                print traceback.extract_tb(printers[2], limit=None)
++                gtk.gdk.threads_leave ()
++                return
+ 
+-        sorted_list.sort (lambda x, y: cups.modelSort (x[1], y[1]))
+-        for id, name in sorted_list:
+-            iter = model.append (None)
+-            model.set_value (iter, 0, name)
+-            model.set_value (iter, 1, id)
+-        combobox = self.cmbNPDownloadableDriverFoundPrinters
+-        combobox.set_model (model)
+-        combobox.set_active (0)
+-        self.setNPButtons ()
++            model = gtk.ListStore (str, str)
++            if len (printers) != 1:
++                if len (printers) > 1:
++                    first = _("-- Select printer model --")
++                else:
++                    first = _("-- No matches found --")
++
++                iter = model.append (None)
++                model.set_value (iter, 0, first)
++                model.set_value (iter, 1, None)
++
++            sorted_list = []
++            for id, name in printers.iteritems ():
++                sorted_list.append ((id, name))
++
++            sorted_list.sort (lambda x, y: cups.modelSort (x[1], y[1]))
++            for id, name in sorted_list:
++                iter = model.append (None)
++                model.set_value (iter, 0, name)
++                model.set_value (iter, 1, id)
++            combobox = self.cmbNPDownloadableDriverFoundPrinters
++            combobox.set_model (model)
++            combobox.set_active (0)
++            self.setNPButtons ()
++        except:
++            nonfatalException()
+         gtk.gdk.threads_leave ()
+ 
+     def on_cmbNPDownloadableDriverFoundPrinters_changed(self, widget):
+-- 
+1.5.4.3
+
+
+From 7c0e60e53e6042bb03beb70237a45909d8494ab2 Mon Sep 17 00:00:00 2001
+From: Tim Waugh <twaugh@redhat.com>
+Date: Thu, 5 Jun 2008 15:25:34 +0100
+Subject: [PATCH] Fixed IPP browse hang (bug #450120).
+
+	(NewPrinterGUI.browse_ipp_queues_thread): Fixed typo (bug
+	#450120).
+(cherry picked from commit 816fff5ef42c435e6e644a600e76ad5f061d4ccb)
+---
+ ChangeLog                |    5 +++++
+ system-config-printer.py |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 0868e62..97435b2 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,5 +1,10 @@
+ 2008-06-05  Tim Waugh  <twaugh@redhat.com>
+ 
++	(NewPrinterGUI.browse_ipp_queues_thread): Fixed typo (bug
++	#450120).
++
++2008-06-05  Tim Waugh  <twaugh@redhat.com>
++
+ 	* system-config-printer.py
+ 	(NewPrinterGUI.browse_ipp_queues_thread): Better exception
+ 	handling.
+diff --git a/system-config-printer.py b/system-config-printer.py
+index 149a93d..5eb73b2 100755
+--- a/system-config-printer.py
++++ b/system-config-printer.py
+@@ -3866,7 +3866,7 @@ class NewPrinterGUI(GtkGUI):
+                     title = _("No queues")
+                     text = _("There are no queues available.")
+ 
+-                self.show_error_dialog (title, text, self.IPPBrowseDialog)
++                show_error_dialog (title, text, self.IPPBrowseDialog)
+                 self.IPPBrowseDialog.hide ()
+ 
+             try:
+-- 
+1.5.4.3
+
