@@ -105,7 +105,7 @@ rm -rf %buildroot
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog README TODO
+%doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
