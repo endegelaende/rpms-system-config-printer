@@ -5,7 +5,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -142,6 +142,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Jun 10 2008 Tim Waugh <twaugh@redhat.com> 1.0.2-1
+- 1.0.2.
+
 * Mon Jun  9 2008 Tim Waugh <twaugh@redhat.com> 1.0.1-1
 - Update pysmbc to 1.0.3.
 - 1.0.1 (bug #450119).
