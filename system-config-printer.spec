@@ -1,11 +1,12 @@
 %define pycups_version 1.9.40
 %define pysmbc_version 1.0.4
+%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.2
+Version: 1.0.3
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -99,9 +100,11 @@ rm -rf %buildroot
 %{python_sitearch}/cups-1.0-py%{pyver}.egg-info
 %{python_sitearch}/smbc.so
 %{python_sitearch}/smbc-1.0-py%{pyver}.egg-info
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/cupshelpers.py*
-%{_datadir}/%{name}/ppds.py*
+%dir %{python_sitelib}/cupshelpers
+%{python_sitelib}/cupshelpers/__init__.py*
+%{python_sitelib}/cupshelpers/cupshelpers.py*
+%{python_sitelib}/cupshelpers/openprinting.py*
+%{python_sitelib}/cupshelpers/ppds.py*
 
 %files
 %defattr(-,root,root,-)
@@ -109,6 +112,7 @@ rm -rf %buildroot
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/contextmenu.py*
@@ -117,7 +121,6 @@ rm -rf %buildroot
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/my-default-printer.py*
-%{_datadir}/%{name}/openprinting.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/probe_printer.py*
@@ -125,6 +128,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/system-config-printer.py*
+%{_datadir}/%{name}/userdefault.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
@@ -142,8 +146,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Jun 30 2008 Tim Waugh <twaugh@redhat.com>
+* Mon Jun 30 2008 Tim Waugh <twaugh@redhat.com> 1.0.3-1
 - Updated pycups to 1.9.40.
+- 1.0.3.
 
 * Fri Jun 20 2008 Tim Waugh <twaugh@redhat.com>
 - Updated pysmbc to 1.0.4.
