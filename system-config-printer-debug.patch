@@ -1,0 +1,39 @@
+diff -up system-config-printer-1.0.3/system-config-printer.py.debug system-config-printer-1.0.3/system-config-printer.py
+--- system-config-printer-1.0.3/system-config-printer.py.debug	2008-06-30 16:23:05.000000000 +0100
++++ system-config-printer-1.0.3/system-config-printer.py	2008-07-08 15:56:56.000000000 +0100
+@@ -3562,7 +3562,7 @@ class NewPrinterGUI(GtkGUI):
+ 
+             debug = 0
+             if get_debugging ():
+-                debug = 1
++                debug = 10
+             smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+             ctx = pysmb.smbc.Context (debug=debug,
+                                       auth_fn=smbc_auth.callback)
+@@ -3702,7 +3702,7 @@ class NewPrinterGUI(GtkGUI):
+                 uri = "smb://%s" % entry.name
+                 debug = 0
+                 if get_debugging ():
+-                    debug = 1
++                    debug = 10
+                 smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+                 ctx = pysmb.smbc.Context (debug=debug,
+                                           auth_fn=smbc_auth.callback)
+@@ -3741,7 +3741,7 @@ class NewPrinterGUI(GtkGUI):
+                 uri = "smb://%s" % entry.name
+                 debug = 0
+                 if get_debugging ():
+-                    debug = 1
++                    debug = 10
+                 smbc_auth = pysmb.AuthContext (self.SMBBrowseDialog)
+                 ctx = pysmb.smbc.Context (debug=debug,
+                                           auth_fn=smbc_auth.callback)
+@@ -3852,7 +3852,7 @@ class NewPrinterGUI(GtkGUI):
+             try:
+                 debug = 0
+                 if get_debugging ():
+-                    debug = 1
++                    debug = 10
+ 
+                 if auth_set:
+                     # No prompting.
