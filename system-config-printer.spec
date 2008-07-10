@@ -15,7 +15,6 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch0: system-config-printer-debug.patch
 Patch1: pysmbc-debug.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -63,7 +62,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-%patch0 -p1 -b .debug
 
 pushd pysmbc-%{pysmbc_version}
 %patch1 -p1 -b .debug
