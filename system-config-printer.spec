@@ -116,6 +116,7 @@ rm -rf %buildroot
 %{python_sitelib}/cupshelpers/cupshelpers.py*
 %{python_sitelib}/cupshelpers/openprinting.py*
 %{python_sitelib}/cupshelpers/ppds.py*
+%{python_sitelib}/*.egg-info
 
 %files
 %defattr(-,root,root,-)
