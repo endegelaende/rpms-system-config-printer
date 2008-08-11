@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.4
+Version: 1.0.5
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -15,7 +15,6 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch0: pycups-requested_attributes.patch
 Patch1: pysmbc-debug.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -63,10 +62,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-
-pushd pycups-%{pycups_version}
-%patch0 -p1 -b .requested_attributes
-popd
 
 pushd pysmbc-%{pysmbc_version}
 %patch1 -p1 -b .debug
@@ -125,6 +120,7 @@ rm -rf %buildroot
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
 %dir %{_datadir}/%{name}
+%{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/contextmenu.py*
@@ -158,7 +154,8 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Jul 14 2008 Tim Waugh <twaugh@redhat.com>
+* Mon Aug 11 2008 Tim Waugh <twaugh@redhat.com> 1.0.5-1
+- 1.0.5.
 - Updated pycups to 1.9.41.
 
 * Thu Jul 10 2008 Tim Waugh <twaugh@redhat.com> 1.0.4-1
