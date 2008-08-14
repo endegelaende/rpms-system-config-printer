@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,7 +15,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch0: system-config-printer-forbidden.patch
+Patch0: system-config-printer-git.patch
 Patch1: pysmbc-debug.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -64,7 +64,7 @@ the configuration tool.
 %prep
 %setup -q -a 1 -a 2
 
-%patch0 -p1 -b .forbidden
+%patch0 -p1 -b .git
 
 pushd pysmbc-%{pysmbc_version}
 %patch1 -p1 -b .debug
@@ -157,6 +157,14 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Aug 14 2008 Tim Waugh <twaugh@redhat.com> 1.0.5-3
+- Include other fixes from upstream including:
+  - OpenPrinting API change (trac #74).
+  - libnotify API change for 'closed' signal.
+  - Notification for job authentication (trac #91).
+  - Glade delete-event fixes (trac #88).
+  - Pre-fill username in job authentication dialog (trac #87).
+
 * Wed Aug 13 2008 Tim Waugh <twaugh@redhat.com> 1.0.5-2
 - Handle HTTP_FORBIDDEN.
 
