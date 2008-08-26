@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.5
-Release: 3%{?dist}
+Version: 1.0.6
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,7 +15,6 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch0: system-config-printer-git.patch
 Patch1: pysmbc-debug.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -35,7 +34,7 @@ Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
-Requires: gnome-python2
+Requires: gnome-python2-gnome
 Requires: notification-daemon
 Requires: notify-python
 
@@ -63,8 +62,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-
-%patch0 -p1 -b .git
 
 pushd pysmbc-%{pysmbc_version}
 %patch1 -p1 -b .debug
@@ -157,6 +154,15 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Aug 26 2008 Tim Waugh <twaugh@redhat.com> 1.0.6-1
+- Requires gnome-python2-gnome (bug #460021).
+- 1.0.6:
+  - More delete-event fixes.
+  - Fixed temporary file leak.
+  - Fixed dialog leaks.
+  - Small UI improvements for the New Printer dialog.
+  - Other small fixes.
+
 * Thu Aug 14 2008 Tim Waugh <twaugh@redhat.com> 1.0.5-3
 - Include other fixes from upstream including:
   - OpenPrinting API change (trac #74).
