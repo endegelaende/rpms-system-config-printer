@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.6
+Version: 1.0.7
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -125,6 +125,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
+%{_datadir}/%{name}/PhysicalDevice.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/smburi.py*
@@ -148,6 +149,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug 29 2008 Tim Waugh <twaugh@redhat.com> 1.0.7-1
+- 1.0.7:
+  - Efficiency improvements.
+  - Small UI improvements for the New Printer dialog.
+  - Other small fixes.
+
 * Fri Aug 29 2008 Tim Waugh <twaugh@redhat.com>
 - Updated pysmbc to 1.0.5.
 - Updated pycups to 1.9.42.
