@@ -1,4 +1,4 @@
-%define pycups_version 1.9.41
+%define pycups_version 1.9.42
 %define pysmbc_version 1.0.4
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -154,6 +154,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug 29 2008 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.42.
+
 * Tue Aug 26 2008 Tim Waugh <twaugh@redhat.com> 1.0.6-1
 - Requires gnome-python2-gnome (bug #460021).
 - 1.0.6:
