@@ -1,5 +1,5 @@
 %define pycups_version 1.9.42
-%define pysmbc_version 1.0.4
+%define pysmbc_version 1.0.5
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
@@ -14,8 +14,6 @@ Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-
-Patch1: pysmbc-debug.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -62,10 +60,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-
-pushd pysmbc-%{pysmbc_version}
-%patch1 -p1 -b .debug
-popd
 
 %build
 %configure
@@ -155,6 +149,7 @@ exit 0
 
 %changelog
 * Fri Aug 29 2008 Tim Waugh <twaugh@redhat.com>
+- Updated pysmbc to 1.0.5.
 - Updated pycups to 1.9.42.
 
 * Tue Aug 26 2008 Tim Waugh <twaugh@redhat.com> 1.0.6-1
