@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -149,6 +149,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Sep 29 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-2
+- Removed patch (no longer needed).
+
 * Mon Sep 29 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-1
 - 1.0.8:
   - Use modelName from custom PPD to suggest name for new printer
