@@ -15,8 +15,6 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch1: system-config-printer-forbidden.patch
-
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: libsmbclient-devel >= 3.2
@@ -62,7 +60,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .forbidden
 
 %build
 %configure
