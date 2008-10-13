@@ -7,13 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+Patch1: system-config-printer-1.0.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -60,6 +61,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
+%patch1 -p1 -z .1.0.x
 
 %build
 %configure
@@ -149,6 +151,19 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Oct 13 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-3
+- Added patch for 1.0.x changes since 1.0.8:
+  - Don't use a LinkButton for the 'Problems?' button (bug #465407).
+  - Don't use a separator for the server settings dialog (bug
+    #465407).
+  - Don't set non-zero page size for SpinButtons.
+  - Don't show an error dialog if an IPP operation's authentication
+    dialog is cancelled by the user, but show an error dialog if the
+    password was incorrect (bug #465407).
+  - Set Server Settings... menu entry sensitive depending on whether
+    we are connected to a server (Ubuntu #280736).
+  - Lots of translations updated.
+
 * Mon Sep 29 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-2
 - Removed patch (no longer needed).
 
