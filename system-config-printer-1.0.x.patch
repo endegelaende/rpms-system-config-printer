@@ -1,6 +1,6 @@
 diff -up system-config-printer-1.0.8/authconn.py.1.0.x system-config-printer-1.0.8/authconn.py
 --- system-config-printer-1.0.8/authconn.py.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/authconn.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/authconn.py	2008-10-16 10:19:28.000000000 +0100
 @@ -202,6 +202,7 @@ class Connection:
              self._forbidden = False
              self._auth_called = False
@@ -38,8 +38,18 @@ diff -up system-config-printer-1.0.8/authconn.py.1.0.x system-config-printer-1.0
           self._use_password) = d.get_auth_info ()
 diff -U0 system-config-printer-1.0.8/ChangeLog.1.0.x system-config-printer-1.0.8/ChangeLog
 --- system-config-printer-1.0.8/ChangeLog.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/ChangeLog	2008-10-15 18:07:56.000000000 +0100
-@@ -0,0 +1,71 @@
++++ system-config-printer-1.0.8/ChangeLog	2008-10-16 10:19:28.000000000 +0100
+@@ -0,0 +1,81 @@
++2008-10-16  Tim Waugh  <twaugh@redhat.com>
++
++	* debug.py (debugprint): Send debug output to stderr to work
++	around the samba bug (#5805) that closes stdout.
++
++2008-10-16  Tim Waugh  <twaugh@redhat.com>
++
++	* pysmb.py (AuthContext.perform_authentication): Fixed the SMB
++	authentication dialog's cancel button (bug #467127).
++
 +2008-10-15  Tim Waugh  <twaugh@redhat.com>
 +
 +	* pysmb.py (AuthContext.perform_authentication): Don't destroy
@@ -113,7 +123,7 @@ diff -U0 system-config-printer-1.0.8/ChangeLog.1.0.x system-config-printer-1.0.8
 +
 diff -up system-config-printer-1.0.8/cupshelpers/ppds.py.1.0.x system-config-printer-1.0.8/cupshelpers/ppds.py
 --- system-config-printer-1.0.8/cupshelpers/ppds.py.1.0.x	2008-09-26 08:57:34.000000000 +0100
-+++ system-config-printer-1.0.8/cupshelpers/ppds.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/cupshelpers/ppds.py	2008-10-16 10:19:28.000000000 +0100
 @@ -594,7 +594,9 @@ class PPDs:
          _debugprint (str (ppdnamelist))
  
@@ -125,9 +135,21 @@ diff -up system-config-printer-1.0.8/cupshelpers/ppds.py.1.0.x system-config-pri
              print "  <manufacturer>%s</manufacturer>" % mfg
              print "  <model>%s</model>" % mdl
              print "  <description>%s</description>" % description
+diff -up system-config-printer-1.0.8/debug.py.1.0.x system-config-printer-1.0.8/debug.py
+--- system-config-printer-1.0.8/debug.py.1.0.x	2008-08-28 14:30:27.000000000 +0100
++++ system-config-printer-1.0.8/debug.py	2008-10-16 10:19:28.000000000 +0100
+@@ -24,7 +24,7 @@ _debug=False
+ def debugprint (x):
+     if _debug:
+         try:
+-            print x
++            print >>sys.stderr, x
+         except:
+             pass
+ 
 diff -up system-config-printer-1.0.8/errordialogs.py.1.0.x system-config-printer-1.0.8/errordialogs.py
 --- system-config-printer-1.0.8/errordialogs.py.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/errordialogs.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/errordialogs.py	2008-10-16 10:19:28.000000000 +0100
 @@ -62,8 +62,8 @@ def show_error_dialog (title, text, pare
  
  def show_IPP_Error(exception, message, parent=None):
@@ -141,7 +163,7 @@ diff -up system-config-printer-1.0.8/errordialogs.py.1.0.x system-config-printer
          text = (_("There was an error during the CUPS "
 diff -up system-config-printer-1.0.8/po/el.po.1.0.x system-config-printer-1.0.8/po/el.po
 --- system-config-printer-1.0.8/po/el.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/el.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/el.po	2008-10-16 10:19:28.000000000 +0100
 @@ -12,14 +12,14 @@ msgid ""
  msgstr ""
  "Project-Id-Version: el\n"
@@ -1622,7 +1644,7 @@ diff -up system-config-printer-1.0.8/po/el.po.1.0.x system-config-printer-1.0.8/
 +
 diff -up system-config-printer-1.0.8/po/hi.po.1.0.x system-config-printer-1.0.8/po/hi.po
 --- system-config-printer-1.0.8/po/hi.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/hi.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/hi.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,19 +1,19 @@
 -# translation of hi.po to Hindi
 -# Rajesh Ranjan <rranjan@redhat.com>, 2004, 2005, 2006.
@@ -3775,7 +3797,7 @@ diff -up system-config-printer-1.0.8/po/hi.po.1.0.x system-config-printer-1.0.8/
 -#~ msgstr "यह PPD CUPS के द्वारा दिया गया है."
 diff -up system-config-printer-1.0.8/po/hu.po.1.0.x system-config-printer-1.0.8/po/hu.po
 --- system-config-printer-1.0.8/po/hu.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/hu.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/hu.po	2008-10-16 10:19:28.000000000 +0100
 @@ -4,13 +4,14 @@
  # Sulyok Péter <peti@sulyok.hu>, 2004, 2008.
  # Arpad Biro <biro_arpad@yahoo.com>, 2004, 2006, 2007.
@@ -6027,7 +6049,7 @@ diff -up system-config-printer-1.0.8/po/hu.po.1.0.x system-config-printer-1.0.8/
 +
 diff -up system-config-printer-1.0.8/po/kn.po.1.0.x system-config-printer-1.0.8/po/kn.po
 --- system-config-printer-1.0.8/po/kn.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/kn.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/kn.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,14 +1,14 @@
 -# translation of kn.po to Kannada
 +# translation of system-config-printer.1.0.x.kn.po to Kannada
@@ -8210,7 +8232,7 @@ diff -up system-config-printer-1.0.8/po/kn.po.1.0.x system-config-printer-1.0.8/
 -#~ msgstr "PPD ಯು CUPS ನಿಂದ ಒದಗಿಸಲ್ಪಟ್ಟಿದೆ."
 diff -up system-config-printer-1.0.8/po/mr.po.1.0.x system-config-printer-1.0.8/po/mr.po
 --- system-config-printer-1.0.8/po/mr.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/mr.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/mr.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,76 +1,72 @@
 -# translation of mr.po to Marathi
 +# translation of system-config-printer.1.0.x.mr.po to marathi
@@ -11291,7 +11313,7 @@ diff -up system-config-printer-1.0.8/po/mr.po.1.0.x system-config-printer-1.0.8/
 -#~ msgstr "हा PPD पुरवला आहे CUPS ने."
 diff -up system-config-printer-1.0.8/po/nb.po.1.0.x system-config-printer-1.0.8/po/nb.po
 --- system-config-printer-1.0.8/po/nb.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/nb.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/nb.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,3 +1,4 @@
 +# Kjartan Maraas <kmaraas@gnome.org>, 2000-2007.
  # Trond Eivind Glomsrød <teg@redhat.com>, 2007.
@@ -11603,7 +11625,7 @@ diff -up system-config-printer-1.0.8/po/nb.po.1.0.x system-config-printer-1.0.8/
  #, python-format
 diff -up system-config-printer-1.0.8/po/POTFILES.in.1.0.x system-config-printer-1.0.8/po/POTFILES.in
 --- system-config-printer-1.0.8/po/POTFILES.in.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/POTFILES.in	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/POTFILES.in	2008-10-16 10:19:28.000000000 +0100
 @@ -10,6 +10,7 @@ my-default-printer.py
  options.py
  optionwidgets.py
@@ -11614,7 +11636,7 @@ diff -up system-config-printer-1.0.8/po/POTFILES.in.1.0.x system-config-printer-
  system-config-printer.desktop.in
 diff -up system-config-printer-1.0.8/po/sk.po.1.0.x system-config-printer-1.0.8/po/sk.po
 --- system-config-printer-1.0.8/po/sk.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/sk.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/sk.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,86 +1,82 @@
 -# Slovak translations for printconf package
 -# Slovenské preklady pre balík printconf.
@@ -13839,7 +13861,7 @@ diff -up system-config-printer-1.0.8/po/sk.po.1.0.x system-config-printer-1.0.8/
 +
 diff -up system-config-printer-1.0.8/po/sv.po.1.0.x system-config-printer-1.0.8/po/sv.po
 --- system-config-printer-1.0.8/po/sv.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/sv.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/sv.po	2008-10-16 10:19:28.000000000 +0100
 @@ -11,7 +11,7 @@ msgstr ""
  "Project-Id-Version: system-config-printer\n"
  "Report-Msgid-Bugs-To: https://bugzilla.redhat.com/bugzilla\n"
@@ -14996,7 +15018,7 @@ diff -up system-config-printer-1.0.8/po/sv.po.1.0.x system-config-printer-1.0.8/
 +
 diff -up system-config-printer-1.0.8/po/ta.po.1.0.x system-config-printer-1.0.8/po/ta.po
 --- system-config-printer-1.0.8/po/ta.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/ta.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/ta.po	2008-10-16 10:19:28.000000000 +0100
 @@ -1,4 +1,4 @@
 -# translation of ta.po to Tamil
 +# translation of system-config-printer.1.0.x.ta.po to Tamil
@@ -17111,7 +17133,7 @@ diff -up system-config-printer-1.0.8/po/ta.po.1.0.x system-config-printer-1.0.8/
 -#~ msgstr "இந்த PPD என்பது CUPSஆல் வழங்கப்பட்டதாகும்."
 diff -up system-config-printer-1.0.8/po/te.po.1.0.x system-config-printer-1.0.8/po/te.po
 --- system-config-printer-1.0.8/po/te.po.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/po/te.po	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/po/te.po	2008-10-16 10:19:28.000000000 +0100
 @@ -2,57 +2,62 @@
  # translation of te.po to
  # This file is distributed under the same license as the PACKAGE package.
@@ -19991,7 +20013,7 @@ diff -up system-config-printer-1.0.8/po/te.po.1.0.x system-config-printer-1.0.8/
 -#~ msgstr "సిద్ధ కార్యాల ఐచ్ఛికాలను తెల్పు"
 diff -up system-config-printer-1.0.8/print-applet.desktop.in.1.0.x system-config-printer-1.0.8/print-applet.desktop.in
 --- system-config-printer-1.0.8/print-applet.desktop.in.1.0.x	2008-08-28 14:30:27.000000000 +0100
-+++ system-config-printer-1.0.8/print-applet.desktop.in	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/print-applet.desktop.in	2008-10-16 10:19:28.000000000 +0100
 @@ -6,5 +6,5 @@ Exec=system-config-printer-applet
  Terminal=false
  Type=Application
@@ -20001,7 +20023,7 @@ diff -up system-config-printer-1.0.8/print-applet.desktop.in.1.0.x system-config
  StartupNotify=false
 diff -up system-config-printer-1.0.8/pysmb.py.1.0.x system-config-printer-1.0.8/pysmb.py
 --- system-config-printer-1.0.8/pysmb.py.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/pysmb.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/pysmb.py	2008-10-16 10:19:28.000000000 +0100
 @@ -27,6 +27,7 @@ except ImportError:
      USE_OLD_CODE=True
  
@@ -20046,7 +20068,7 @@ diff -up system-config-printer-1.0.8/pysmb.py.1.0.x system-config-printer-1.0.8/
          d.show_all ()
  
          if self.use_user == 'guest':
-@@ -117,7 +133,6 @@ class AuthContext:
+@@ -117,15 +133,16 @@ class AuthContext:
          username_entry.set_text (self.use_user)
          domain_entry.set_text (self.use_workgroup)
          response = d.run ()
@@ -20054,7 +20076,9 @@ diff -up system-config-printer-1.0.8/pysmb.py.1.0.x system-config-printer-1.0.8/
  
          if response == gtk.RESPONSE_CANCEL:
              self.cancel = True
-@@ -126,6 +141,7 @@ class AuthContext:
++            d.destroy ()
+             return -1
+ 
          self.use_user = username_entry.get_text ()
          self.use_password = password_entry.get_text ()
          self.use_workgroup = domain_entry.get_text ()
@@ -20064,7 +20088,7 @@ diff -up system-config-printer-1.0.8/pysmb.py.1.0.x system-config-printer-1.0.8/
      def initial_authentication (self):
 diff -up system-config-printer-1.0.8/smburi.py.1.0.x system-config-printer-1.0.8/smburi.py
 --- system-config-printer-1.0.8/smburi.py.1.0.x	2008-08-28 14:34:24.000000000 +0100
-+++ system-config-printer-1.0.8/smburi.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/smburi.py	2008-10-16 10:19:28.000000000 +0100
 @@ -47,7 +47,7 @@ class SMBURI:
          uri = "%s%s%s" % (urllib.quote (user),
                            uri_password,
@@ -20076,7 +20100,7 @@ diff -up system-config-printer-1.0.8/smburi.py.1.0.x system-config-printer-1.0.8
          if len (share) > 0:
 diff -up system-config-printer-1.0.8/system-config-printer.glade.1.0.x system-config-printer-1.0.8/system-config-printer.glade
 --- system-config-printer-1.0.8/system-config-printer.glade.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/system-config-printer.glade	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/system-config-printer.glade	2008-10-16 10:19:28.000000000 +0100
 @@ -67,7 +67,7 @@
  		  </child>
  
@@ -20223,7 +20247,7 @@ diff -up system-config-printer-1.0.8/system-config-printer.glade.1.0.x system-co
  					    <packing>
 diff -up system-config-printer-1.0.8/system-config-printer.py.1.0.x system-config-printer-1.0.8/system-config-printer.py
 --- system-config-printer-1.0.8/system-config-printer.py.1.0.x	2008-09-29 17:53:53.000000000 +0100
-+++ system-config-printer-1.0.8/system-config-printer.py	2008-10-15 18:07:56.000000000 +0100
++++ system-config-printer-1.0.8/system-config-printer.py	2008-10-16 10:19:28.000000000 +0100
 @@ -209,7 +209,7 @@ class GUI(GtkGUI, monitor.Watcher):
                          "btnPrinterPropertiesApply",
                          "btnPrinterPropertiesClose",

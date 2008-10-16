@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -151,6 +151,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Oct 16 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-6
+- Updated patch for 1.0.x changes:
+  - Fixed SMB authentication dialog's cancel button (bug #467127).
+  - Work around samba bug #5805 by sending debug output to stderr
+    instead of stdout.
+
 * Wed Oct 15 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-5
 - Updated patch for 1.0.x changes:
   - Fixed SMB authentication (bug #464003).
