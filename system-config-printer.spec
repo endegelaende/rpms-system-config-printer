@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.8
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,6 +15,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-1.0.x.patch
+Patch2: pysmbc-git.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -62,6 +63,8 @@ the configuration tool.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -z .1.0.x
+cd pysmbc-%{pysmbc_version}
+%patch2 -p1 -z .git
 
 %build
 %configure
@@ -151,6 +154,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Oct 17 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-7
+- Added patch for pysmbc changes in git to prevent getdents crashing
+  (bug #465975).
+
 * Thu Oct 16 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-6
 - Updated patch for 1.0.x changes:
   - Fixed SMB authentication dialog's cancel button (bug #467127).
