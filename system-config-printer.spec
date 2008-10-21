@@ -1,21 +1,19 @@
 %define pycups_version 1.9.42
-%define pysmbc_version 1.0.5
+%define pysmbc_version 1.0.6
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.8
-Release: 7%{?dist}
+Version: 1.0.9
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-1.0.x.patch
-Patch2: pysmbc-git.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -62,9 +60,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -z .1.0.x
-cd pysmbc-%{pysmbc_version}
-%patch2 -p1 -z .git
 
 %build
 %configure
@@ -154,6 +149,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Oct 21 2008 Tim Waugh <twaugh@redhat.com> 1.0.9-1
+- Updated to 1.0.9 for translations.
+- Updated pysmbc to 1.0.6.  No longer need pysmbc-git patch.
+
 * Fri Oct 17 2008 Tim Waugh <twaugh@redhat.com> 1.0.8-7
 - Added patch for pysmbc changes in git to prevent getdents crashing
   (bug #465975).
