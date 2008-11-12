@@ -14,6 +14,7 @@ Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+Patch0: pycups-git-master.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -60,6 +61,10 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
+
+pushd pycups-%{pycups_version}
+%patch0 -p1 -b .git-master
+popd
 
 %build
 %configure
@@ -149,6 +154,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Nov 12 2008 Tim Waugh <twaugh@redhat.com>
+- Applied pycups patch from git.
+
 * Tue Oct 21 2008 Tim Waugh <twaugh@redhat.com> 1.0.9-1
 - Updated to 1.0.9 for translations.
 - Updated pysmbc to 1.0.6.  No longer need pysmbc-git patch.
