@@ -1,4 +1,4 @@
-%define pycups_version 1.9.43
+%define pycups_version 1.9.44
 %define pysmbc_version 1.0.6
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.11
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -149,6 +149,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Nov 28 2008 Tim Waugh <twaugh@redhat.com> 1.0.11-2
+- Updated pycups to 1.9.44.
+
 * Fri Nov 21 2008 Tim Waugh <twaugh@redhat.com> 1.0.11-1
 - Updated to 1.0.11.
 - Updated pycups to 1.9.43.
