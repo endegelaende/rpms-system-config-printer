@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.11
-Release: 3%{?dist}
+Version: 1.0.12
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -149,6 +149,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Dec  1 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-1
+- Updated to 1.0.12:
+  - Don't automatically replace network printer URIs with
+    HPLIP URIs (bug #473129).
+  - Fixed some file descriptor and temporary file leaks.
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.0.11-3
 - Rebuild for Python 2.6
 
