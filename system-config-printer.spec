@@ -7,13 +7,15 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.12
-Release: 1%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+
+Patch0: system-config-printer-1.0.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -60,6 +62,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
+%patch0 -p1 -b .1.0.x
 
 %build
 %configure
@@ -149,16 +152,26 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Dec 12 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-4
+- Updated patch for 1.0.x changes:
+  - Fix for advanced server settings dialog.
+  - Fixes for troubleshooter to restore error_log fetching.
+
+* Wed Dec 10 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-3
+- Updated patch for 1.0.x changes:
+  - Fixed problem that prevented authentication prompt being
+    displayed.
+
+* Fri Dec  5 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-2
+- Added patch for 1.0.x changes since 1.0.12:
+  - Smarter PPD cache in cupshelpers module.
+  - Don't write back localized versions of globalized PPDs.
+
 * Mon Dec  1 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-1
 - Updated to 1.0.12:
   - Don't automatically replace network printer URIs with
     HPLIP URIs (bug #473129).
   - Fixed some file descriptor and temporary file leaks.
-
-* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 1.0.11-3
-- Rebuild for Python 2.6
-
-* Fri Nov 28 2008 Tim Waugh <twaugh@redhat.com> 1.0.11-2
 - Updated pycups to 1.9.44.
 
 * Fri Nov 21 2008 Tim Waugh <twaugh@redhat.com> 1.0.11-1
