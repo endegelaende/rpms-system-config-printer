@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.12
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,6 +16,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch0: system-config-printer-1.0.x.patch
+Patch10: pycups-git.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -63,6 +64,9 @@ the configuration tool.
 %prep
 %setup -q -a 1 -a 2
 %patch0 -p1 -b .1.0.x
+pushd pycups-%{pycups_version}
+%patch10 -p1 -b .pycups-git
+popd
 
 %build
 %configure
@@ -152,6 +156,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Dec 17 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-5
+- Added patch for pycups git changes since 1.9.44:
+  - Look for test page file in new location for CUPS 1.4 (bug
+    #476612).
+
 * Fri Dec 12 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-4
 - Updated patch for 1.0.x changes:
   - Fix for advanced server settings dialog.
