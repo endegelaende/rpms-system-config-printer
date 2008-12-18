@@ -158,8 +158,7 @@ exit 0
 %changelog
 * Wed Dec 17 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-5
 - Added patch for pycups git changes since 1.9.44:
-  - Look for test page file in new location for CUPS 1.4 (bug
-    #476612).
+  - Look for test page file in new location for CUPS 1.4 (bug #476612).
 
 * Fri Dec 12 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-4
 - Updated patch for 1.0.x changes:
