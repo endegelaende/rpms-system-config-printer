@@ -1,8 +1,15 @@
 diff --git a/ChangeLog b/ChangeLog
-index 2851eeb..d02e03d 100644
+index 2851eeb..db57408 100644
 --- a/ChangeLog
 +++ b/ChangeLog
-@@ -1,3 +1,108 @@
+@@ -1,3 +1,115 @@
++2008-12-19  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.in: Set prefix environment variable here,
++	partially reverting earlier change.
++	* system-config-printer-applet.in: Likewise.
++	* my-default-printer.in: Likewise.
++
 +2008-12-19  Tim Waugh  <twaugh@redhat.com>
 +
 +	* PhysicalDevice.py (PhysicalDevice.get_info): The hpfax backend
@@ -378,14 +385,6 @@ index 3748d45..43e151f 100644
          except cups.IPPError, (e, m):
              self.watcher.cups_ipp_error (self, e, m)
              return
-diff --git a/my-default-printer.in b/my-default-printer.in
-index 7fa772d..3c55f0e 100755
---- a/my-default-printer.in
-+++ b/my-default-printer.in
-@@ -1,3 +1,2 @@
- #!/bin/sh
--prefix=@prefix@
- exec @datarootdir@/@PACKAGE@/my-default-printer.py "$@"
 diff --git a/po/POTFILES.in b/po/POTFILES.in
 index 7d5766a..897e78a 100644
 --- a/po/POTFILES.in
@@ -4468,22 +4467,6 @@ index 5a6b7bc..8fcccab 100644
  #~ msgid "Unknown printer"
  #~ msgstr "Okänd"
 +
-diff --git a/system-config-printer-applet.in b/system-config-printer-applet.in
-index 22b5f75..a30d4b7 100755
---- a/system-config-printer-applet.in
-+++ b/system-config-printer-applet.in
-@@ -1,3 +1,2 @@
- #!/bin/sh
--prefix=@prefix@
- exec @datarootdir@/@PACKAGE@/applet.py "$@"
-diff --git a/system-config-printer.in b/system-config-printer.in
-index c4ea13d..97f0098 100755
---- a/system-config-printer.in
-+++ b/system-config-printer.in
-@@ -1,3 +1,2 @@
- #!/bin/sh
--prefix=@prefix@
- exec @datarootdir@/@PACKAGE@/system-config-printer.py "$@"
 diff --git a/system-config-printer.py b/system-config-printer.py
 index 349c6f0..c225b95 100755
 --- a/system-config-printer.py
