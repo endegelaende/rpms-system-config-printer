@@ -1,8 +1,72 @@
 diff --git a/ChangeLog b/ChangeLog
-index 2851eeb..85c3f3e 100644
+index 2851eeb..d02e03d 100644
 --- a/ChangeLog
 +++ b/ChangeLog
-@@ -1,3 +1,44 @@
+@@ -1,3 +1,108 @@
++2008-12-19  Tim Waugh  <twaugh@redhat.com>
++
++	* PhysicalDevice.py (PhysicalDevice.get_info): The hpfax backend
++	wants to tell us that the device make and model is "HP Fax", so
++	ignore that useless field and use the device-info field instead.
++
++2008-12-19  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (NewPrinterGUI.nextNPTab): Prevent
++	traceback when adding a printer driven by HPLIP (bug #477107).
++
++2008-12-16  Tim Waugh  <twaugh@redhat.com>
++
++	* Makefile.am (EXTRA_DIST): Ship config.py.in.
++	(DISTCLEANFILES): Clean config.py.
++
++2008-12-15  Tim Waugh  <twaugh@redhat.com>
++
++	* monitor.py (Monitor.refresh): Use getPrinters instead of
++	getDests to avoid character encoding problems.
++
++2008-12-15  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (NewPrinterGUI.on_btnNPApply_clicked):
++	Convert name of new printer to unicode (trac #124).
++
++2008-12-15  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py
++	(NewPrinterGUI.browse_ipp_queues_thread): Split port out from host
++	string if required (bug #476396).
++
++2008-12-13  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py
++	(GUI.on_tvPrinterProperties_cursor_changed): Use get_cursor here
++	(Ubuntu #282634).
++
++2008-12-13  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (NewPrinterGUI.on_btnNPApply_clicked):
++	Check we have a real PPD before trying to copy options (Ubuntu
++	#285133).
++
++2008-12-13  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (GUI.on_btnPrintTestPage_clicked):
++	Display an error dialog if unable to connect to server (Ubuntu
++	#286943).
++
++2008-12-13  Tim Waugh  <twaugh@redhat.com>
++
++	* cupshelpers/ppds.py (PPDs._findBestMatchPPDs): Handle model
++	names with more than one set of digits (Ubuntu #251244).
++
++2008-12-12  Tim Waugh  <twaugh@redhat.com>
++
++	* troubleshoot/__init__.py (Troubleshooter.is_moving_backwards):
++	Allow troubleshooter pages to know the direction we're going.
++
++	* troubleshoot/DeviceListed.py (DeviceListed.display): Don't
++	perform expensive operation if we're moving backwards and this
++	page will not be displayed.
++
 +2008-12-11  Tim Waugh  <twaugh@redhat.com>
 +
 +	* troubleshoot/ErrorLogCheckpoint.py
@@ -47,6 +111,177 @@ index 2851eeb..85c3f3e 100644
  2008-12-01  Tim Waugh  <twaugh@redhat.com>
  
  	* configure.in: Version 1.0.12.
+diff --git a/Makefile.am b/Makefile.am
+index cb62cbd..0b229bb 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -20,8 +20,17 @@ EXPORT_MODULES=					\
+ 	fi
+ 	touch .stamp-distutils-in-builddir
+ 
++config.py: config.py.in Makefile
++	sed \
++	  -e "s|\@prefix\@|$(prefix)|" \
++	  -e "s|\@datadir\@|$(datadir)|" \
++	  -e "s|\@localedir\@|$(localedir)|" \
++	  -e "s|\@VERSION\@|$(VERSION)|" \
++	  -e "s|\@PACKAGE\@|$(PACKAGE)|" \
++	  $< > $@
++
+ # Use distutils to build the module.
+-all-local: .stamp-distutils-in-builddir
++all-local: .stamp-distutils-in-builddir config.py
+ 	$(PYTHON) setup.py build
+ 
+ # Use distutils to install the module.
+@@ -179,7 +188,8 @@ EXTRA_DIST=\
+ 	print-applet.desktop.in \
+ 	intltool-extract.in \
+ 	intltool-merge.in \
+-	intltool-update.in
++	intltool-update.in \
++	config.py.in
+ 
+ desktop_in_files = $(desktop_DATA:.desktop=.desktop.in)
+ 
+@@ -207,11 +217,11 @@ missing-languages:
+ fix-glade:
+ 	sed -i -e '/invisible_char/d' -e '/toolbar_style/d' *.glade
+ 
+-run:
++run:	config.py
+ 	SYSTEM_CONFIG_PRINTER_GLADE=$(top_srcdir) \
+ 	python $(top_srcdir)/system-config-printer.py --debug
+ 
+-run-applet:
++run-applet:	config.py
+ 	SYSTEM_CONFIG_PRINTER_GLADE=$(top_srcdir) \
+ 	python $(top_srcdir)/applet.py --debug
+ 
+@@ -238,7 +248,8 @@ DISTCLEANFILES=*.pyc *.pyo *~ *.bak \
+ 	troubleshoot/*.pyc troubleshoot/*.pyo troubleshoot/*~ \
+ 	intltool-extract intltool-merge intltool-update \
+ 	*.desktop man/*.1 \
+-	test-ppd-module.sh pickled-ppds
++	test-ppd-module.sh pickled-ppds \
++	config.py
+ 
+ distclean-local:
+ 	rm -rf html
+diff --git a/PhysicalDevice.py b/PhysicalDevice.py
+index e4930e7..6c3439e 100644
+--- a/PhysicalDevice.py
++++ b/PhysicalDevice.py
+@@ -70,7 +70,10 @@ class PhysicalDevice:
+         return self.devices
+ 
+     def get_info (self):
+-        if self.mfg == '':
++        # If the manufacturer/model is not known, or useless (in the
++        # case of the hpfax backend), show the device-info field
++        # instead.
++        if self.mfg == '' or (self.mfg == "HP" and self.mdl == "Fax"):
+             return self.devices[0].info
+ 
+         info = "%s %s" % (self.mfg, self.mdl)
+diff --git a/authconn.py b/authconn.py
+index fce9c0f..9e7db20 100644
+--- a/authconn.py
++++ b/authconn.py
+@@ -22,20 +22,23 @@ import gtk
+ from debug import *
+ 
+ _ = lambda x: x
++N_ = lambda x: x
+ def set_gettext_function (fn):
+     global _
+     _ = fn
+ 
+ class AuthDialog(gtk.Dialog):
+-    AUTH_FIELD={'username': _("Username:"),
+-                'password': _("Password:"),
+-                'domain': _("Domain:")}
++    AUTH_FIELD={'username': N_("Username:"),
++                'password': N_("Password:"),
++                'domain': N_("Domain:")}
+ 
+-    def __init__ (self, title=_("Authentication"), parent=None,
++    def __init__ (self, title=None, parent=None,
+                   flags=gtk.DIALOG_MODAL | gtk.DIALOG_NO_SEPARATOR,
+                   buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                            gtk.STOCK_OK, gtk.RESPONSE_OK),
+                   auth_info_required=['username', 'password']):
++        if title == None:
++            title = _("Authentication")
+         gtk.Dialog.__init__ (self, title, parent, flags, buttons)
+         self.auth_info_required = auth_info_required
+         self.set_default_response (gtk.RESPONSE_OK)
+@@ -60,7 +63,7 @@ class AuthDialog(gtk.Dialog):
+         self.field_entry = []
+         for i in range (num_fields):
+             field = auth_info_required[i]
+-            label = gtk.Label (self.AUTH_FIELD.get (field, field))
++            label = gtk.Label (_(self.AUTH_FIELD.get (field, field)))
+             label.set_alignment (0, 0.5)
+             table.attach (label, 0, 1, i, i + 1)
+             entry = gtk.Entry ()
+@@ -154,6 +157,8 @@ class Connection:
+                 fn = getattr (self._connection, fname)
+                 c = self._connection
+ 
++            cups.setUser (self._use_user)
++
+             try:
+                 result = fn.__call__ (*args, **kwds)
+ 
+diff --git a/config.py.in b/config.py.in
+index 3d7ade6..052bb2f 100644
+--- a/config.py.in
++++ b/config.py.in
+@@ -19,28 +19,9 @@
+ ## Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ prefix="@prefix@"
+-datadir="@datarootdir@"
+-pkgdatadir="${datadir}/${PACKAGE}"
++datadir="@datadir@"
++localedir="@localedir@"
++pkgdatadir="@datadir@/@PACKAGE@"
+ VERSION="@VERSION@"
+ PACKAGE="@PACKAGE@"
+ DOWNLOADABLE_DRIVER_SUPPORT=False
+-
+-import os
+-class Paths:
+-      def __init__ (self):
+-            vars = ['prefix', 'datadir', 'pkgdatadir', 'VERSION', 'PACKAGE']
+-            for var in vars:
+-                  os.environ[var] = eval (var)
+-            self.paths = {}
+-            changed = True
+-            while changed:
+-                  changed = False
+-                  for var in vars:
+-                        old = self.paths.get (var, None)
+-                        self.paths[var] = os.path.expandvars (os.environ[var])
+-                        os.environ[var] = self.paths[var]
+-                        if old != self.paths[var]:
+-                              changed = True
+-
+-      def get_path (self, var):
+-            return self.paths[var]
+diff --git a/configure.in b/configure.in
+index b3e2377..ef8d4e1 100644
+--- a/configure.in
++++ b/configure.in
+@@ -18,7 +18,6 @@ ALL_LINGUAS="ar as bg bn_IN bn bs ca cs cy da de el en_GB es et fa fi fr gu he h
+ AC_CONFIG_FILES([
+ Makefile
+ po/Makefile.in
+-config.py
+ my-default-printer
+ system-config-printer
+ system-config-printer-applet
 diff --git a/cupshelpers/cupshelpers.py b/cupshelpers/cupshelpers.py
 index a19034f..fcf0f2c 100755
 --- a/cupshelpers/cupshelpers.py
@@ -95,6 +330,74 @@ index a19034f..fcf0f2c 100755
  
      def setOption(self, name, value):
          """
+diff --git a/cupshelpers/ppds.py b/cupshelpers/ppds.py
+index 6048582..673f0af 100755
+--- a/cupshelpers/ppds.py
++++ b/cupshelpers/ppds.py
+@@ -694,6 +694,8 @@ class PPDs:
+                         digits_start = i
+                     digits_end = i
+                     digits += 1
++                elif digits_start != -1:
++                    break
+             digits_end += 1
+             modelnumber = 0
+             if digits > 0:
+diff --git a/jobviewer.py b/jobviewer.py
+index 5005305..a247a2e 100644
+--- a/jobviewer.py
++++ b/jobviewer.py
+@@ -49,7 +49,7 @@ from statereason import StateReason
+ statereason.set_gettext_function (_)
+ errordialogs.set_gettext_function (_)
+ 
+-pkgdata = config.Paths ().get_path ('pkgdatadir')
++pkgdata = config.pkgdatadir
+ GLADE="applet.glade"
+ ICON="printer"
+ SEARCHING_ICON="document-print-preview"
+diff --git a/monitor.py b/monitor.py
+index 3748d45..43e151f 100644
+--- a/monitor.py
++++ b/monitor.py
+@@ -581,15 +581,8 @@ class Monitor:
+ 
+         try:
+             self.printer_state_reasons = collect_printer_state_reasons (c)
+-            dests = c.getDests ()
+-            printers = set()
+-            for (printer, instance) in dests.keys ():
+-                if printer == None:
+-                    continue
+-                if instance != None:
+-                    continue
+-                printers.add (printer)
+-            self.printers = printers
++            dests = c.getPrinters ()
++            self.printers = set(dests.keys ())
+         except cups.IPPError, (e, m):
+             self.watcher.cups_ipp_error (self, e, m)
+             return
+diff --git a/my-default-printer.in b/my-default-printer.in
+index 7fa772d..3c55f0e 100755
+--- a/my-default-printer.in
++++ b/my-default-printer.in
+@@ -1,3 +1,2 @@
+ #!/bin/sh
+-prefix=@prefix@
+ exec @datarootdir@/@PACKAGE@/my-default-printer.py "$@"
+diff --git a/po/POTFILES.in b/po/POTFILES.in
+index 7d5766a..897e78a 100644
+--- a/po/POTFILES.in
++++ b/po/POTFILES.in
+@@ -27,6 +27,7 @@ troubleshoot/DeviceListed.py
+ troubleshoot/ErrorLogCheckpoint.py
+ troubleshoot/ErrorLogFetch.py
+ troubleshoot/ErrorLogParse.py
++troubleshoot/Locale.py
+ troubleshoot/LocalOrRemote.py
+ troubleshoot/NetworkCUPSPrinterShared.py
+ troubleshoot/PrinterStateReasons.py
 diff --git a/po/sv.po b/po/sv.po
 index 5a6b7bc..8fcccab 100644
 --- a/po/sv.po
@@ -4165,11 +4468,70 @@ index 5a6b7bc..8fcccab 100644
  #~ msgid "Unknown printer"
  #~ msgstr "Okänd"
 +
+diff --git a/system-config-printer-applet.in b/system-config-printer-applet.in
+index 22b5f75..a30d4b7 100755
+--- a/system-config-printer-applet.in
++++ b/system-config-printer-applet.in
+@@ -1,3 +1,2 @@
+ #!/bin/sh
+-prefix=@prefix@
+ exec @datarootdir@/@PACKAGE@/applet.py "$@"
+diff --git a/system-config-printer.in b/system-config-printer.in
+index c4ea13d..97f0098 100755
+--- a/system-config-printer.in
++++ b/system-config-printer.in
+@@ -1,3 +1,2 @@
+ #!/bin/sh
+-prefix=@prefix@
+ exec @datarootdir@/@PACKAGE@/system-config-printer.py "$@"
 diff --git a/system-config-printer.py b/system-config-printer.py
-index 349c6f0..5844174 100755
+index 349c6f0..c225b95 100755
 --- a/system-config-printer.py
 +++ b/system-config-printer.py
-@@ -765,6 +765,11 @@ class GUI(GtkGUI, monitor.Watcher):
+@@ -87,10 +87,13 @@ from gettext import gettext as _
+ monitor.set_gettext_function (_)
+ errordialogs.set_gettext_function (_)
+ contextmenu.set_gettext_function (_)
++authconn.set_gettext_function (_)
+ import gettext
+ gettext.textdomain (domain)
+-gtk.glade.bindtextdomain (domain)
+-pkgdata = config.Paths ().get_path ('pkgdatadir')
++gettext.bindtextdomain (domain, config.localedir)
++gtk.glade.textdomain (domain)
++gtk.glade.bindtextdomain (domain, config.localedir)
++pkgdata = config.pkgdatadir
+ iconpath = os.path.join (pkgdata, 'icons/')
+ sys.path.append (pkgdata)
+ 
+@@ -612,7 +615,7 @@ class GUI(GtkGUI, monitor.Watcher):
+             model = self.dests_iconview.get_model ()
+             iter = model.get_iter_first ()
+             while iter != None:
+-                name = model.get_value (iter, 2)
++                name = unicode (model.get_value (iter, 2))
+                 if name == configure_printer:
+                     path = model.get_path (iter)
+                     self.dests_iconview.item_activated (path)
+@@ -624,7 +627,7 @@ class GUI(GtkGUI, monitor.Watcher):
+     def dests_iconview_item_activated (self, iconview, path):
+         model = iconview.get_model ()
+         iter = model.get_iter (path)
+-        name = model.get_value (iter, 2)
++        name = unicode (model.get_value (iter, 2))
+         object = model.get_value (iter, 0)
+         try:
+             self.fillPrinterTab (name)
+@@ -692,7 +695,7 @@ class GUI(GtkGUI, monitor.Watcher):
+             model = iconview.get_model ()
+             iter = model.get_iter (paths[i])
+             object = model.get_value (iter, 0)
+-            name = model.get_value (iter, 2)
++            name = unicode (model.get_value (iter, 2))
+             if object.discovered:
+                 any_discovered = True
+             if object.enabled:
+@@ -765,6 +768,11 @@ class GUI(GtkGUI, monitor.Watcher):
                  AdvancedServerSettingsDialog (self.cups, dialog)
              except:
                  return
@@ -4181,7 +4543,16 @@ index 349c6f0..5844174 100755
          else:
              dialog.hide ()
  
-@@ -858,6 +863,8 @@ class GUI(GtkGUI, monitor.Watcher):
+@@ -834,7 +842,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         model = self.dests_iconview.get_model ()
+         for path in paths:
+             iter = model.get_iter (path)
+-            name = model.get_value (iter, 2)
++            name = unicode (model.get_value (iter, 2))
+             selected_printers.add (name)
+ 
+         if self.cups:
+@@ -858,6 +866,8 @@ class GUI(GtkGUI, monitor.Watcher):
                  show_IPP_Error(e, m, self.MainWindow)
                  self.printers = {}
                  self.default_printer = None
@@ -4190,7 +4561,41 @@ index 349c6f0..5844174 100755
          else:
              self.printers = {}
              self.default_printer = None
-@@ -1750,6 +1757,8 @@ class GUI(GtkGUI, monitor.Watcher):
+@@ -987,7 +997,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         # Restore selection of printers.
+         model = self.dests_iconview.get_model ()
+         def maybe_select (model, path, iter):
+-            name = model.get_value (iter, 2)
++            name = unicode (model.get_value (iter, 2))
+             if name in selected_printers:
+                 self.dests_iconview.select_path (path)
+         model.foreach (maybe_select)
+@@ -1593,9 +1603,12 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+     def on_tvPrinterProperties_cursor_changed (self, treeview):
+         # Adjust notebook to reflect selected item.
+-        (store, iter) = treeview.get_selection ().get_selected ()
+-        n = store.get_value (iter, 1)
+-        self.ntbkPrinter.set_current_page (n)
++        (path, column) = treeview.get_cursor ()
++        if path != None:
++            model = treeview.get_model ()
++            iter = model.get_iter (path)
++            n = model.get_value (iter, 1)
++            self.ntbkPrinter.set_current_page (n)
+ 
+     # set default printer
+     def set_system_or_user_default_printer (self, name):
+@@ -1674,6 +1687,8 @@ class GUI(GtkGUI, monitor.Watcher):
+             show_info_dialog (_("Submitted"),
+                               _("Test page submitted as job %d") % job_id,
+                               parent=self.MainWindow)
++        except RuntimeError, s:
++            show_IPP_Error (None, s, self.MainWindow)
+         except cups.IPPError, (e, msg):
+             if (e == cups.IPP_NOT_AUTHORIZED and
+                 self.connect_server != 'localhost' and
+@@ -1750,6 +1765,8 @@ class GUI(GtkGUI, monitor.Watcher):
  
          try:
              self.ppd = printer.getPPD()
@@ -4199,7 +4604,7 @@ index 349c6f0..5844174 100755
          except cups.IPPError, (e, m):
              # Some IPP error other than IPP_NOT_FOUND.
              show_IPP_Error(e, m, self.MainWindow)
-@@ -1988,19 +1997,20 @@ class GUI(GtkGUI, monitor.Watcher):
+@@ -1988,19 +2005,20 @@ class GUI(GtkGUI, monitor.Watcher):
              return
          ppd = self.ppd
          ppd.markDefaults()
@@ -4224,7 +4629,150 @@ index 349c6f0..5844174 100755
                  tab_label = self.lblPInstallOptions
              else:
                  frame = gtk.Frame("<b>%s</b>" % group.text)
-@@ -5110,7 +5120,6 @@ class NewPrinterGUI(GtkGUI):
+@@ -2147,7 +2165,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         (path, cell) = tuple
+         model = self.dests_iconview.get_model ()
+         iter = model.get_iter (path)
+-        name = model.get_value (iter, 2)
++        name = unicode (model.get_value (iter, 2))
+         if not self.is_rename_possible (name):
+             return
+         cell.set_property ('editable', True)
+@@ -2161,7 +2179,7 @@ class GUI(GtkGUI, monitor.Watcher):
+     def printer_name_edited (self, cell, path, newname):
+         model = self.dests_iconview.get_model ()
+         iter = model.get_iter (path)
+-        name = model.get_value (iter, 2)
++        name = unicode (model.get_value (iter, 2))
+         debugprint ("edited: %s -> %s" % (name, newname))
+         try:
+             self.rename_printer (name, newname)
+@@ -2255,7 +2273,7 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+         # ..and select the new printer.
+         def select_new_printer (model, path, iter):
+-            name = model.get_value (iter, 2)
++            name = unicode (model.get_value (iter, 2))
+             print name, new_name
+             if name == new_name:
+                 self.dests_iconview.select_path (path)
+@@ -2278,7 +2296,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         paths = iconview.get_selected_items ()
+         model = self.dests_iconview.get_model ()
+         iter = model.get_iter (paths[0])
+-        name = model.get_value (iter, 2)
++        name = unicode (model.get_value (iter, 2))
+         self.entCopyName.set_text(name)
+         self.NewPrinterName.set_transient_for (self.MainWindow)
+         result = self.NewPrinterName.run()
+@@ -2298,7 +2316,7 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+     def on_entCopyName_changed(self, widget):
+         # restrict
+-        text = widget.get_text()
++        text = unicode (widget.get_text())
+         new_text = text
+         new_text = new_text.replace("/", "")
+         new_text = new_text.replace("#", "")
+@@ -2337,7 +2355,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         try:
+             for i in range (n):
+                 iter = model.get_iter (paths[i])
+-                name = model.get_value (iter, 2)
++                name = unicode (model.get_value (iter, 2))
+                 self.cups.deletePrinter (name)
+         except cups.IPPError, (e, msg):
+             show_IPP_Error(e, msg, self.MainWindow)
+@@ -2402,7 +2420,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         paths = iconview.get_selected_items ()
+         model = iconview.get_model ()
+         iter = model.get_iter (paths[0])
+-        name = model.get_value (iter, 2)
++        name = unicode (model.get_value (iter, 2))
+         self.set_system_or_user_default_printer (name)
+ 
+     def on_troubleshoot_activate(self, widget):
+@@ -2556,7 +2574,7 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+     def checkNPName(self, name):
+         if not name: return False
+-        name = name.lower()
++        name = unicode (name.lower())
+         for printer in self.printers.values():
+             if not printer.discovered and printer.name.lower()==name:
+                 return False
+@@ -3168,8 +3186,7 @@ class NewPrinterGUI(GtkGUI):
+                 self.auto_make, self.auto_model = None, None
+                 self.device.uri = self.getDeviceURI()
+                 if self.device.type in ["socket", "lpd", "ipp"]:
+-                    self.getNetworkPrinterMakeModel ()
+-                elif self.device.type == "hp":
++                    host = self.getNetworkPrinterMakeModel ()
+                     faxuri = None
+                     if host:
+                         faxuri = self.get_hplip_uri_for_network_printer(host,
+@@ -3570,7 +3587,7 @@ class NewPrinterGUI(GtkGUI):
+             
+     def on_entNPName_changed(self, widget):
+         # restrict
+-        text = widget.get_text()
++        text = unicode (widget.get_text())
+         new_text = text
+         new_text = new_text.replace("/", "")
+         new_text = new_text.replace("#", "")
+@@ -3659,6 +3676,12 @@ class NewPrinterGUI(GtkGUI):
+         return uri
+ 
+     def getNetworkPrinterMakeModel(self):
++        """
++        Try to determine the make and model for the currently selected
++        network printer, and store this in the data structure for the
++        printer.
++        Returns the hostname or None.
++        """
+         device = self.device
+         # Determine host name/IP
+         host = None
+@@ -3705,6 +3728,8 @@ class NewPrinterGUI(GtkGUI):
+             device.id = "MFG:" + mk + ";MDL:" + md + ";DES:" + mk + " " + md + ";"
+             device.id_dict = cupshelpers.parseDeviceID (device.id)
+ 
++        return host
++
+     def fillDeviceTab(self, current_uri=None):
+         try:
+             devices = self.fetchDevices()
+@@ -4322,6 +4347,7 @@ class NewPrinterGUI(GtkGUI):
+         thread.start_new_thread(self.browse_ipp_queues_thread, ())
+ 
+     def browse_ipp_queues_thread(self):
++        host = None
+         gtk.gdk.threads_enter()
+         try:
+             store = self.ipp_store
+@@ -4340,12 +4366,19 @@ class NewPrinterGUI(GtkGUI):
+         oldserver = cups.getServer ()
+         printers = classes = {}
+         failed = False
++        port = 631
++        if host != None:
++            (host, port) = urllib.splitnport (host, defport=port)
++
+         try:
+             try:
+-                c = cups.Connection (host=host)
++                c = cups.Connection (host=host, port=port)
+             except TypeError:
+                 # host parameter requires pycups >= 1.9.40.
+-                cups.setServer (host)
++                cups.setPort (port)
++                if host != None:
++                    cups.setServer (host)
++
+                 c = cups.Connection()
+ 
+             printers = c.getPrinters ()
+@@ -5110,7 +5143,6 @@ class NewPrinterGUI(GtkGUI):
                  ppd = self.NPDrivers[nr]
              elif self.rbtnNPPPD.get_active():
                  ppd = cups.PPD(self.filechooserPPD.get_filename())
@@ -4232,7 +4780,7 @@ index 349c6f0..5844174 100755
              else:
                  # PPD of the driver downloaded from OpenPrinting XXX
                  treeview = self.tvNPDownloadableDrivers
-@@ -5132,7 +5141,6 @@ class NewPrinterGUI(GtkGUI):
+@@ -5132,7 +5164,6 @@ class NewPrinterGUI(GtkGUI):
                              ppdfile.write(ppdcontent)
                              ppdfile.close()
                              ppd = cups.PPD(ppdname)
@@ -4240,7 +4788,7 @@ index 349c6f0..5844174 100755
                              os.unlink(ppdname)
  
          except RuntimeError, e:
-@@ -5188,7 +5196,6 @@ class NewPrinterGUI(GtkGUI):
+@@ -5188,7 +5219,6 @@ class NewPrinterGUI(GtkGUI):
                  if (ppd != "raw"):
                      f = self.mainapp.cups.getServerPPD(ppd)
                      ppd = cups.PPD(f)
@@ -4248,7 +4796,20 @@ index 349c6f0..5844174 100755
                      os.unlink(f)
              except AttributeError:
                  nonfatalException()
-@@ -5373,7 +5380,6 @@ class NewPrinterGUI(GtkGUI):
+@@ -5262,9 +5292,9 @@ class NewPrinterGUI(GtkGUI):
+     # Create new Printer
+     def on_btnNPApply_clicked(self, widget):
+         if self.dialog_mode in ("class", "printer"):
+-            name = self.entNPName.get_text()
+-            location = self.entNPLocation.get_text()
+-            info = self.entNPDescription.get_text()
++            name = unicode (self.entNPName.get_text())
++            location = unicode (self.entNPLocation.get_text())
++            info = unicode (self.entNPDescription.get_text())
+         else:
+             name = self.mainapp.printer.name
+ 
+@@ -5373,7 +5403,6 @@ class NewPrinterGUI(GtkGUI):
                  try:
                      filename = self.mainapp.cups.getPPD(name)
                      ppd = cups.PPD(filename)
@@ -4256,6 +4817,88 @@ index 349c6f0..5844174 100755
                      os.unlink(filename)
                  except cups.IPPError, (e, msg):
                      if e == cups.IPP_NOT_FOUND:
+@@ -5383,8 +5412,9 @@ class NewPrinterGUI(GtkGUI):
+                         return
+             else:
+                 # We have an actual PPD to upload, not just a name.
+-                if not self.rbtnChangePPDasIs.get_active():
+-                    cupshelpers.copyPPDOptions(self.mainapp.ppd, ppd) # XXX
++                if ((not self.rbtnChangePPDasIs.get_active()) and
++                    isinstance (self.mainapp.ppd, cups.PPD)):
++                    cupshelpers.copyPPDOptions(self.mainapp.ppd, ppd)
+                 else:
+                     # write Installable Options to ppd
+                     for option in self.options.itervalues():
+diff --git a/troubleshoot/DeviceListed.py b/troubleshoot/DeviceListed.py
+index 1537ea7..903503a 100644
+--- a/troubleshoot/DeviceListed.py
++++ b/troubleshoot/DeviceListed.py
+@@ -69,33 +69,38 @@ class DeviceListed(Question):
+         model.set (iter, 0, _("Not listed"), 1, '', 2, '', 3, None)
+ 
+         devices = {}
+-        try:
+-            cups.setServer ('')
+-            c = answers['_authenticated_connection']
+-            devices = c.getDevices ()
+-            devices_list = []
+-            for uri, device in devices.iteritems ():
+-                if uri.find (':') == -1:
+-                    continue
+-
+-                if device.get('device-class') != 'direct':
+-                    continue
+-
+-                name = device.get('device-info', _("Unknown"))
+-                info = device.get('device-make-and-model', _("Unknown"))
+-                devices_list.append ((name, info, uri, device))
+-
+-            devices_list.sort (lambda x, y: cmp (x[0], y[0]))
+-            for name, info, uri, device in devices_list:
+-                iter = model.append (None)
+-                model.set (iter, 0, name, 1, info, 2, uri, 3, device)
+-
+-        except cups.HTTPError:
+-            pass
+-        except cups.IPPError:
+-            pass
+-        except RuntimeError:
+-            pass
++        # Skip device list if this page is hidden and we're skipping
++        # backwards past it.
++        if not (answers['cups_queue_listed'] and
++                self.troubleshooter.is_moving_backwards ()):
++            # Otherwise, fetch devices.
++            try:
++                cups.setServer ('')
++                c = answers['_authenticated_connection']
++                devices = c.getDevices ()
++                devices_list = []
++                for uri, device in devices.iteritems ():
++                    if uri.find (':') == -1:
++                        continue
++
++                    if device.get('device-class') != 'direct':
++                        continue
++
++                    name = device.get('device-info', _("Unknown"))
++                    info = device.get('device-make-and-model', _("Unknown"))
++                    devices_list.append ((name, info, uri, device))
++
++                devices_list.sort (lambda x, y: cmp (x[0], y[0]))
++                for name, info, uri, device in devices_list:
++                    iter = model.append (None)
++                    model.set (iter, 0, name, 1, info, 2, uri, 3, device)
++
++            except cups.HTTPError:
++                pass
++            except cups.IPPError:
++                pass
++            except RuntimeError:
++                pass
+ 
+         if answers['cups_queue_listed']:
+             try:
 diff --git a/troubleshoot/ErrorLogCheckpoint.py b/troubleshoot/ErrorLogCheckpoint.py
 index 99b00a9..26e862f 100644
 --- a/troubleshoot/ErrorLogCheckpoint.py
@@ -4329,3 +4972,154 @@ index 7dd97f3..4d92602 100644
          except cups.IPPError:
              pass
  
+diff --git a/troubleshoot/Locale.py b/troubleshoot/Locale.py
+index 581ab9e..c1f81a2 100644
+--- a/troubleshoot/Locale.py
++++ b/troubleshoot/Locale.py
+@@ -26,18 +26,38 @@ from base import *
+ class Locale(Question):
+     def __init__ (self, troubleshooter):
+         Question.__init__ (self, troubleshooter, "Locale issues")
+-        troubleshooter.new_page (gtk.Label (), self)
++        page = self.initial_vbox (_("Incorrect Page Size"),
++                                  _("The page size for the print job was "
++                                    "not the printer's default page size.  "
++                                    "If this is not intentional it may cause "
++                                    "alignment problems."))
+ 
+-    def display (self):
+-        return False
+-
+-    def collect_answer (self):
+-        answers = {}
++        table = gtk.Table (2, 2)
++        table.set_row_spacings (6)
++        table.set_col_spacings (6)
++        page.pack_start (table)
++        self.printer_page_size = gtk.Label ()
++        self.printer_page_size.set_alignment (0, 0)
++        self.job_page_size = gtk.Label ()
++        self.job_page_size.set_alignment (0, 0)
++        label = gtk.Label (_("Print job page size:"))
++        label.set_alignment (0, 0)
++        table.attach (label, 0, 1, 0, 1, xoptions=gtk.FILL, yoptions=0)
++        table.attach (self.job_page_size, 1, 2, 0, 1,
++                      xoptions=gtk.FILL, yoptions=0)
++        label = gtk.Label (_("Printer page size:"))
++        label.set_alignment (0, 0)
++        table.attach (label, 0, 1, 1, 2, xoptions=gtk.FILL, yoptions=0)
++        table.attach (self.printer_page_size, 1, 2, 1, 2,
++                      xoptions=gtk.FILL, yoptions=0)
++        troubleshooter.new_page (page, self)
+ 
++    def display (self):
++        self.answers = {}
+         (messages, encoding) = locale.getlocale (locale.LC_MESSAGES)
+         (ctype, encoding) = locale.getlocale (locale.LC_CTYPE)
+-        answers['user_locale_messages'] = messages
+-        answers['user_locale_ctype'] = ctype
++        self.answers['user_locale_messages'] = messages
++        self.answers['user_locale_ctype'] = ctype
+ 
+         try:
+             i18n = file ("/etc/sysconfig/i18n").readlines ()
+@@ -50,6 +70,43 @@ class Locale(Question):
+         except:
+             system_lang = None
+ 
+-        answers['system_locale_lang'] = system_lang
++        self.answers['system_locale_lang'] = system_lang
++
++        printer_page_size = None
++        try:
++            ppd_defs = self.troubleshooter.answers['cups_printer_ppd_defaults']
++            for group, options in ppd_defs.iteritems ():
++                if options.has_key ("PageSize"):
++                    printer_page_size = options["PageSize"]
++                    break
++
++        except KeyError:
++            try:
++                attrs = self.troubleshooter.answers['remote_cups_queue_attributes']
++                printer_page_size = attrs["media-default"]
++            except KeyError:
++                pass
++
++        try:
++            job_status = self.troubleshooter.answers["test_page_job_status"]
++        except KeyError:
++            job_status = []
++
++        self.answers['printer_page_size'] = printer_page_size
++        if printer_page_size != None:
++            job_page_size = None
++            for (test, jobid, printer, doc, status, attrs) in job_status:
++                if test:
++                    if attrs.has_key ("PageSize"):
++                        job_page_size = attrs["PageSize"]
++                        self.answers['job_page_size'] = job_page_size
++                        if job_page_size != printer_page_size:
++                            self.printer_page_size.set_text (printer_page_size)
++                            self.job_page_size.set_text (job_page_size)
++                            return True
++
++        return False
++
++    def collect_answer (self):
++        return self.answers
+ 
+-        return answers
+diff --git a/troubleshoot/__init__.py b/troubleshoot/__init__.py
+index 85620c0..eff87df 100644
+--- a/troubleshoot/__init__.py
++++ b/troubleshoot/__init__.py
+@@ -98,6 +98,7 @@ class Troubleshooter:
+         self.questions = []
+         self.question_answers = []
+         self.answers = {}
++        self.moving_backwards = False
+ 
+         main.show_all ()
+ 
+@@ -148,6 +149,9 @@ class Troubleshooter:
+         self.set_back_forward_buttons ()
+         return page
+ 
++    def is_moving_backwards (self):
++        return self.moving_backwards
++
+     def set_back_forward_buttons (self, *args):
+         page = self.ntbk.get_current_page ()
+         self.back.set_sensitive (page != 0)
+@@ -165,6 +169,7 @@ class Troubleshooter:
+             self.cancel.show ()
+ 
+     def on_back_clicked (self, widget):
++        self.moving_backwards = True
+         page = self.ntbk.get_current_page ()
+         try:
+             self.questions[page].disconnect_signals ()
+@@ -194,6 +199,7 @@ class Troubleshooter:
+             self._report_traceback ()
+ 
+         self.set_back_forward_buttons ()
++        self.moving_backwards = False
+ 
+     def on_forward_clicked (self, widget):
+         page = self.ntbk.get_current_page ()
+@@ -290,7 +296,6 @@ QUESTIONS = ["Welcome",
+              "ChoosePrinter",
+              "CheckPrinterSanity",
+              "CheckPPDSanity",
+-             "Locale",
+ 
+              "LocalOrRemote",
+              "DeviceListed",
+@@ -312,6 +317,7 @@ QUESTIONS = ["Welcome",
+              "ErrorLogFetch",
+              "PrinterStateReasons",
+              "ErrorLogParse",
++             "Locale",
+              "Shrug"]
+ 
+ def run (quitfn=None, parent=None):

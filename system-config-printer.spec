@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.0.12
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -156,6 +156,24 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Dec 19 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-6
+- Updated patch for 1.0.x changes:
+  - Look harder for locale/page size issues in the troubleshooter
+    (trac #118).
+  - Troubleshooter speed improvement (trac #123).
+  - Localization fixes for authentication dialog (trac #122).
+  - Character encoding fixes (trac #124).
+  - Handle model names with more than one set of digits (Ubuntu #251244).
+  - Catch unable-to-connect error when trying to print a test page
+    (Ubuntu #286943).
+  - Prevent crash when copying PPD options (Ubuntu #285133).
+  - Use get_cursor for the printer properties treeview (Ubuntu #282634).
+  - Fix IPP browser when trying to connect to host:port (bug #476396).
+  - Make sure we're authenticating as the correct user in authconn.
+  - Prevent traceback when adding printer driven by HPLIP
+    (bug #477107).
+  - Better display of available local HP fax devices.
+
 * Wed Dec 17 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-5
 - Added patch for pycups git changes since 1.9.44:
   - Look for test page file in new location for CUPS 1.4 (bug #476612).
