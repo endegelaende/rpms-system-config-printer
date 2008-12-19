@@ -6,16 +6,15 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.0.12
-Release: 7%{?dist}
+Version: 1.1.0
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
-Source0: http://cyberelk.net/tim/data/system-config-printer/1.0.x/system-config-printer-%{version}.tar.bz2
+Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch0: system-config-printer-1.0.x.patch
 Patch10: pycups-git.patch
 
 BuildRequires: cups-devel >= 1.2
@@ -63,7 +62,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-%patch0 -p1 -b .1.0.x
 pushd pycups-%{pycups_version}
 %patch10 -p1 -b .pycups-git
 popd
@@ -124,31 +122,40 @@ rm -rf %buildroot
 %{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
-%{_datadir}/%{name}/contextmenu.py*
 %{_datadir}/%{name}/debug.py*
 %{_datadir}/%{name}/errordialogs.py*
+%{_datadir}/%{name}/glade.py*
+%{_datadir}/%{name}/GroupsPane.py*
+%{_datadir}/%{name}/GroupsPaneModel.py*
+%{_datadir}/%{name}/HIG.py*
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/PhysicalDevice.py*
+%{_datadir}/%{name}/ppdippstr.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
+%{_datadir}/%{name}/SearchCriterion.py*
 %{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/system-config-printer.py*
+%{_datadir}/%{name}/timedops.py*
+%{_datadir}/%{name}/ToolbarSearchEntry.py*
 %{_datadir}/%{name}/userdefault.py*
+%{_datadir}/%{name}/XmlHelper.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
-%{_datadir}/%{name}/*.glade
 %{_datadir}/%{name}/icons
-%{_datadir}/applications/redhat-system-config-printer.desktop
-%{_datadir}/applications/redhat-manage-print-jobs.desktop
-%{_datadir}/applications/redhat-my-default-printer.desktop
-%{_sysconfdir}/xdg/autostart/redhat-print-applet.desktop
+%dir %{_datadir}/%{name}/glade
+%{_datadir}/%{name}/glade/*.glade
+%{_datadir}/applications/system-config-printer.desktop
+%{_datadir}/applications/manage-print-jobs.desktop
+%{_datadir}/applications/my-default-printer.desktop
+%{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/*
 
 %post
@@ -156,6 +163,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Dec 19 2008 Tim Waugh <twaugh@redhat.com> 1.1.0-1
+- 1.1.0.
+
 * Fri Dec 19 2008 Tim Waugh <twaugh@redhat.com> 1.0.12-7
 - Updated patch for 1.0.x changes:
   - Fixed stub scripts (bug #477107).
