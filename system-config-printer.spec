@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -128,6 +128,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/GroupsPane.py*
 %{_datadir}/%{name}/GroupsPaneModel.py*
 %{_datadir}/%{name}/HIG.py*
+%{_datadir}/%{name}/installpackage.py*
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/my-default-printer.py*
@@ -163,6 +164,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Sat Dec 20 2008 Tim Waugh <twaugh@redhat.com> 1.1.1-1
+- 1.1.1.
+
 * Fri Dec 19 2008 Tim Waugh <twaugh@redhat.com> 1.1.0-1
 - 1.1.0.
 
