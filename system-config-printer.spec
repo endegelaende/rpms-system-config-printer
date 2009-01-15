@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.1
-Release: 2%{?dist}
+Version: 1.1.2
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -35,6 +35,7 @@ Requires: gnome-icon-theme
 Requires: gnome-python2-gnome
 Requires: notification-daemon
 Requires: notify-python
+Requires: gnome-python2-gnomekeyring
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -122,6 +123,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/glade.py*
 %{_datadir}/%{name}/GroupsPane.py*
 %{_datadir}/%{name}/GroupsPaneModel.py*
+%{_datadir}/%{name}/gtkinklevel.py*
 %{_datadir}/%{name}/HIG.py*
 %{_datadir}/%{name}/installpackage.py*
 %{_datadir}/%{name}/jobviewer.py*
@@ -159,6 +161,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jan 15 2009 Tim Waugh <twaugh@redhat.com> 1.1.2-1
+- 1.1.2.
+- Requires gnome-python2-gnomekeyring.
+
 * Thu Jan  8 2009 Tim Waugh <twaugh@redhat.com> 1.1.1-2
 - Updated pycups to 1.9.45.
 
