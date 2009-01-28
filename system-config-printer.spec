@@ -36,6 +36,7 @@ Requires: gnome-python2-gnome
 Requires: notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
+Requires: python-sexy
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -161,6 +162,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jan 28 2009 Tim Waugh <twaugh@redhat.com>
+- Requires python-sexy.
+
 * Thu Jan 15 2009 Tim Waugh <twaugh@redhat.com> 1.1.2-1
 - 1.1.2.
 - Requires gnome-python2-gnomekeyring.
