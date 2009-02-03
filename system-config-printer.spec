@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.2
+Version: 1.1.3
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -162,8 +162,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Wed Jan 28 2009 Tim Waugh <twaugh@redhat.com>
+* Tue Feb  3 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-1
 - Requires python-sexy.
+- 1.1.3.
 
 * Thu Jan 15 2009 Tim Waugh <twaugh@redhat.com> 1.1.2-1
 - 1.1.2.
