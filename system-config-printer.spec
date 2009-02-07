@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -64,6 +64,9 @@ the configuration tool.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .git-1.1.x
+aclocal # for cupspk changes
+autoconf
+automake
 
 %build
 %configure
@@ -121,6 +124,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
+%{_datadir}/%{name}/cupspk.py*
 %{_datadir}/%{name}/debug.py*
 %{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/glade.py*
@@ -164,6 +168,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Sat Feb  7 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-3
+- Ship the missing cupspk file (bug #484461).
+
 * Thu Feb  5 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-2
 - Added in cups-pk-helper support from upstream.
 
