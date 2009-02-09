@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -38,6 +38,7 @@ Requires: notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: python-sexy
+Requires: libxml2-python
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -168,6 +169,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Feb  9 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-4
+- Requires libxml2-python.
+
 * Sat Feb  7 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-3
 - Ship the missing cupspk file (bug #484461).
 
