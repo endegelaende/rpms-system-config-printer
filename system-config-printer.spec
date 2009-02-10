@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -169,6 +169,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Feb 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-6
+- Updated from git:
+  - Better make/model discovery for multiple devices (bug #484130).
+
 * Tue Feb 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-5
 - Updated from git:
   - Handle D-Bus failures when querying Jockey (bug #484402).
