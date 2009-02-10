@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -169,6 +169,14 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Feb 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-5
+- Updated from git:
+  - Handle D-Bus failures when querying Jockey (bug #484402).
+  - Set operation when fetching PPD from server (bug #484130).
+  - Don't allow prompting when updating the UI for a server failure
+    (bug #484130).
+  - Fixed printing a test page from the applet (bug #484130).
+
 * Mon Feb  9 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-4
 - Requires libxml2-python.
 
