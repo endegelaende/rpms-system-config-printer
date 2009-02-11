@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -169,6 +169,13 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 11 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-7
+- Updated from git:
+  - Avoid tracebacks in main application (bug #484130) and job viewer.
+  - Avoid unnecessary modal dialog when adding printer (bug #484960).
+  - Don't use notification when authentication is required, just
+    display the dialog.
+
 * Tue Feb 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.3-6
 - Updated from git:
   - Better make/model discovery for multiple devices (bug #484130).

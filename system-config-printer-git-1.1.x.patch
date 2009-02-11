@@ -1,6 +1,6 @@
 diff -up system-config-printer-1.1.3/authconn.py.git-1.1.x system-config-printer-1.1.3/authconn.py
 --- system-config-printer-1.1.3/authconn.py.git-1.1.x	2009-02-02 17:49:39.000000000 +0000
-+++ system-config-printer-1.1.3/authconn.py	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/authconn.py	2009-02-11 11:10:17.000000000 +0000
 @@ -19,8 +19,10 @@
  
  import threading
@@ -57,10 +57,55 @@ diff -up system-config-printer-1.1.3/authconn.py.git-1.1.x system-config-printer
                  if not self._cancel and (e == cups.IPP_NOT_AUTHORIZED or
                                           e == cups.IPP_FORBIDDEN):
                      self._failed (e == cups.IPP_FORBIDDEN)
+@@ -390,8 +409,6 @@ class Connection:
+         d.set_keep_above (True)
+         d.show_all ()
+         d.show_now ()
+-        gtk.gdk.keyboard_grab (d.window, True)
+-        gtk.gdk.pointer_grab (d.window, True)
+         self._dialog_shown = True
+         if self._lock:
+             d.connect ("response", self._on_authentication_response)
+@@ -401,8 +418,6 @@ class Connection:
+             self._on_authentication_response (d, response)
+ 
+     def _on_authentication_response (self, dialog, response):
+-        gtk.gdk.pointer_ungrab ()
+-        gtk.gdk.keyboard_ungrab ()
+         (self._use_user,
+          self._use_password) = dialog.get_auth_info ()
+         dialog.destroy ()
 diff -U0 system-config-printer-1.1.3/ChangeLog.git-1.1.x system-config-printer-1.1.3/ChangeLog
 --- system-config-printer-1.1.3/ChangeLog.git-1.1.x	2009-02-02 17:49:39.000000000 +0000
-+++ system-config-printer-1.1.3/ChangeLog	2009-02-10 18:35:04.000000000 +0000
-@@ -0,0 +1,19 @@
++++ system-config-printer-1.1.3/ChangeLog	2009-02-11 11:10:17.000000000 +0000
+@@ -0,0 +1,46 @@
++2009-02-11  Tim Waugh  <twaugh@redhat.com>
++
++	* jobviewer.py (JobViewer.update_job): Don't display a
++	notification when authentication is required, just go straight to
++	the authentication dialog.  Don't grab keyboard and pointer for
++	that dialog and instead let the window manager prevent keyboard
++	input accidentally going to the wrong window.
++
++2009-02-11  Tim Waugh  <twaugh@redhat.com>
++
++	* authconn.py (Connection._perform_authentication): Don't grab
++	keyboard and pointer when displaying authentication dialog.
++	Instead let the window manager prevent keyboard input accidentally
++	going to the wrong window.
++
++2009-02-11  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (NewPrinterGUI.on_btnNPApply_clicked):
++	Don't show wait window when adding a new printer, as that may	
++	require an authentication dialog and we don't want them competing
++	for focus (bug #484960).
++
++2009-02-11  Tim Waugh  <twaugh@redhat.com>
++
++	* system-config-printer.py (NewPrinterGUI.getNPPPD): Fixed
++	indentation.
++
 +2009-02-10  Tim Waugh  <twaugh@redhat.com>
 +
 +	* system-config-printer.py (NewPrinterGUI.getJockeyDriver_thread):
@@ -81,8 +126,8 @@ diff -U0 system-config-printer-1.1.3/ChangeLog.git-1.1.x system-config-printer-1
 +	display status icon for completed jobs (trac #140).
 +
 diff -up /dev/null system-config-printer-1.1.3/cupspk.py
---- /dev/null	2009-02-10 09:39:07.061189340 +0000
-+++ system-config-printer-1.1.3/cupspk.py	2009-02-10 18:35:04.000000000 +0000
+--- /dev/null	2009-02-11 08:44:26.046189319 +0000
++++ system-config-printer-1.1.3/cupspk.py	2009-02-11 11:10:17.000000000 +0000
 @@ -0,0 +1,732 @@
 +# vim: set ts=4 sw=4 et: coding=UTF-8
 +#
@@ -818,14 +863,100 @@ diff -up /dev/null system-config-printer-1.1.3/cupspk.py
 +#    printFiles
 diff -up system-config-printer-1.1.3/jobviewer.py.git-1.1.x system-config-printer-1.1.3/jobviewer.py
 --- system-config-printer-1.1.3/jobviewer.py.git-1.1.x	2009-02-03 12:30:29.000000000 +0000
-+++ system-config-printer-1.1.3/jobviewer.py	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/jobviewer.py	2009-02-11 11:10:17.000000000 +0000
 @@ -1,5 +1,4 @@
  
 -
  ## Copyright (C) 2007, 2008, 2009 Tim Waugh <twaugh@redhat.com>
  ## Copyright (C) 2007, 2008, 2009 Red Hat, Inc.
  
-@@ -841,7 +840,7 @@ class JobViewer (GtkGUI, monitor.Watcher
+@@ -144,13 +143,11 @@ class JobViewer (GtkGUI, monitor.Watcher
+         self.num_jobs_when_hidden = 0
+         self.connecting_to_device = {} # dict of printer->time first seen
+         self.state_reason_notifications = {}
+-        self.auth_notifications = {} # by job ID
+         self.auth_info_dialogs = {} # by job ID
+         self.job_creation_times_timer = None
+         self.special_status_icon = False
+         self.new_printer_notifications = {}
+         self.completed_job_notifications = {}
+-        self.reasoniters = {}
+         self.authenticated_jobs = set() # of job IDs
+ 
+         self.getWidgets ({"JobsWindow":
+@@ -308,7 +305,6 @@ class JobViewer (GtkGUI, monitor.Watcher
+ 
+         # Close any open notifications.
+         for l in [self.new_printer_notifications.values (),
+-                  self.auth_notifications.values (),
+                   self.state_reason_notifications.values ()]:
+             for notification in l:
+                 if notification.get_data ('closed') != True:
+@@ -607,7 +603,6 @@ class JobViewer (GtkGUI, monitor.Watcher
+         # Check whether authentication is required.
+         if self.trayicon:
+             if (job_requires_auth and
+-                not self.auth_notifications.has_key (job) and
+                 not self.auth_info_dialogs.has_key (job)):
+                 try:
+                     cups.require ("1.9.37")
+@@ -685,33 +680,7 @@ class JobViewer (GtkGUI, monitor.Watcher
+                         c._end_operation ()
+                         nonfatalException ()
+ 
+-                title = _("Authentication Required")
+-                text = _("Job requires authentication to proceed.")
+-                notification = pynotify.Notification (title, text, 'printer')
+-                notification.set_data ('job-id', job)
+-                notification.set_data ('keyring-attrs', keyring_attrs)
+-                notification.set_urgency (pynotify.URGENCY_NORMAL)
+-                notification.set_timeout (pynotify.EXPIRES_NEVER)
+-                notification.connect ('closed',
+-                                      self.on_auth_notification_closed)
+-                notification.add_action ("authenticate", _("Authenticate"),
+-                                         self.on_auth_notification_authenticate)
+-                self.auth_notifications[job] = notification
+-                debugprint ("auth notification opened for job %s" % job)
+-                self.set_statusicon_visibility ()
+-
+-                # In set_statusicon_visibility we process pending
+-                # events, so we need to check that we still have a
+-                # notification to show.
+-                if notification.get_data ('closed') != True:
+-                    notification.attach_to_status_icon (self.statusicon)
+-                    notification.show ()
+-            elif (not job_requires_auth and
+-                  self.auth_notifications.has_key (job)):
+-                debugprint ("job %s no longer requires auth" % job)
+-                self.auth_notifications[job].close ()
+-                self.auth_notifications[job].set_data ('closed', True)
+-                del self.auth_notifications[job]
++                self.display_auth_info_dialog (job)
+ 
+     def on_auth_notification_closed (self, notification, reason=None):
+         job = notification.get_data ('job-id')
+@@ -763,15 +732,11 @@ class JobViewer (GtkGUI, monitor.Watcher
+         dialog.show_all ()
+         dialog.set_keep_above (True)
+         dialog.show_now ()
+-        gtk.gdk.keyboard_grab (dialog.window, True)
+-        gtk.gdk.pointer_grab (dialog.window, True)
+ 
+     def auth_info_dialog_delete (self, dialog, event):
+         self.auth_info_dialog_response (dialog, gtk.RESPONSE_CANCEL)
+ 
+     def auth_info_dialog_response (self, dialog, response):
+-        gtk.gdk.pointer_ungrab ()
+-        gtk.gdk.keyboard_ungrab ()
+         jobid = dialog.get_data ('job-id')
+         del self.auth_info_dialogs[jobid]
+         if response != gtk.RESPONSE_OK:
+@@ -836,12 +801,11 @@ class JobViewer (GtkGUI, monitor.Watcher
+             return
+ 
+         open_notifications = len (self.new_printer_notifications.keys ())
+-        open_notifications += len (self.auth_notifications.keys ())
+         open_notifications += len (self.completed_job_notifications.keys ())
          for reason, notification in self.state_reason_notifications.iteritems():
              if notification.get_data ('closed') != True:
                  open_notifications += 1
@@ -834,7 +965,7 @@ diff -up system-config-printer-1.1.3/jobviewer.py.git-1.1.x system-config-printe
  
          debugprint ("open notifications: %d" % open_notifications)
          debugprint ("num_jobs: %d" % num_jobs)
-@@ -1294,7 +1293,11 @@ class JobViewer (GtkGUI, monitor.Watcher
+@@ -1294,7 +1258,11 @@ class JobViewer (GtkGUI, monitor.Watcher
          if not self.jobiters.has_key (jobid):
              self.add_job (jobid, jobdata)
  
@@ -847,7 +978,7 @@ diff -up system-config-printer-1.1.3/jobviewer.py.git-1.1.x system-config-printe
          self.update_status (have_jobs=True)
          if self.trayicon:
              if not self.job_is_active (jobdata):
-@@ -1314,10 +1317,13 @@ class JobViewer (GtkGUI, monitor.Watcher
+@@ -1314,10 +1282,13 @@ class JobViewer (GtkGUI, monitor.Watcher
              printer = uri
          jobdata['job-printer-name'] = printer
  
@@ -861,9 +992,46 @@ diff -up system-config-printer-1.1.3/jobviewer.py.git-1.1.x system-config-printe
  
          self.update_job (jobid, jobdata)
          jobdata = self.jobs[jobid]
+@@ -1464,11 +1435,6 @@ class JobViewer (GtkGUI, monitor.Watcher
+         if jobid in self.active_jobs:
+             self.active_jobs.remove (jobid)
+ 
+-        if self.auth_notifications.has_key (jobid):
+-            self.auth_notifications[jobid].close ()
+-            self.auth_notifications[jobid].set_data ('closed', True)
+-            del self.auth_notifications[jobid]
+-
+         self.update_status ()
+ 
+     def state_reason_added (self, mon, reason):
+@@ -1476,11 +1442,6 @@ class JobViewer (GtkGUI, monitor.Watcher
+ 
+         (title, text) = reason.get_description ()
+         printer = reason.get_printer ()
+-        iter = self.store_printers.append (None)
+-        self.store_printers.set_value (iter, 0, reason.get_level ())
+-        self.store_printers.set_value (iter, 1, printer)
+-        self.store_printers.set_value (iter, 2, text)
+-        self.reasoniters[reason.get_tuple ()] = iter
+ 
+         try:
+             l = self.printer_state_reasons[printer]
+@@ -1507,12 +1468,6 @@ class JobViewer (GtkGUI, monitor.Watcher
+     def state_reason_removed (self, mon, reason):
+         monitor.Watcher.state_reason_removed (self, mon, reason)
+ 
+-        try:
+-            iter = self.reasoniters[reason.get_tuple ()]
+-            self.store_printers.remove (iter)
+-        except KeyError:
+-            debugprint ("Reason iter not found")
+-
+         printer = reason.get_printer ()
+         try:
+             reasons = self.printer_state_reasons[printer]
 diff -up system-config-printer-1.1.3/Makefile.am.git-1.1.x system-config-printer-1.1.3/Makefile.am
 --- system-config-printer-1.1.3/Makefile.am.git-1.1.x	2009-02-02 17:49:39.000000000 +0000
-+++ system-config-printer-1.1.3/Makefile.am	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/Makefile.am	2009-02-11 11:10:17.000000000 +0000
 @@ -68,6 +68,7 @@ nobase_pkgdata_DATA=					\
  	AdvancedServerSettings.py			\
  	authconn.py					\
@@ -874,7 +1042,7 @@ diff -up system-config-printer-1.1.3/Makefile.am.git-1.1.x system-config-printer
  	HIG.py						\
 diff -up system-config-printer-1.1.3/PhysicalDevice.py.git-1.1.x system-config-printer-1.1.3/PhysicalDevice.py
 --- system-config-printer-1.1.3/PhysicalDevice.py.git-1.1.x	2009-01-12 16:46:56.000000000 +0000
-+++ system-config-printer-1.1.3/PhysicalDevice.py	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/PhysicalDevice.py	2009-02-11 11:10:17.000000000 +0000
 @@ -1,7 +1,7 @@
  #!/usr/bin/env python
  
@@ -900,7 +1068,7 @@ diff -up system-config-printer-1.1.3/PhysicalDevice.py.git-1.1.x system-config-p
      def add_device (self, device):
 diff -up system-config-printer-1.1.3/po/fi.po.git-1.1.x system-config-printer-1.1.3/po/fi.po
 --- system-config-printer-1.1.3/po/fi.po.git-1.1.x	2009-02-03 12:33:33.000000000 +0000
-+++ system-config-printer-1.1.3/po/fi.po	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/po/fi.po	2009-02-11 11:10:17.000000000 +0000
 @@ -3,59 +3,58 @@
  #
  # Mikko Ikola <ikola@iki.fi>, 2004.
@@ -3752,7 +3920,7 @@ diff -up system-config-printer-1.1.3/po/fi.po.git-1.1.x system-config-printer-1.
  #~ msgstr "Luo uusi tulostinryhmä"
 diff -up system-config-printer-1.1.3/po/ko.po.git-1.1.x system-config-printer-1.1.3/po/ko.po
 --- system-config-printer-1.1.3/po/ko.po.git-1.1.x	2009-02-03 12:33:33.000000000 +0000
-+++ system-config-printer-1.1.3/po/ko.po	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/po/ko.po	2009-02-11 11:10:17.000000000 +0000
 @@ -7,15 +7,15 @@ msgid ""
  msgstr ""
  "Project-Id-Version: system-config-printer.1.1.x\n"
@@ -4394,7 +4562,7 @@ diff -up system-config-printer-1.1.3/po/ko.po.git-1.1.x system-config-printer-1.
 -#~ msgstr "프린터 상태"
 diff -up system-config-printer-1.1.3/po/sk.po.git-1.1.x system-config-printer-1.1.3/po/sk.po
 --- system-config-printer-1.1.3/po/sk.po.git-1.1.x	2009-02-03 12:33:33.000000000 +0000
-+++ system-config-printer-1.1.3/po/sk.po	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/po/sk.po	2009-02-11 11:10:17.000000000 +0000
 @@ -5,20 +5,20 @@
  #
  # Mike Karas <zoliqe@gmail.com>, 2005.
@@ -5366,7 +5534,7 @@ diff -up system-config-printer-1.1.3/po/sk.po.git-1.1.x system-config-printer-1.
  msgid "System tray icon for managing print jobs"
 diff -up system-config-printer-1.1.3/po/zh_CN.po.git-1.1.x system-config-printer-1.1.3/po/zh_CN.po
 --- system-config-printer-1.1.3/po/zh_CN.po.git-1.1.x	2009-02-03 12:33:33.000000000 +0000
-+++ system-config-printer-1.1.3/po/zh_CN.po	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/po/zh_CN.po	2009-02-11 11:10:17.000000000 +0000
 @@ -1,4 +1,4 @@
 -# translation of system-config-printer.1.0.x.po to Simplified Chinese
 +# translation of system-config-printer.1.1.x.po to Simplified Chinese
@@ -5743,7 +5911,7 @@ diff -up system-config-printer-1.1.3/po/zh_CN.po.git-1.1.x system-config-printer
  msgid "Printer Location"
 diff -up system-config-printer-1.1.3/system-config-printer.py.git-1.1.x system-config-printer-1.1.3/system-config-printer.py
 --- system-config-printer-1.1.3/system-config-printer.py.git-1.1.x	2009-02-03 12:30:29.000000000 +0000
-+++ system-config-printer-1.1.3/system-config-printer.py	2009-02-10 18:35:04.000000000 +0000
++++ system-config-printer-1.1.3/system-config-printer.py	2009-02-11 11:10:17.000000000 +0000
 @@ -854,6 +854,8 @@ class GUI(GtkGUI, monitor.Watcher):
              name = unicode (model.get_value (iter, 2))
              if name == queue:
@@ -5802,18 +5970,46 @@ diff -up system-config-printer-1.1.3/system-config-printer.py.git-1.1.x system-c
                      f = self.mainapp.cups.getServerPPD(ppd)
                      ppd = cups.PPD(f)
                      os.unlink(f)
-@@ -5994,7 +5996,9 @@ class NewPrinterGUI(GtkGUI):
+@@ -5994,6 +5996,8 @@ class NewPrinterGUI(GtkGUI):
                  nonfatalException()
                  debugprint ("CUPS 1.3 server not available: never mind")
  
--        return ppd
 +            self.mainapp.cups._end_operation ()
 +
-+       return ppd
+         return ppd
  
      # Installable Options
+@@ -6091,11 +6095,6 @@ class NewPrinterGUI(GtkGUI):
+                 option.writeback()
  
-@@ -6358,7 +6362,7 @@ if __name__ == "__main__":
+             self.busy (self.NewPrinterWindow)
+-            self.lblWait.set_markup ('<span weight="bold" size="larger">' +
+-                                     _('Adding') + '</span>\n\n' +
+-                                     _('Adding printer'))
+-            self.WaitWindow.set_transient_for (self.NewPrinterWindow)
+-            self.WaitWindow.show ()
+             while gtk.events_pending ():
+                 gtk.main_iteration ()
+             self.mainapp.cups._begin_operation (_("adding printer %s") % name)
+@@ -6115,17 +6114,14 @@ class NewPrinterGUI(GtkGUI):
+                     checkppd = ppd
+             except cups.IPPError, (e, msg):
+                 self.ready (self.NewPrinterWindow)
+-                self.WaitWindow.hide ()
+                 self.show_IPP_Error(e, msg)
+                 self.mainapp.cups._end_operation()
+                 return
+             except:
+                 self.ready (self.NewPrinterWindow)
+-                self.WaitWindow.hide ()
+                 self.mainapp.cups._end_operation()
+                 fatalException (1)
+             self.mainapp.cups._end_operation()
+-            self.WaitWindow.hide ()
+             self.ready (self.NewPrinterWindow)
+         if self.dialog_mode in ("class", "printer"):
+             self.mainapp.cups._begin_operation (_("modifying printer %s") %
+@@ -6358,7 +6354,7 @@ if __name__ == "__main__":
              configure_printer = optarg
              if opt == "--choose-driver":
                  change_ppd = True
