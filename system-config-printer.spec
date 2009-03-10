@@ -7,13 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+Patch1: system-config-printer-git-1.1.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -63,6 +64,7 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
+%patch1 -p1 -b .git-1.1.x
 
 %build
 %configure
@@ -165,6 +167,29 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Mar 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.5-2
+- Added patch for changes in 1.1.x since 1.1.5:
+  - Strip " hpijs" from PPD names.
+  - Handle there being no operation name set when authentication/retry
+    is required.
+  - Mark "Unauthorized" PolicyKit dialog strings for translation, and
+    change that dialog to an error.
+  - Work around marker-* attributes not being presented as lists
+    (bug #489512).
+  - D-Bus policy tweak.
+  - Better PPD fallback searching.
+  - Fixed model search oddity when no digits in model name.
+  - Fixed locale save/restore in cupshelpers (bug #489313).
+  - Use gtk.show_uri() instead of gnome.url_show() (trac #147).
+  - Removed HPLIP probe screen (no longer needed).
+  - Be certain of having the right cell when starting a rename
+    (Ubuntu #333260).
+  - Fixed strftime call (Ubuntu #334859).
+  - Check dict before use when handling auth-info-required.
+  - Handle timed operations being cancelled in the troubleshooter test
+    print page (Ubuntu #325084).
+  - Put pycups version requirement in monitor module.
+
 * Tue Mar  3 2009 Tim Waugh <twaugh@redhat.com> 1.1.5-1
 - 1.1.5.
 
