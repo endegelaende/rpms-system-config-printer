@@ -6,15 +6,14 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.5
-Release: 2%{?dist}
+Version: 1.1.6
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-git-1.1.x.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -33,7 +32,6 @@ Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
-Requires: gnome-python2-gnome
 Requires: notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
@@ -64,7 +62,6 @@ the configuration tool.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .git-1.1.x
 
 %build
 %configure
@@ -167,6 +164,13 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Mar 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.6-1
+- No longer requires gnome-python2-gnome.
+- Updated to 1.1.6:
+  - Translatable string fix for authconn.
+  - Romanian allow/deny translation fix (bug #489748).
+  - Set glade's textdomain in the jobviewer (Ubuntu #341765).
+
 * Tue Mar 10 2009 Tim Waugh <twaugh@redhat.com> 1.1.5-2
 - Added patch for changes in 1.1.x since 1.1.5:
   - Strip " hpijs" from PPD names.
