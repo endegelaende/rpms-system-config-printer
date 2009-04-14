@@ -30,6 +30,7 @@ Requires: pygobject2
 Requires: usermode >= 1.94
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
+Requires: dbus-python
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: notification-daemon
@@ -164,6 +165,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Apr 14 2009 Tim Waugh <twaugh@redhat.com>
+- Requires dbus-python (bug #495392).
+
 * Fri Mar 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.6-1
 - No longer requires gnome-python2-gnome.
 - Updated to 1.1.6:
