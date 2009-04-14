@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.6
+Version: 1.1.7
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -165,8 +165,18 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Tue Apr 14 2009 Tim Waugh <twaugh@redhat.com>
+* Tue Apr 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-1
 - Requires dbus-python (bug #495392).
+- Updated to 1.1.7:
+  - Updated translations.
+  - Don't abort if the jobviewer couldn't show a notification.
+  - Don't use setlocale() for locale-independent case conversion.
+  - Don't assume the notification daemon can show action buttons.
+  - Use case-insensitive matching for model names.
+  - HPLIP compatibility fixes.
+  - Fixed typo in jobviewer keyring support (Ubuntu #343156).
+  - Added support for https device URIs (bug #478677).
+  - Prevent traceback in monitor when connection failed (Ubuntu #343387).
 
 * Fri Mar 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.6-1
 - No longer requires gnome-python2-gnome.
