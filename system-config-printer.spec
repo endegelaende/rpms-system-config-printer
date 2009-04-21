@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -109,10 +109,6 @@ rm -rf %buildroot
 %{python_sitelib}/cupshelpers/openprinting.py*
 %{python_sitelib}/cupshelpers/ppds.py*
 %{python_sitelib}/*.egg-info
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/config.py*
-%{_datadir}/%{name}/debug.py*
-%{_datadir}/%{name}/smburi.py*
 
 %files
 %defattr(-,root,root,-)
@@ -120,9 +116,12 @@ rm -rf %buildroot
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %{_bindir}/my-default-printer
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/authconn.py*
+%{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
+%{_datadir}/%{name}/debug.py*
 %{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/glade.py*
 %{_datadir}/%{name}/GroupsPane.py*
@@ -141,6 +140,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/SearchCriterion.py*
+%{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/timedops.py*
@@ -165,6 +165,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Apr 21 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-3
+- Moved them back again, as they are not part of the exported
+  interface (bug #496808).
+
 * Tue Apr 21 2009 Kevin Kofler <Kevin@tigcc.ticalc.org> 1.1.7-2
 - Move files required by system-config-printer-kde to -libs (#496646)
 
