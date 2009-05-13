@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.7
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -33,7 +33,7 @@ Requires: dbus-x11
 Requires: dbus-python
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
-Requires: notification-daemon
+Requires: desktop-notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: python-sexy
@@ -165,6 +165,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed May 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-4
+- Changed requirement on notification-daemon to
+  desktop-notification-daemon to allow for other implementations
+  (bug #500587).
+
 * Tue Apr 21 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-3
 - Moved them back again, as they are not part of the exported
   interface (bug #496808).
