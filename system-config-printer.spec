@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.7
-Release: 4%{?dist}
+Version: 1.1.8
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -165,8 +165,27 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Thu Jun 18 2009 Tim Waugh <twaugh@redhat.com>
+* Thu Jun 18 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-1
 - Updated pycups to 1.9.46.
+- Updated to 1.1.8:
+  - Select a printer after adding it (trac #145).
+  - Make sure the job and printer context menus cannot get out of date
+    (trac #175, trac #172).
+  - Fixed displayed hold time for held jobs.
+  - Use grey ink-drop when there is no marker-colors value instead of
+    crashing (bug #505399).
+  - Scroll job list window to new job when appropriate.
+  - Clean up temporary PPD files (bug #498743).
+  - Fixed XML crash (Ubuntu #370469).
+  - Fixed automatic printer model selection.
+  - Fixed cupspk crash due to missing debugprint import (bug #496722,
+    trac #161). 
+  - Fixed PhysicalDevice crash (bug #496722, trac #161).
+  - Adjusted border padding for New Printer window (bug #493862).
+  - Set glade's textdomain in the job viewer (Ubuntu #341765).
+  - Fixed URI parsing when verifying IPP URIs.
+  - Set relaxed PPD conformance (trac #159).
+  - Make troubleshooter work again by disabling cupspk for it.
 
 * Wed May 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-4
 - Changed requirement on notification-daemon to
