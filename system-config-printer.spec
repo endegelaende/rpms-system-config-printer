@@ -1,4 +1,4 @@
-%define pycups_version 1.9.45
+%define pycups_version 1.9.46
 %define pysmbc_version 1.0.6
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -165,6 +165,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jun 18 2009 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.46.
+
 * Wed May 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.7-4
 - Changed requirement on notification-daemon to
   desktop-notification-daemon to allow for other implementations
