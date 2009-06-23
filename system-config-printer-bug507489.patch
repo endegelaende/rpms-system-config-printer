@@ -1,0 +1,15 @@
+diff -up system-config-printer-1.1.8/system-config-printer.py.bug507489 system-config-printer-1.1.8/system-config-printer.py
+--- system-config-printer-1.1.8/system-config-printer.py.bug507489	2009-06-17 18:39:51.000000000 +0100
++++ system-config-printer-1.1.8/system-config-printer.py	2009-06-23 12:23:49.888572438 +0100
+@@ -6644,6 +6644,11 @@ class NewPrinterGUI(GtkGUI):
+ 
+             iter = model.iter_next (iter)
+ 
++        # Load information about the printer,
++        # e.g. self.mainapp.server_side_options and self.mainapp.ppd
++        # (both used below).
++        self.mainapp.fillPrinterTab (name)
++
+         if check:
+             try:
+                 self.checkDriverExists (name, ppd=checkppd)
