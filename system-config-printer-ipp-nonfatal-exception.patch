@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.1.8/system-config-printer.py.ipp-nonfatal-exception system-config-printer-1.1.8/system-config-printer.py
+--- system-config-printer-1.1.8/system-config-printer.py.ipp-nonfatal-exception	2009-06-24 10:28:47.773317435 +0100
++++ system-config-printer-1.1.8/system-config-printer.py	2009-06-24 10:29:24.339192122 +0100
+@@ -4167,6 +4167,8 @@ class NewPrinterGUI(GtkGUI):
+                             self.entNPDescription.set_text (info)
+                         if len (location) > 0:
+                             self.entNPLocation.set_text (location)
++                    except RuntimeError:
++                        pass
+                     except:
+                         nonfatalException ()
+ 
