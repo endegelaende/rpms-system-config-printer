@@ -16,6 +16,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-bug507489.patch
 Patch2: system-config-printer-ipp-nonfatal-exception.patch
+Patch3: system-config-printer-https.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -67,6 +68,7 @@ the configuration tool.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .bug507489
 %patch2 -p1 -b .ipp-nonfatal-exception
+%patch3 -p1 -b .https
 
 %build
 %configure
@@ -170,6 +172,7 @@ exit 0
 
 %changelog
 * Wed Jun 24 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-2
+- Make sure we find https URIs from https backend (bug #507628).
 - Avoid showing a non-fatal exception when adding an IPP printer
   (bug #507629).
 - Fixed traceback when adding/modifying printer which could lead to
