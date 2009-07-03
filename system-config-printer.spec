@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.8
-Release: 3%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -21,6 +21,10 @@ Patch4: system-config-printer-remote-location-field.patch
 Patch5: system-config-printer-nmblookup-failure.patch
 Patch6: system-config-printer-properties-cancel.patch
 Patch7: system-config-printer-incorrect-auth.patch
+Patch8: system-config-printer-packagekit.patch
+Patch9: system-config-printer-stopped-jobs.patch
+Patch10: system-config-printer-gutenprint.patch
+Patch11: system-config-printer-arrows.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -77,6 +81,10 @@ the configuration tool.
 %patch5 -p1 -b .nmblookup-failure
 %patch6 -p1 -b .properties-cancel
 %patch7 -p1 -b .incorrect-auth
+%patch8 -p1 -b .packagekit
+%patch9 -p1 -b .stopped-jobs
+%patch10 -p1 -b .gutenprint
+%patch11 -p1 -b .arrows
 
 %build
 %configure
@@ -179,6 +187,13 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jul  3 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-5
+- Use gpk-install-package-name instead of trying to use the D-Bus API.
+- Spot stopped jobs with CUPS 1.4 as well (trac #177).  This, along
+  with the previous fix, addresses bug #509177.
+- Map gutenprint filenames to the package name.
+- Fixed sensitivity of class member selection arrows (bug #508653).
+
 * Thu Jun 25 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-3
 - Use correct 'location' field for printers added remotely.
 - Parse nmblookup failures correctly in troubleshooter.

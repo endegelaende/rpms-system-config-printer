@@ -1,0 +1,15 @@
+diff -up system-config-printer-1.1.8/jobviewer.py.stopped-jobs system-config-printer-1.1.8/jobviewer.py
+--- system-config-printer-1.1.8/jobviewer.py.stopped-jobs	2009-06-17 18:39:51.000000000 +0100
++++ system-config-printer-1.1.8/jobviewer.py	2009-07-03 18:08:28.040995881 +0100
+@@ -1375,7 +1375,10 @@ class JobViewer (GtkGUI, monitor.Watcher
+                 self.notify_completed_job (jobid)
+ 
+         # Look out for stopped jobs.
+-        if (self.trayicon and eventname == 'job-stopped' and
++        if (self.trayicon and
++            (eventname == 'job-stopped' or
++             (eventname == 'job-state-changed' and
++              event['job-state'] == cups.IPP_JOB_STOPPED))and
+             not jobid in self.stopped_job_prompts):
+             # Why has the job stopped?  It might be due to a job error
+             # of some sort, or it might be that the backend requires

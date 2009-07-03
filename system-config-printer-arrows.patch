@@ -1,0 +1,79 @@
+diff -up system-config-printer-1.1.8/glade/NewPrinterWindow.glade.arrows system-config-printer-1.1.8/glade/NewPrinterWindow.glade
+--- system-config-printer-1.1.8/glade/NewPrinterWindow.glade.arrows	2009-06-03 09:20:26.000000000 +0100
++++ system-config-printer-1.1.8/glade/NewPrinterWindow.glade	2009-07-03 18:18:50.640997051 +0100
+@@ -3662,6 +3662,7 @@ DTR/DSR (Hardware)</property>
+ 			  <property name="fixed_height_mode">False</property>
+ 			  <property name="hover_selection">False</property>
+ 			  <property name="hover_expand">False</property>
++			  <signal name="cursor_changed" handler="on_tvNCMembers_cursor_changed" last_modification_time="Tue, 30 Jun 2009 15:15:42 GMT"/>
+ 			</widget>
+ 		      </child>
+ 		    </widget>
+@@ -3693,6 +3694,7 @@ DTR/DSR (Hardware)</property>
+ 			  <child>
+ 			    <widget class="GtkButton" id="btnNCAddMember">
+ 			      <property name="visible">True</property>
++			      <property name="sensitive">False</property>
+ 			      <property name="can_default">True</property>
+ 			      <property name="can_focus">True</property>
+ 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+@@ -3771,6 +3773,7 @@ DTR/DSR (Hardware)</property>
+ 			  <child>
+ 			    <widget class="GtkButton" id="btnNCDelMember">
+ 			      <property name="visible">True</property>
++			      <property name="sensitive">False</property>
+ 			      <property name="can_default">True</property>
+ 			      <property name="can_focus">True</property>
+ 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+@@ -3823,6 +3826,7 @@ DTR/DSR (Hardware)</property>
+ 			  <property name="fixed_height_mode">False</property>
+ 			  <property name="hover_selection">False</property>
+ 			  <property name="hover_expand">False</property>
++			  <signal name="cursor_changed" handler="on_tvNCNotMembers_cursor_changed" last_modification_time="Tue, 30 Jun 2009 15:15:49 GMT"/>
+ 			</widget>
+ 		      </child>
+ 		    </widget>
+diff -up system-config-printer-1.1.8/system-config-printer.py.arrows system-config-printer-1.1.8/system-config-printer.py
+--- system-config-printer-1.1.8/system-config-printer.py.arrows	2009-07-03 18:18:36.478996538 +0100
++++ system-config-printer-1.1.8/system-config-printer.py	2009-07-03 18:18:50.643996718 +0100
+@@ -174,7 +174,6 @@ def moveClassMembers(treeview_from, tree
+     for row in rows:
+         path = row.get_path()
+         iter = model_from.get_iter(path)
+-
+         row_data = model_from.get(iter, 0)
+         model_to.append(row_data)
+         model_from.remove(iter)
+@@ -3547,6 +3546,8 @@ class NewPrinterGUI(GtkGUI):
+                               "entNPTDevice",
+                               "tvNCMembers",
+                               "tvNCNotMembers",
++                              "btnNCAddMember",
++                              "btnNCDelMember",
+                               "ntbkPPDSource",
+                               "rbtnNPPPD",
+                               "tvNPMakes",
+@@ -4089,11 +4090,23 @@ class NewPrinterGUI(GtkGUI):
+         moveClassMembers(self.tvNCNotMembers, self.tvNCMembers)
+         self.btnNPApply.set_sensitive(
+             bool(getCurrentClassMembers(self.tvNCMembers)))
++        button.set_sensitive(False)
+ 
+     def on_btnNCDelMember_clicked(self, button):
+         moveClassMembers(self.tvNCMembers, self.tvNCNotMembers)
+         self.btnNPApply.set_sensitive(
+             bool(getCurrentClassMembers(self.tvNCMembers)))
++        button.set_sensitive(False)
++
++    def on_tvNCMembers_cursor_changed(self, widget):
++        selection = widget.get_selection()
++        model_from, rows = selection.get_selected_rows()
++        self.btnNCDelMember.set_sensitive(rows != [])
++
++    def on_tvNCNotMembers_cursor_changed(self, widget):
++        selection = widget.get_selection()
++        model_from, rows = selection.get_selected_rows()
++        self.btnNCAddMember.set_sensitive(rows != [])
+ 
+     # Navigation buttons
+ 
