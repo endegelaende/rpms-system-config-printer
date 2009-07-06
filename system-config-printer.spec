@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -49,6 +49,7 @@ Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: python-sexy
 Requires: libxml2-python
+Requires: gnome-packagekit
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -187,6 +188,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jul  6 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-6
+- Requires gnome-packagekit for gpk-install-package-name.
+
 * Fri Jul  3 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-5
 - Use gpk-install-package-name instead of trying to use the D-Bus API.
 - Spot stopped jobs with CUPS 1.4 as well (trac #177).  This, along
