@@ -6,25 +6,14 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.8
-Release: 6%{?dist}
+Version: 1.1.10
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-bug507489.patch
-Patch2: system-config-printer-ipp-nonfatal-exception.patch
-Patch3: system-config-printer-https.patch
-Patch4: system-config-printer-remote-location-field.patch
-Patch5: system-config-printer-nmblookup-failure.patch
-Patch6: system-config-printer-properties-cancel.patch
-Patch7: system-config-printer-incorrect-auth.patch
-Patch8: system-config-printer-packagekit.patch
-Patch9: system-config-printer-stopped-jobs.patch
-Patch10: system-config-printer-gutenprint.patch
-Patch11: system-config-printer-arrows.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -32,6 +21,7 @@ BuildRequires: libsmbclient-devel >= 3.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
+BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -73,22 +63,22 @@ Provides: pysmbc = %{pysmbc_version}
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
 
+%package udev
+Summary: Rules for udev for automatic configuration of USB printers
+Group: System Environment/Base
+Requires: system-config-printer-libs = %{version}-%{release}
+Obsoletes: hal-cups-utils <= 0.6.20
+Provides: hal-cups-utils = 0.6.20
+
+%description udev
+The udev rules and helper programs for automatically configuring USB
+printers.
+
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .bug507489
-%patch2 -p1 -b .ipp-nonfatal-exception
-%patch3 -p1 -b .https
-%patch4 -p1 -b .remote-location-field
-%patch5 -p1 -b .nmblookup-failure
-%patch6 -p1 -b .properties-cancel
-%patch7 -p1 -b .incorrect-auth
-%patch8 -p1 -b .packagekit
-%patch9 -p1 -b .stopped-jobs
-%patch10 -p1 -b .gutenprint
-%patch11 -p1 -b .arrows
 
 %build
-%configure
+%configure --with-udev-rules
 
 pushd pycups-%{pycups_version}
 make
@@ -132,6 +122,11 @@ rm -rf %buildroot
 %{python_sitelib}/cupshelpers/openprinting.py*
 %{python_sitelib}/cupshelpers/ppds.py*
 %{python_sitelib}/*.egg-info
+
+%files udev
+%defattr(-,root,root,-)
+%{_sysconfdir}/udev/rules.d/*.rules
+/lib/udev/*
 
 %files
 %defattr(-,root,root,-)
@@ -188,6 +183,19 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jul 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-1
+- 1.1.10:
+  - New udev rules for adding/enabling/disabling USB printers
+    automatically.
+  - Now uses gnome-packagekit utility to install packages
+    instead of the D-Bus API.
+  - Fixed detection of stopped jobs with CUPS 1.4.
+  - Fixed tracebacks when adding a new printer and when receiving
+    IPP notifications.
+  - Fixed 'location' field for printers added on remote CUPS servers.
+  - Fixed handling of incorrect authentication.
+  - Some UI and troubleshooter fixes have been made.
+
 * Mon Jul  6 2009 Tim Waugh <twaugh@redhat.com> 1.1.8-6
 - Requires gnome-packagekit for gpk-install-package-name.
 
