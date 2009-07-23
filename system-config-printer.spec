@@ -7,13 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+Patch1: system-config-printer-a05bd9c.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,6 +77,7 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
+%patch1 -p1 -b .a05bd9c
 
 %build
 %configure --with-udev-rules
@@ -183,6 +185,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jul 23 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-2
+- Applied some udev-configure-printer fixes from upstrema.
+
 * Wed Jul 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-1
 - 1.1.10:
   - New udev rules for adding/enabling/disabling USB printers
