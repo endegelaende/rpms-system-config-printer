@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -40,7 +40,6 @@ Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: python-sexy
 Requires: libxml2-python
-Requires: gnome-packagekit
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -185,8 +184,13 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jul 24 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-3
+- Removed gnome-packagekit dependency.  The presence of
+  gpk-install-package-name is detected at run-time, and the program
+  acts accordingly.
+
 * Thu Jul 23 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-2
-- Applied some udev-configure-printer fixes from upstrema.
+- Applied some udev-configure-printer fixes from upstream.
 
 * Wed Jul 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-1
 - 1.1.10:
