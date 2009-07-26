@@ -7,14 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-a05bd9c.patch
+Patch1: system-config-printer-525e996.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -25,6 +25,9 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
+
+BuildRequires: automake, autoconf
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
@@ -76,7 +79,9 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .a05bd9c
+%patch1 -p1 -b .525e996
+automake --copy --add-missing
+autoconf
 
 %build
 %configure --with-udev-rules
@@ -127,7 +132,12 @@ rm -rf %buildroot
 %files udev
 %defattr(-,root,root,-)
 %{_sysconfdir}/udev/rules.d/*.rules
-/lib/udev/*
+%{_sysconfdir}/dbus-1/system.d/*.conf
+%{_libexecdir}/printer-config-daemon
+%{_libexecdir}/udev-add-printer
+%{_datadir}/dbus-1/interfaces/*.xml
+%{_datadir}/dbus-1/system-services/*.service
+/lib/udev/udev-usb-printer
 
 %files
 %defattr(-,root,root,-)
@@ -184,6 +194,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Sun Jul 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-4
+- Split out D-Bus service for udev helper.
+
 * Fri Jul 24 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-3
 - Removed gnome-packagekit dependency.  The presence of
   gpk-install-package-name is detected at run-time, and the program
