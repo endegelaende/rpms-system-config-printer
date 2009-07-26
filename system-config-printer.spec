@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -23,6 +23,7 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
+BuildRequires: dbus-glib-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
 
@@ -194,8 +195,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Sun Jul 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-4
-- Split out D-Bus service for udev helper.
+* Sun Jul 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-5
+- Split out D-Bus service for udev helper.  Build requires
+  dbus-glib-devel.
 
 * Fri Jul 24 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-3
 - Removed gnome-packagekit dependency.  The presence of
