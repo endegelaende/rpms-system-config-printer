@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -42,7 +42,6 @@ Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
-Requires: python-sexy
 Requires: libxml2-python
 
 Obsoletes: system-config-printer-gui <= 0.6.152
@@ -195,6 +194,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jul 27 2009 Matthias Clasen <mclasen@redhat.com> 1.1.10-6
+- Drop no-longer-used python-sexy dep
+
 * Sun Jul 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-5
 - Split out D-Bus service for udev helper.  Build requires
   dbus-glib-devel.
