@@ -1,0 +1,58 @@
+diff -up system-config-printer-1.1.10/cupspk.py.getdevices system-config-printer-1.1.10/cupspk.py
+--- system-config-printer-1.1.10/cupspk.py.getdevices	2009-07-31 15:11:10.285962319 +0100
++++ system-config-printer-1.1.10/cupspk.py	2009-07-31 15:11:23.732961871 +0100
+@@ -300,7 +300,53 @@ class Connection:
+ #    getPPDs
+ #    getServerPPD
+ #    getDocument
+-#    getDevices
++
++
++    def getDevices(self, *args, **kwds):
++        use_pycups = False
++        pk_args = ()
++
++        result = self._call_with_pk_and_fallback(use_pycups,
++                                                 'DevicesGet', pk_args,
++                                                 self._connection.getDevices,
++                                                 *args, **kwds)
++
++        result_str = {}
++        if result != None:
++            for i in result.keys():
++                if type(i) == dbus.String:
++                    result_str[str(i)] = str(result[i])
++                else:
++                    result_str[i] = result[i]
++
++        # cups-pk-helper returns all devices in one dictionary.
++        # Keys of different devices are distinguished by ':n' postfix.
++
++        devices = {}
++        n = 0
++        postfix = ':' + str (n)
++        device_keys = [x for x in result_str.keys() if x.endswith(postfix)]
++        while len (device_keys) > 0:
++
++            device_uri = None
++            device_dict = {}
++            for i in device_keys:
++                key = i[:len(i)-len(postfix)]
++                if key != 'device-uri':
++                    device_dict[key] = result_str[i]
++                else:
++                    device_uri = result_str[i]
++
++            if device_uri != None:
++                devices[device_uri] = device_dict
++
++            n += 1
++            postfix = ':' + str (n)
++            device_keys = [x for x in result_str.keys() if x.endswith(postfix)]
++
++        return devices
++
++
+ #    getJobs
+ #    getJobAttributes
+ 

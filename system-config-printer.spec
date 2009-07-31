@@ -7,14 +7,15 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-525e996.patch
+Patch1: system-config-printer-a6cf4d3.patch
+Patch2: system-config-printer-getdevices.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -79,7 +80,8 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .525e996
+%patch1 -p1 -b .a6cf4d3
+%patch2 -p1 -b .getdevices
 automake --copy --add-missing
 autoconf
 
@@ -194,6 +196,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jul 31 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-7
+- Sync with 1.1.x.
+- Added patch for cupspk DevicesGet method call.
+
 * Mon Jul 27 2009 Matthias Clasen <mclasen@redhat.com> 1.1.10-6
 - Drop no-longer-used python-sexy dep
 
