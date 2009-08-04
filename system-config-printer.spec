@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.10
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -59,7 +59,6 @@ the user to configure a CUPS print server.
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
-Requires: foomatic
 Provides: pycups = %{pycups_version}
 Provides: pysmbc = %{pysmbc_version}
 
@@ -196,6 +195,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Aug  4 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-8
+- Dropped foomatic dependency from libs package.
+
 * Fri Jul 31 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-7
 - Sync with 1.1.x.
 - Added patch for cupspk DevicesGet method call.
