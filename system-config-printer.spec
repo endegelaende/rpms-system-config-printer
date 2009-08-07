@@ -6,16 +6,15 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.10
-Release: 8%{?dist}
+Version: 1.1.11
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
-Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.bz2
+Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.xz
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-a6cf4d3.patch
-Patch2: system-config-printer-getdevices.patch
+Patch1: system-config-printer-getdevices.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -24,11 +23,8 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
-BuildRequires: dbus-glib-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
-
-BuildRequires: automake, autoconf
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -79,10 +75,7 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .a6cf4d3
-%patch2 -p1 -b .getdevices
-automake --copy --add-missing
-autoconf
+%patch1 -p1 -b .getdevices
 
 %build
 %configure --with-udev-rules
@@ -133,12 +126,7 @@ rm -rf %buildroot
 %files udev
 %defattr(-,root,root,-)
 %{_sysconfdir}/udev/rules.d/*.rules
-%{_sysconfdir}/dbus-1/system.d/*.conf
-%{_libexecdir}/printer-config-daemon
-%{_libexecdir}/udev-add-printer
-%{_datadir}/dbus-1/interfaces/*.xml
-%{_datadir}/dbus-1/system-services/*.service
-/lib/udev/udev-usb-printer
+/lib/udev/*
 
 %files
 %defattr(-,root,root,-)
@@ -195,6 +183,16 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug  7 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-1
+- 1.1.11:
+  - Several udev-configure-printer fixes.
+  - Use case-insensitive PPD matching.
+  - Better URI validity testing.
+  - Another stale printer status icon fix.
+  - Notice when jobs stop due to backend errors.
+  - Warn about job history when renaming printers.
+  - Small UI improvements.
+
 * Tue Aug  4 2009 Tim Waugh <twaugh@redhat.com> 1.1.10-8
 - Dropped foomatic dependency from libs package.
 

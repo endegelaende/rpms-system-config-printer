@@ -1,6 +1,6 @@
-diff -up system-config-printer-1.1.10/cupspk.py.getdevices system-config-printer-1.1.10/cupspk.py
---- system-config-printer-1.1.10/cupspk.py.getdevices	2009-07-31 15:11:10.285962319 +0100
-+++ system-config-printer-1.1.10/cupspk.py	2009-07-31 15:11:23.732961871 +0100
+diff -up system-config-printer-1.1.11/cupspk.py.getdevices system-config-printer-1.1.11/cupspk.py
+--- system-config-printer-1.1.11/cupspk.py.getdevices	2009-08-05 11:33:24.000000000 +0100
++++ system-config-printer-1.1.11/cupspk.py	2009-08-07 18:05:45.528421465 +0100
 @@ -300,7 +300,53 @@ class Connection:
  #    getPPDs
  #    getServerPPD
