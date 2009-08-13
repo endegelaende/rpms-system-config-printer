@@ -1,7 +1,7 @@
 diff -up system-config-printer-1.1.11/cupspk.py.getdevices system-config-printer-1.1.11/cupspk.py
 --- system-config-printer-1.1.11/cupspk.py.getdevices	2009-08-05 11:33:24.000000000 +0100
-+++ system-config-printer-1.1.11/cupspk.py	2009-08-07 18:05:45.528421465 +0100
-@@ -300,7 +300,53 @@ class Connection:
++++ system-config-printer-1.1.11/cupspk.py	2009-08-13 17:39:34.251284301 +0100
+@@ -300,7 +300,74 @@ class Connection:
  #    getPPDs
  #    getServerPPD
  #    getDocument
@@ -10,12 +10,33 @@ diff -up system-config-printer-1.1.11/cupspk.py.getdevices system-config-printer
 +
 +    def getDevices(self, *args, **kwds):
 +        use_pycups = False
-+        pk_args = ()
++
++        timeout = 0
++        include_schemes = ''
++        exclude_schemes = ''
++
++        if len(args) == 3:
++            (use_pycups, timeout, include_schemes, exclude_schemes) = self._args_to_tuple([int, str, str], *args)
++        else:
++            if kwds.has_key('timeout'):
++                timeout = kwds['timeout']
++
++            if kwds.has_key('include_schemes'):
++                include_schemes = kwds['include_schemes']
++
++            if kwds.has_key('exclude_schemes'):
++                exclude_schemes = kwds['exclude_schemes']
++
++        pk_args = (timeout, include_schemes, exclude_schemes)
 +
 +        result = self._call_with_pk_and_fallback(use_pycups,
 +                                                 'DevicesGet', pk_args,
 +                                                 self._connection.getDevices,
 +                                                 *args, **kwds)
++
++        # return 'result' if fallback was called
++        if len (result.keys()) > 0 and type (result[result.keys()[0]]) == dict:
++             return result
 +
 +        result_str = {}
 +        if result != None:
@@ -37,7 +58,7 @@ diff -up system-config-printer-1.1.11/cupspk.py.getdevices system-config-printer
 +            device_uri = None
 +            device_dict = {}
 +            for i in device_keys:
-+                key = i[:len(i)-len(postfix)]
++                key = i[:len(i) - len(postfix)]
 +                if key != 'device-uri':
 +                    device_dict[key] = result_str[i]
 +                else:

@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.11
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -183,6 +183,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Aug 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-2
+- Updated cupspk DevicesGet call for accepted API.
+
 * Fri Aug  7 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-1
 - 1.1.11:
   - Several udev-configure-printer fixes.
