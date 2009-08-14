@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.11
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,6 +15,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-pr
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-getdevices.patch
+Patch2: system-config-printer-hplip-hack.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,6 +77,7 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .getdevices
+%patch2 -p1 -b .hplip-hack
 
 %build
 %configure --with-udev-rules
@@ -188,6 +190,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-4
+- Compare MFG and MDL fields case insensitively when adding automatic
+  queues, because HPLIP provides them with different case than the
+  actual devices do.  Upstream HPLIP bug:
+  https://bugs.launchpad.net/hplip/+bug/405804
+
 * Fri Aug 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-3
 - Own /var/run/udev-configure-printer.
 
