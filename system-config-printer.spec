@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.11
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -102,6 +102,9 @@ pushd pysmbc-%{pysmbc_version}
 make DESTDIR=%buildroot install
 popd
 
+%{__mkdir_p} %buildroot%{_localstatedir}/run/udev-configure-printer
+touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
+
 %find_lang system-config-printer
 
 %clean
@@ -127,6 +130,8 @@ rm -rf %buildroot
 %defattr(-,root,root,-)
 %{_sysconfdir}/udev/rules.d/*.rules
 /lib/udev/*
+%dir %{_localstatedir}/run/udev-configure-printer
+%verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %files
 %defattr(-,root,root,-)
@@ -183,6 +188,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-3
+- Own /var/run/udev-configure-printer.
+
 * Thu Aug 13 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-2
 - Updated cupspk DevicesGet call for accepted API.
 
