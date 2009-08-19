@@ -7,15 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.11
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.xz
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-getdevices.patch
-Patch2: system-config-printer-hplip-hack.patch
+Patch1: system-config-printer-scp-git.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -26,6 +25,7 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
+BuildRequires: autoconf, automake
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -76,8 +76,11 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .getdevices
-%patch2 -p1 -b .hplip-hack
+# Applied patch from 1.1.x (3f45e96).
+%patch1 -p1 -b .scp-git
+aclocal
+automake --copy --add-missing
+autoconf
 
 %build
 %configure --with-udev-rules
@@ -173,7 +176,6 @@ rm -rf %buildroot
 %{_datadir}/%{name}/userdefault.py*
 %{_datadir}/%{name}/XmlHelper.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
-%{_datadir}/%{name}/gtk_treeviewtooltips.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
@@ -190,6 +192,14 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Aug 19 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-5
+- Applied patch from 1.1.x (3f45e96):
+  - Show a 'paused' emblem for rejecting/disabled printers
+    (bug #518020).
+  - Set appropriate tooltip when configuring printer (bug #518007).
+  - Use separate thread for verifying IPP queue (part of bug #518065).
+  - Better driver preference order (bug #518045).
+
 * Fri Aug 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-4
 - Compare MFG and MDL fields case insensitively when adding automatic
   queues, because HPLIP provides them with different case than the
