@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.11
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -76,7 +76,7 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-# Applied patch from 1.1.x (3f45e96).
+# Applied patch from 1.1.x (52a73b6).
 %patch1 -p1 -b .scp-git
 aclocal
 automake --copy --add-missing
@@ -192,6 +192,14 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Aug 20 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-6
+- Applied patch from 1.1.x (52a73b6).
+  - Better printer icons representing status (bug #518020).
+  - Use paused ico nwhen printer state reason is 'paused'.
+  - Job status icon and state reason in jobs treeview (bug #518070).
+  - Job creation times display fixes.
+  - Use preferred object path for AuthenticationAgent (bug #518427).
+
 * Wed Aug 19 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-5
 - Applied patch from 1.1.x (3f45e96):
   - Show a 'paused' emblem for rejecting/disabled printers
