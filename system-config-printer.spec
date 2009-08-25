@@ -6,15 +6,14 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.11
-Release: 6%{?dist}
+Version: 1.1.12
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.xz
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-scp-git.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -25,7 +24,6 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
-BuildRequires: autoconf, automake
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -76,11 +74,6 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-# Applied patch from 1.1.x (52a73b6).
-%patch1 -p1 -b .scp-git
-aclocal
-automake --copy --add-missing
-autoconf
 
 %build
 %configure --with-udev-rules
@@ -192,6 +185,30 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Aug 25 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-1
+- 1.1.12:
+  - Troubleshooting fix.
+  - Fixed applet traceback when printing test page.
+  - Removed completed job notifications (trac #181).
+  - Show printer status in printer icons (bug #518020).
+  - Use paused icon when printer state reason is 'paused'.
+  - Driver preference order fixes.
+  - Job status icon and state reason display in jobs list
+    (bug #518070).
+  - Fixed overactive job creation times update timer.
+  - Use preferred D-Bus object path for AuthenticationAgent
+    (bug #518427).
+  - Fixed disabling a printer when PolicyKit call fails.
+  - Set appropriate status icon tooltip when configuration printer
+    (bug #518007).
+  - Use separate thread for verifying IPP queue (bug #518065).
+  - Use newer tooltip API to avoid deprecation warnings.
+  - Compare MFG/MDL case-insensitively in udev rule.
+  - Support for cups-pk-helper's DevicesGet method.
+  - Don't attempt to use PolicyKit if running as root.
+  - Support for localized marker names (trac #183).
+  - Other small fixes.
+
 * Thu Aug 20 2009 Tim Waugh <twaugh@redhat.com> 1.1.11-6
 - Applied patch from 1.1.x (52a73b6).
   - Better printer icons representing status (bug #518020).
