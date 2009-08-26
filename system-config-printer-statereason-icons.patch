@@ -1,0 +1,16 @@
+diff -up system-config-printer-1.1.12/statereason.py.statereason-icons system-config-printer-1.1.12/statereason.py
+--- system-config-printer-1.1.12/statereason.py.statereason-icons	2009-08-25 17:01:28.000000000 +0100
++++ system-config-printer-1.1.12/statereason.py	2009-08-26 17:43:19.368314303 +0100
+@@ -28,9 +28,9 @@ class StateReason:
+     ERROR=3
+ 
+     LEVEL_ICON={
+-        REPORT: "info",
+-        WARNING: "important",
+-        ERROR: "error"
++        REPORT: "dialog-info",
++        WARNING: "dialog-warning",
++        ERROR: "dialog-error"
+         }
+ 
+     def __init__(self, printer, reason):

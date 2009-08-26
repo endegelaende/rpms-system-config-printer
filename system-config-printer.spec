@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.12
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,6 +15,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-pr
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-get_cursor.patch
+Patch2: system-config-printer-statereason-icons.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,6 +77,7 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .get_cursor
+%patch2 -p1 -b .statereason-icons
 
 %build
 %configure --with-udev-rules
@@ -187,6 +189,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Aug 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-3
+- Fixed statereason icon names.
+
 * Wed Aug 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-2
 - Fixed traceback in on_tvNPDeviceURIs_cursor_changed (bug #519367).
 
