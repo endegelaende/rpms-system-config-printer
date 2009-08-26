@@ -16,6 +16,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-get_cursor.patch
 Patch2: system-config-printer-statereason-icons.patch
+Patch3: system-config-printer-icon-load-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -78,6 +79,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .get_cursor
 %patch2 -p1 -b .statereason-icons
+%patch3 -p1 -b .icon-load-traceback
 
 %build
 %configure --with-udev-rules
@@ -190,6 +192,7 @@ exit 0
 
 %changelog
 * Wed Aug 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-3
+- Handle icon load failure gracefully.
 - Fixed statereason icon names.
 
 * Wed Aug 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-2
