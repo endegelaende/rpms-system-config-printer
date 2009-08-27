@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.12
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-get_cursor.patch
 Patch2: system-config-printer-statereason-icons.patch
 Patch3: system-config-printer-icon-load-traceback.patch
+Patch4: system-config-printer-polkit-1.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -27,6 +28,7 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
+BuildRequires: automake, autoconf
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -80,9 +82,13 @@ printers.
 %patch1 -p1 -b .get_cursor
 %patch2 -p1 -b .statereason-icons
 %patch3 -p1 -b .icon-load-traceback
+%patch4 -p1 -b .polkit-1
 
 %build
-%configure --with-udev-rules
+aclocal
+automake --copy --add-missing
+autoconf
+%configure --with-udev-rules --with-polkit-1
 
 pushd pycups-%{pycups_version}
 make
@@ -191,6 +197,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Aug 27 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-4
+- Ported to polkit-1.
+
 * Wed Aug 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-3
 - Handle icon load failure gracefully.
 - Fixed statereason icon names.
