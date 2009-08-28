@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.12
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,6 +18,7 @@ Patch1: system-config-printer-get_cursor.patch
 Patch2: system-config-printer-statereason-icons.patch
 Patch3: system-config-printer-icon-load-traceback.patch
 Patch4: system-config-printer-polkit-1.patch
+Patch5: system-config-printer-proxy-auth.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -83,6 +84,7 @@ printers.
 %patch2 -p1 -b .statereason-icons
 %patch3 -p1 -b .icon-load-traceback
 %patch4 -p1 -b .polkit-1
+%patch5 -p1 -b .proxy-auth
 
 %build
 aclocal
@@ -197,6 +199,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Aug 28 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-5
+- Fixed proxy authentication.
+
 * Thu Aug 27 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-4
 - Ported to polkit-1.
 
