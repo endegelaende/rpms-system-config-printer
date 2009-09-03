@@ -1,0 +1,24 @@
+diff -up system-config-printer-1.1.12/system-config-printer.py.raw-device-change system-config-printer-1.1.12/system-config-printer.py
+--- system-config-printer-1.1.12/system-config-printer.py.raw-device-change	2009-09-03 17:30:31.792304116 +0100
++++ system-config-printer-1.1.12/system-config-printer.py	2009-09-03 17:30:33.364303189 +0100
+@@ -1906,16 +1906,16 @@ class GUI(GtkGUI, monitor.Watcher):
+ 
+     # set buttons sensitivity
+     def setDataButtonState(self):
+-        try: # Might not be a printer selected
++        try:
+             possible = (self.ppd and
+                         not bool (self.changed) and
+                         self.printer.enabled and
+                         not self.printer.rejecting)
+ 
+-            for button in [self.btnPrintTestPage,
+-                           self.btnChangePPD,
++            self.btnPrintTestPage.set_sensitive (possible)
++            for button in [self.btnChangePPD,
+                            self.btnSelectDevice]:
+-                button.set_sensitive (possible)
++                button.set_sensitive (not bool (self.changed))
+ 
+             commands = (self.printer.type & cups.CUPS_PRINTER_COMMANDS) != 0
+             self.btnSelfTest.set_sensitive (commands and possible)
