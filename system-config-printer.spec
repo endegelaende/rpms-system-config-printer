@@ -6,22 +6,14 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.12
-Release: 8%{?dist}
+Version: 1.1.13
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.xz
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-get_cursor.patch
-Patch2: system-config-printer-statereason-icons.patch
-Patch3: system-config-printer-icon-load-traceback.patch
-Patch4: system-config-printer-polkit-1.patch
-Patch5: system-config-printer-proxy-auth.patch
-Patch6: system-config-printer-ppdippstr.patch
-Patch7: system-config-printer-raw-device-change.patch
-Patch8: system-config-printer-get-devices.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -32,7 +24,6 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
 BuildRequires: epydoc
-BuildRequires: automake, autoconf
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -83,19 +74,8 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .get_cursor
-%patch2 -p1 -b .statereason-icons
-%patch3 -p1 -b .icon-load-traceback
-%patch4 -p1 -b .polkit-1
-%patch5 -p1 -b .proxy-auth
-%patch6 -p1 -b .ppdippstr
-%patch7 -p1 -b .raw-device-change
-%patch8 -p1 -b .get-devices
 
 %build
-aclocal
-automake --copy --add-missing
-autoconf
 %configure --with-udev-rules --with-polkit-1
 
 pushd pycups-%{pycups_version}
@@ -205,6 +185,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Sep 14 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-1
+- 1.1.13:
+  - Translation updates (bug #522451).
+
 * Fri Sep  4 2009 Tim Waugh <twaugh@redhat.com> 1.1.12-8
 - Further speed improvement when fetching devices.
 
