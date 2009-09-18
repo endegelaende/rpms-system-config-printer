@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-data-button-state.patch
 Patch2: system-config-printer-cancel-traceback.patch
+Patch3: system-config-printer-publish-printers.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -79,6 +80,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .data-button-state
 %patch2 -p1 -b .cancel-traceback
+%patch3 -p1 -b .publish-printers
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -191,6 +193,7 @@ exit 0
 
 %changelog
 * Fri Sep 18 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-2
+- Avoid showing the publish-printers dialog when not necessary.
 - Fixed traceback when cancelling change-driver dialog.
 - Fixed data button state.
 

@@ -1,0 +1,31 @@
+diff -up system-config-printer-1.1.13/system-config-printer.py.publish-printers system-config-printer-1.1.13/system-config-printer.py
+--- system-config-printer-1.1.13/system-config-printer.py.publish-printers	2009-09-18 13:44:41.680437056 +0100
++++ system-config-printer-1.1.13/system-config-printer.py	2009-09-18 13:45:30.704315256 +0100
+@@ -220,7 +220,7 @@ class GUI(GtkGUI, monitor.Watcher):
+         self.changed = set() # of options
+ 
+         self.servers = set((self.connect_server,))
+-        self.server_is_publishing = False
++        self.server_is_publishing = None # not known
+         self.devid = devid
+         self.focus_on_map = focus_on_map
+ 
+@@ -3158,6 +3158,18 @@ class GUI(GtkGUI, monitor.Watcher):
+             self.cups._end_operation ()
+ 
+         if success and share:
++            if self.server_is_publishing == None:
++                # We haven't yet seen a server-is-sharing-printers attribute.
++                # Assuming CUPS 1.4, this means we haven't opened a
++                # properties dialog yet.  Fetch the attributes now and
++                # look for it.
++                try:
++                    printer.getAttributes ()
++                    p = printer.other_attributes['server-is-sharing-printers']
++                    self.server_is_publishing = p
++                except (cups.IPPError, KeyError):
++                    pass
++
+             self.advise_publish ()
+ 
+         # For some reason CUPS doesn't give us a notification about
