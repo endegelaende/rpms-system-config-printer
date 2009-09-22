@@ -20,6 +20,7 @@ Patch2: system-config-printer-cancel-traceback.patch
 Patch3: system-config-printer-publish-printers.patch
 Patch4: system-config-printer-iconify.patch
 Patch5: system-config-printer-fetchdevices.patch
+Patch6: system-config-printer-missing-import.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -85,6 +86,7 @@ printers.
 %patch3 -p1 -b .publish-printers
 %patch4 -p1 -b .iconify
 %patch5 -p1 -b .fetchdevices
+%patch6 -p1 -b .missing-import
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -197,6 +199,7 @@ exit 0
 
 %changelog
 * Tue Sep 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-3
+- Fixed missing import in probe_printer module.
 - Fixed race when fetching device list (bug #521110).
 
 * Fri Sep 18 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-2
