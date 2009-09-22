@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,6 +19,7 @@ Patch1: system-config-printer-data-button-state.patch
 Patch2: system-config-printer-cancel-traceback.patch
 Patch3: system-config-printer-publish-printers.patch
 Patch4: system-config-printer-iconify.patch
+Patch5: system-config-printer-fetchdevices.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -83,6 +84,7 @@ printers.
 %patch2 -p1 -b .cancel-traceback
 %patch3 -p1 -b .publish-printers
 %patch4 -p1 -b .iconify
+%patch5 -p1 -b .fetchdevices
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -194,6 +196,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Sep 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-3
+- Fixed race when fetching device list (bug #521110).
+
 * Fri Sep 18 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-2
 - Iconify jobs window into status icon.
 - Avoid showing the publish-printers dialog when not necessary.
