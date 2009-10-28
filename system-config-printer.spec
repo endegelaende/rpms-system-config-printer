@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -21,6 +21,14 @@ Patch3: system-config-printer-publish-printers.patch
 Patch4: system-config-printer-iconify.patch
 Patch5: system-config-printer-fetchdevices.patch
 Patch6: system-config-printer-missing-import.patch
+Patch7: system-config-printer-find-return-accel.patch
+Patch8: system-config-printer-physdev-traceback.patch
+Patch9: system-config-printer-autoselect-raw.patch
+Patch10: system-config-printer-network-model.patch
+Patch11: system-config-printer-no-cancel-properties-dialog.patch
+Patch12: system-config-printer-jobs-window-visibility.patch
+Patch13: system-config-printer-strip-zxs-pcl3.patch
+Patch14: system-config-printer-troubleshoot-network-printers.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -87,6 +95,14 @@ printers.
 %patch4 -p1 -b .iconify
 %patch5 -p1 -b .fetchdevices
 %patch6 -p1 -b .missing-import
+%patch7 -p1 -b .find-return-accel
+%patch8 -p1 -b .physdev-traceback
+%patch9 -p1 -b .autoselect-raw
+%patch10 -p1 -b .network-model
+%patch11 -p1 -b .no-cancel-properties-dialog
+%patch12 -p1 -b .jobs-window-visibility
+%patch13 -p1 -b .strip-zxs-pcl3
+%patch14 -p1 -b .troubleshoot-network-printers
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -198,6 +214,17 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Oct 28 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-4
+- Troubleshoot: connect to the right server when choosing a network
+  queue (bug #531482).
+- Strip 'zxs' and 'pcl3' from make-and-model (bug #531048).
+- Fixed visibility tracking for jobs window (bug #531438).
+- Don't display properties dialog for first test page (bug #531490).
+- Determine make/model for network printers (bug #524321).
+- Auto-select the correct driver entry for raw queues.
+- Avoid traceback in PhysicalDevice.py.
+- Let Return key activate the Find button for Find Network Printer.
+
 * Tue Sep 22 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-3
 - Fixed missing import in probe_printer module.
 - Fixed race when fetching device list (bug #521110).

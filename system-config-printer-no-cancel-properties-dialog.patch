@@ -1,0 +1,14 @@
+diff -up system-config-printer-1.1.13/system-config-printer.py.no-cancel-properties-dialog system-config-printer-1.1.13/system-config-printer.py
+--- system-config-printer-1.1.13/system-config-printer.py.no-cancel-properties-dialog	2009-10-28 14:41:15.654017107 +0000
++++ system-config-printer-1.1.13/system-config-printer.py	2009-10-28 15:29:53.600140205 +0000
+@@ -6815,8 +6815,9 @@ class NewPrinterGUI(GtkGUI):
+             response = q.run ()
+             q.destroy ()
+             if response == gtk.RESPONSE_YES:
+-                # Display the properties dialog.
++                # Load the printer details but hide the properties dialog.
+                 self.mainapp.display_properties_dialog_for (name)
++                self.mainapp.PrinterPropertiesDialog.hide ()
+ 
+                 # Click the test button.
+                 self.mainapp.btnPrintTestPage.clicked ()

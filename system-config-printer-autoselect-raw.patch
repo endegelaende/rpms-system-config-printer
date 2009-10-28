@@ -1,0 +1,14 @@
+diff -up system-config-printer-1.1.13/system-config-printer.py.autoselect-raw system-config-printer-1.1.13/system-config-printer.py
+--- system-config-printer-1.1.13/system-config-printer.py.autoselect-raw	2009-09-30 16:54:07.363635374 +0100
++++ system-config-printer-1.1.13/system-config-printer.py	2009-09-30 16:54:19.189761633 +0100
+@@ -3948,8 +3948,8 @@ class NewPrinterGUI(GtkGUI):
+                  cupshelpers.ppds.ppdMakeModelSplit (makeandmodel)
+             else:
+                 # Special CUPS names for a raw queue.
+-                self.auto_make = 'Raw'
+-                self.auto_model = 'Queue'
++                self.auto_make = 'Generic'
++                self.auto_model = 'Raw Queue'
+ 
+             try:
+                 if self.dialog_mode == "ppd":
