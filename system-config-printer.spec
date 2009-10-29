@@ -30,6 +30,7 @@ Patch12: system-config-printer-jobs-window-visibility.patch
 Patch13: system-config-printer-strip-zxs-pcl3.patch
 Patch14: system-config-printer-troubleshoot-network-printers.patch
 Patch15: system-config-printer-strip-zjs.patch
+Patch16: system-config-printer-custom-state-reasons.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -105,6 +106,7 @@ printers.
 %patch13 -p1 -b .strip-zxs-pcl3
 %patch14 -p1 -b .troubleshoot-network-printers
 %patch15 -p1 -b .strip-zjs
+%patch16 -p1 -b .custom-state-reasons
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -217,6 +219,7 @@ exit 0
 
 %changelog
 * Thu Oct 29 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-5
+- Added upstream patch for custom state reasons (bug #531872).
 - Strip 'zjs' from make-and-model as well (bug #531869).
 
 * Wed Oct 28 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-4
