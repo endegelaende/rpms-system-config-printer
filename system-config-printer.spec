@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -29,6 +29,7 @@ Patch11: system-config-printer-no-cancel-properties-dialog.patch
 Patch12: system-config-printer-jobs-window-visibility.patch
 Patch13: system-config-printer-strip-zxs-pcl3.patch
 Patch14: system-config-printer-troubleshoot-network-printers.patch
+Patch15: system-config-printer-strip-zjs.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -103,6 +104,7 @@ printers.
 %patch12 -p1 -b .jobs-window-visibility
 %patch13 -p1 -b .strip-zxs-pcl3
 %patch14 -p1 -b .troubleshoot-network-printers
+%patch15 -p1 -b .strip-zjs
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -214,6 +216,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Oct 29 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-5
+- Strip 'zjs' from make-and-model as well (bug #531869).
+
 * Wed Oct 28 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-4
 - Troubleshoot: connect to the right server when choosing a network
   queue (bug #531482).
