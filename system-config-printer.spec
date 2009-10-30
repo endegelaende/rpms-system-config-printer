@@ -31,6 +31,7 @@ Patch13: system-config-printer-strip-zxs-pcl3.patch
 Patch14: system-config-printer-troubleshoot-network-printers.patch
 Patch15: system-config-printer-strip-zjs.patch
 Patch16: system-config-printer-custom-state-reasons.patch
+Patch17: system-config-printer-no-epydoc.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -40,7 +41,6 @@ BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel
 BuildRequires: xmlto
-BuildRequires: epydoc
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -107,6 +107,7 @@ printers.
 %patch14 -p1 -b .troubleshoot-network-printers
 %patch15 -p1 -b .strip-zjs
 %patch16 -p1 -b .custom-state-reasons
+%patch17 -p1 -b .no-epydoc
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -218,6 +219,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Oct 30 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-6
+- Avoid epydoc dependency.
+
 * Thu Oct 29 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-5
 - Added upstream patch for custom state reasons (bug #531872).
 - Strip 'zjs' from make-and-model as well (bug #531869).
