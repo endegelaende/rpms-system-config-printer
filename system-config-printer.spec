@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -32,6 +32,7 @@ Patch14: system-config-printer-troubleshoot-network-printers.patch
 Patch15: system-config-printer-strip-zjs.patch
 Patch16: system-config-printer-custom-state-reasons.patch
 Patch17: system-config-printer-no-epydoc.patch
+Patch18: system-config-printer-notification-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -108,6 +109,7 @@ printers.
 %patch15 -p1 -b .strip-zjs
 %patch16 -p1 -b .custom-state-reasons
 %patch17 -p1 -b .no-epydoc
+%patch18 -p1 -b .notification-traceback
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -220,6 +222,7 @@ exit 0
 
 %changelog
 * Fri Oct 30 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-6
+- Avoid traceback in IPP notification handlers (bug #530641).
 - Avoid epydoc dependency.
 
 * Thu Oct 29 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-5
