@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -34,6 +34,7 @@ Patch16: system-config-printer-custom-state-reasons.patch
 Patch17: system-config-printer-no-epydoc.patch
 Patch18: system-config-printer-notification-traceback.patch
 Patch19: system-config-printer-de.po-typo.patch
+Patch20: system-config-printer-test-page-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -112,6 +113,7 @@ printers.
 %patch17 -p1 -b .no-epydoc
 %patch18 -p1 -b .notification-traceback
 %patch19 -p1 -b .de.po-typo
+%patch20 -p1 -b .test-page-traceback
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -223,6 +225,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Nov  5 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-8
+- Fail gracefully if the new printer has disappeared before the user
+  has responded to the test page prompt (bug #533109).
+
 * Mon Nov  2 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-7
 - Fixed typo in de.po (bug #532371).
 
