@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -36,6 +36,7 @@ Patch18: system-config-printer-notification-traceback.patch
 Patch19: system-config-printer-de.po-typo.patch
 Patch20: system-config-printer-test-page-traceback.patch
 Patch21: system-config-printer-install-foomatic-db-ppds.patch
+Patch22: system-config-printer-gpk-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -116,6 +117,7 @@ printers.
 %patch19 -p1 -b .de.po-typo
 %patch20 -p1 -b .test-page-traceback
 %patch21 -p1 -b .install-foomatic-db-ppds
+%patch22 -p1 -b .gpk-traceback
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -227,6 +229,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Nov 23 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.13-11
+- Prevent traceback when PackageKit is not installed (bug #540230).
+
 * Wed Nov 11 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-10
 - Suggest installing foomatic-db-ppds when appropriate (bug #536831).
 
