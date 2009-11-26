@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.13
-Release: 11%{?dist}
+Release: 12%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -37,6 +37,7 @@ Patch19: system-config-printer-de.po-typo.patch
 Patch20: system-config-printer-test-page-traceback.patch
 Patch21: system-config-printer-install-foomatic-db-ppds.patch
 Patch22: system-config-printer-gpk-traceback.patch
+Patch23: system-config-printer-editable-ppd.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -118,6 +119,7 @@ printers.
 %patch20 -p1 -b .test-page-traceback
 %patch21 -p1 -b .install-foomatic-db-ppds
 %patch22 -p1 -b .gpk-traceback
+%patch23 -p1 -b .editable-ppd
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -229,6 +231,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Nov 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-12
+- Fixed editability of PPD options for explicit IPP queues
+  (bug #541588).
+
 * Mon Nov 23 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.13-11
 - Prevent traceback when PackageKit is not installed (bug #540230).
 

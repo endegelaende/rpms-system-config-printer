@@ -1,0 +1,20 @@
+diff -up system-config-printer-1.1.13/system-config-printer.py.editable-ppd system-config-printer-1.1.13/system-config-printer.py
+--- system-config-printer-1.1.13/system-config-printer.py.editable-ppd	2009-11-26 15:27:29.844177855 +0000
++++ system-config-printer-1.1.13/system-config-printer.py	2009-11-26 15:27:42.803179141 +0000
+@@ -2320,7 +2320,6 @@ class GUI(GtkGUI, monitor.Watcher):
+             pass
+ 
+         editable = not self.printer.discovered
+-        editablePPD = not self.printer.remote
+ 
+         try:
+             self.ppd = printer.getPPD()
+@@ -2471,7 +2470,7 @@ class GUI(GtkGUI, monitor.Watcher):
+             self.fillClassMembers(name, editable)
+         else:
+             # real Printer
+-            self.fillPrinterOptions(name, editablePPD)
++            self.fillPrinterOptions(name, editable)
+ 
+         self.updateMarkerLevels()
+         self.updateStateReasons()
