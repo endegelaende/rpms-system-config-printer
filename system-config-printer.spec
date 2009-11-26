@@ -38,6 +38,7 @@ Patch20: system-config-printer-test-page-traceback.patch
 Patch21: system-config-printer-install-foomatic-db-ppds.patch
 Patch22: system-config-printer-gpk-traceback.patch
 Patch23: system-config-printer-editable-ppd.patch
+Patch24: system-config-printer-center.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -120,6 +121,7 @@ printers.
 %patch21 -p1 -b .install-foomatic-db-ppds
 %patch22 -p1 -b .gpk-traceback
 %patch23 -p1 -b .editable-ppd
+%patch24 -p1 -b .center
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -232,6 +234,7 @@ exit 0
 
 %changelog
 * Thu Nov 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-12
+- Place the window in the middle of the screen (bug #539876).
 - Fixed editability of PPD options for explicit IPP queues
   (bug #541588).
 
