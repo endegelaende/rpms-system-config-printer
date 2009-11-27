@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.13
-Release: 12%{?dist}
+Version: 1.1.14
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,31 +15,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-pr
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch1: system-config-printer-data-button-state.patch
-Patch2: system-config-printer-cancel-traceback.patch
-Patch3: system-config-printer-publish-printers.patch
-Patch4: system-config-printer-iconify.patch
-Patch5: system-config-printer-fetchdevices.patch
-Patch6: system-config-printer-missing-import.patch
-Patch7: system-config-printer-find-return-accel.patch
-Patch8: system-config-printer-physdev-traceback.patch
-Patch9: system-config-printer-autoselect-raw.patch
-Patch10: system-config-printer-network-model.patch
-Patch11: system-config-printer-no-cancel-properties-dialog.patch
-Patch12: system-config-printer-jobs-window-visibility.patch
-Patch13: system-config-printer-strip-zxs-pcl3.patch
-Patch14: system-config-printer-troubleshoot-network-printers.patch
-Patch15: system-config-printer-strip-zjs.patch
-Patch16: system-config-printer-custom-state-reasons.patch
-Patch17: system-config-printer-no-epydoc.patch
-Patch18: system-config-printer-notification-traceback.patch
-Patch19: system-config-printer-de.po-typo.patch
-Patch20: system-config-printer-test-page-traceback.patch
-Patch21: system-config-printer-install-foomatic-db-ppds.patch
-Patch22: system-config-printer-gpk-traceback.patch
-Patch23: system-config-printer-editable-ppd.patch
-Patch24: system-config-printer-center.patch
-Patch25: system-config-printer-markers-display.patch
+Patch1: system-config-printer-no-epydoc.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -99,31 +75,7 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-%patch1 -p1 -b .data-button-state
-%patch2 -p1 -b .cancel-traceback
-%patch3 -p1 -b .publish-printers
-%patch4 -p1 -b .iconify
-%patch5 -p1 -b .fetchdevices
-%patch6 -p1 -b .missing-import
-%patch7 -p1 -b .find-return-accel
-%patch8 -p1 -b .physdev-traceback
-%patch9 -p1 -b .autoselect-raw
-%patch10 -p1 -b .network-model
-%patch11 -p1 -b .no-cancel-properties-dialog
-%patch12 -p1 -b .jobs-window-visibility
-%patch13 -p1 -b .strip-zxs-pcl3
-%patch14 -p1 -b .troubleshoot-network-printers
-%patch15 -p1 -b .strip-zjs
-%patch16 -p1 -b .custom-state-reasons
-%patch17 -p1 -b .no-epydoc
-%patch18 -p1 -b .notification-traceback
-%patch19 -p1 -b .de.po-typo
-%patch20 -p1 -b .test-page-traceback
-%patch21 -p1 -b .install-foomatic-db-ppds
-%patch22 -p1 -b .gpk-traceback
-%patch23 -p1 -b .editable-ppd
-%patch24 -p1 -b .center
-%patch25 -p1 -b .markers-display
+%patch1 -p1 -b .no-epydoc
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -176,8 +128,8 @@ rm -rf %buildroot
 
 %files udev
 %defattr(-,root,root,-)
-%{_sysconfdir}/udev/rules.d/*.rules
-/lib/udev/*
+/lib/udev/rules.d/*.rules
+/lib/udev/udev-*-printer
 %dir %{_localstatedir}/run/udev-configure-printer
 %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 
@@ -194,6 +146,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/cupspk.py*
 %{_datadir}/%{name}/debug.py*
 %{_datadir}/%{name}/errordialogs.py*
+%{_datadir}/%{name}/firewall.py*
 %{_datadir}/%{name}/glade.py*
 %{_datadir}/%{name}/GroupsPane.py*
 %{_datadir}/%{name}/GroupsPaneModel.py*
@@ -235,6 +188,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Nov 27 2009 Tim Waugh <twaugh@redhat.com> 1.1.14-1
+- 1.1.14:
+  - Retry when reconnection fails (bug #541741).
+  - Prevent traceback with bad marker-levels attribute (bug #541882).
+
 * Thu Nov 26 2009 Tim Waugh <twaugh@redhat.com> 1.1.13-12
 - Prevent display of marker levels from making the properties dialog
   too big (bug #540826).
