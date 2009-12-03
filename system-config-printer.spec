@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.15
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-localize-statereason.patch
+Patch3: system-config-printer-browsepoll.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -78,6 +79,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .localize-statereason
+%patch3 -p1 -b .browsepoll
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -190,6 +192,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Dec  3 2009 Tim Waugh <twaugh@redhat.com> - 1.1.15-3
+- Don't overwrite BrowsePoll settings in basic settings dialog (bug #543986).
+
 * Thu Dec  3 2009 Tim Waugh <twaugh@redhat.com> - 1.1.15-2
 - Handle RuntimeError when localizing state reason (bug #543937).
 
