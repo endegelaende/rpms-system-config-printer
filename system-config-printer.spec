@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.15
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -20,6 +20,7 @@ Patch2: system-config-printer-localize-statereason.patch
 Patch3: system-config-printer-browsepoll.patch
 Patch4: system-config-printer-cupsd.conf-parser.patch
 Patch5: system-config-printer-troubleshooter-traceback.patch
+Patch6: system-config-printer-lpd-uri.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -84,6 +85,7 @@ printers.
 %patch3 -p1 -b .browsepoll
 %patch4 -p1 -b .cupsd.conf-parser
 %patch5 -p1 -b .troubleshooter-traceback
+%patch6 -p1 -b .lpd-uri
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -196,6 +198,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Dec  8 2009 Tim Waugh <twaugh@redhat.com> - 1.1.15-6
+- Fixed traceback with short lpd device URIs (bug #545397).
+
 * Mon Dec  7 2009 Tim Waugh <twaugh@redhat.com> - 1.1.15-5
 - Fixed traceback when troubleshooter operation is cancelled (bug #544356).
 
