@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.15
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -22,6 +22,7 @@ Patch4: system-config-printer-cupsd.conf-parser.patch
 Patch5: system-config-printer-troubleshooter-traceback.patch
 Patch6: system-config-printer-lpd-uri.patch
 Patch7: system-config-printer-short-lived-states.patch
+Patch8: system-config-printer-troubleshooter-debugcancel.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -88,6 +89,7 @@ printers.
 %patch5 -p1 -b .troubleshooter-traceback
 %patch6 -p1 -b .lpd-uri
 %patch7 -p1 -b .short-lived-states
+%patch8 -p1 -b .troubleshooter-debugcancel
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -200,6 +202,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Dec 14 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.15-8
+- Prevent traceback when cancel button in troubleshooter pressed (#546821).
+
 * Wed Dec  9 2009 Tim Waugh <twaugh@redhat.com> - 1.1.15-7
 - Fixed jobviewer traceback with short-lived state reasons (bug #545733).
 

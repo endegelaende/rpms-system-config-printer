@@ -1,0 +1,21 @@
+diff -up system-config-printer-1.1.15/troubleshoot/ErrorLogCheckpoint.py.debugcancel system-config-printer-1.1.15/troubleshoot/ErrorLogCheckpoint.py
+--- system-config-printer-1.1.15/troubleshoot/ErrorLogCheckpoint.py.debugcancel	2009-09-01 13:08:33.000000000 +0200
++++ system-config-printer-1.1.15/troubleshoot/ErrorLogCheckpoint.py	2009-12-14 17:16:32.000000000 +0100
+@@ -23,7 +23,7 @@ import cups
+ import os
+ import tempfile
+ import time
+-from timedops import TimedOperation
++from timedops import TimedOperation, OperationCanceled
+ from base import *
+ class ErrorLogCheckpoint(Question):
+     def __init__ (self, troubleshooter):
+@@ -162,7 +162,7 @@ class ErrorLogCheckpoint(Question):
+             self.op = TimedOperation (self.authconn.adminGetServerSettings,
+                                       parent=parent)
+             settings = self.op.run ()
+-        except cups.IPPError:
++        except (cups.IPPError, OperationCanceled):
+             self.troubleshooter.ready ()
+             self.forward_allowed = True
+             handler (button)
