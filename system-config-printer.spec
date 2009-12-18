@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.15
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -23,6 +23,7 @@ Patch5: system-config-printer-troubleshooter-traceback.patch
 Patch6: system-config-printer-lpd-uri.patch
 Patch7: system-config-printer-short-lived-states.patch
 Patch8: system-config-printer-troubleshooter-debugcancel.patch
+Patch9: system-config-printer-selection-browse.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -90,6 +91,7 @@ printers.
 %patch6 -p1 -b .lpd-uri
 %patch7 -p1 -b .short-lived-states
 %patch8 -p1 -b .troubleshooter-debugcancel
+%patch9 -p1 -b .selection-browse
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -202,6 +204,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Dec 18 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.15-9
+- Prevent traceback when no downloadable driver selected (#548449).
+
 * Mon Dec 14 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.15-8
 - Prevent traceback when cancel button in troubleshooter pressed (#546821).
 
