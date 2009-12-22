@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.15
-Release: 9%{?dist}
+Version: 1.1.16
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,14 +16,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-localize-statereason.patch
-Patch3: system-config-printer-browsepoll.patch
-Patch4: system-config-printer-cupsd.conf-parser.patch
-Patch5: system-config-printer-troubleshooter-traceback.patch
-Patch6: system-config-printer-lpd-uri.patch
-Patch7: system-config-printer-short-lived-states.patch
-Patch8: system-config-printer-troubleshooter-debugcancel.patch
-Patch9: system-config-printer-selection-browse.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -84,14 +76,6 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
-%patch2 -p1 -b .localize-statereason
-%patch3 -p1 -b .browsepoll
-%patch4 -p1 -b .cupsd.conf-parser
-%patch5 -p1 -b .troubleshooter-traceback
-%patch6 -p1 -b .lpd-uri
-%patch7 -p1 -b .short-lived-states
-%patch8 -p1 -b .troubleshooter-debugcancel
-%patch9 -p1 -b .selection-browse
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -157,6 +141,10 @@ rm -rf %buildroot
 %{_bindir}/my-default-printer
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/AdvancedServerSettings.py*
+%{_datadir}/%{name}/asyncconn.py*
+%{_datadir}/%{name}/asyncipp.py*
+%{_datadir}/%{name}/asyncpk0.py*
+%{_datadir}/%{name}/asyncpk1.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
@@ -204,8 +192,16 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Tue Dec 22 2009 Tim Waugh <twaugh@redhat.com>
+* Tue Dec 22 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-1
 - Updated pycups to 1.9.47.
+- 1.1.16:
+  - Ignore com.apple.print.recoverable state reason.
+  - Prevent traceback in found_network_printer_callback (bug #547765).
+  - Use asynchronous connection class for fetching device lists
+    (bug #549749).
+  - Prefer Foomatic/hpijs to hpcups for the time being.
+  - Clear device screen each time a new dialog is presented.
+  - Constraints handling fix.
 
 * Fri Dec 18 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.15-9
 - Prevent traceback when no downloadable driver selected (#548449).
