@@ -1,4 +1,4 @@
-%define pycups_version 1.9.46
+%define pycups_version 1.9.47
 %define pysmbc_version 1.0.6
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -204,6 +204,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Dec 22 2009 Tim Waugh <twaugh@redhat.com>
+- Updated pycups to 1.9.47.
+
 * Fri Dec 18 2009 Jiri Popelka <jpopelka@redhat.com> 1.1.15-9
 - Prevent traceback when no downloadable driver selected (#548449).
 

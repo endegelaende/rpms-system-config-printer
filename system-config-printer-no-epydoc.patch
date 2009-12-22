@@ -26,9 +26,9 @@ diff -up system-config-printer-1.1.13/Makefile.in.no-epydoc system-config-printe
  
  distcheck-hook: update-po
  
-diff -up system-config-printer-1.1.13/pycups-1.9.46/Makefile.no-epydoc system-config-printer-1.1.13/pycups-1.9.46/Makefile
---- system-config-printer-1.1.13/pycups-1.9.46/Makefile.no-epydoc	2009-10-30 11:32:53.089519286 +0000
-+++ system-config-printer-1.1.13/pycups-1.9.46/Makefile	2009-10-30 11:33:07.606519162 +0000
+diff -up system-config-printer-1.1.13/pycups-1.9.47/Makefile.no-epydoc system-config-printer-1.1.13/pycups-1.9.47/Makefile
+--- system-config-printer-1.1.13/pycups-1.9.47/Makefile.no-epydoc	2009-10-30 11:32:53.089519286 +0000
++++ system-config-printer-1.1.13/pycups-1.9.47/Makefile	2009-10-30 11:33:07.606519162 +0000
 @@ -14,7 +14,9 @@ cups.so: $(SOURCES)
  
  doc:	cups.so
