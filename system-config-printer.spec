@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-typo.patch
+Patch3: system-config-printer-driver-pre-selection.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -78,6 +79,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .typo
+%patch3 -p1 -b .driver-pre-selection
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -195,6 +197,7 @@ exit 0
 
 %changelog
 * Wed Dec 23 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-2
+- Pre-select correct driver when adding or changing a queue (bug #550075).
 - Fixed typo (bug #550096).
 
 * Tue Dec 22 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-1
