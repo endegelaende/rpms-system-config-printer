@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,6 +16,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
+Patch2: system-config-printer-typo.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,6 +77,7 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
+%patch2 -p1 -b .typo
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -143,8 +145,8 @@ rm -rf %buildroot
 %{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/asyncconn.py*
 %{_datadir}/%{name}/asyncipp.py*
-%{_datadir}/%{name}/asyncpk0.py*
 %{_datadir}/%{name}/asyncpk1.py*
+%{_datadir}/%{name}/asyncpk0.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
@@ -192,6 +194,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Dec 23 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-2
+- Fixed typo (bug #550096).
+
 * Tue Dec 22 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-1
 - Updated pycups to 1.9.47.
 - 1.1.16:
