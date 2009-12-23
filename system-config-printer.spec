@@ -18,6 +18,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-typo.patch
 Patch3: system-config-printer-driver-pre-selection.patch
+Patch4: system-config-printer-foomatic-recommended.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -80,6 +81,7 @@ printers.
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .typo
 %patch3 -p1 -b .driver-pre-selection
+%patch4 -p1 -b .foomatic-recommended
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -197,6 +199,7 @@ exit 0
 
 %changelog
 * Wed Dec 23 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-2
+- Prefer foomatic-recommended drivers (bug #550108).
 - Pre-select correct driver when adding or changing a queue (bug #550075).
 - Fixed typo (bug #550096).
 
