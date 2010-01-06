@@ -23,6 +23,7 @@ Patch5: system-config-printer-jobviewer-exit.patch
 Patch6: system-config-printer-npinit-traceback.patch
 Patch7: system-config-printer-notification-timeouts.patch
 Patch8: system-config-printer-select-nonexistent-printer.patch
+Patch9: system-config-printer-ink-levels.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -90,6 +91,7 @@ printers.
 %patch6 -p1 -b .npinit-traceback
 %patch7 -p1 -b .notification-timeouts
 %patch8 -p1 -b .select-nonexistent-printer
+%patch9 -p1 -b .ink-levels
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -207,6 +209,7 @@ exit 0
 
 %changelog
 * Wed Jan  6 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-3
+- Make sure there are enough ink level values (bug #541882).
 - Make sure the printer we added still exists before selecting it
   (bug #551436).
 - Set notification timeouts appropriately (bug #550829).
