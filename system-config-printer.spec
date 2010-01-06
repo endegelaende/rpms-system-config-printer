@@ -1,13 +1,13 @@
-%define pycups_version 1.9.47
-%define pysmbc_version 1.0.6
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-%{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
+%global pycups_version 1.9.47
+%global pysmbc_version 1.0.6
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -214,6 +214,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jan  6 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-4
+- Use %%global instead of %%define.
+
 * Wed Jan  6 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-3
 - Fixed pycups IPPRequest attribute handling bug.
 - Make sure there are enough ink level values (bug #541882).
