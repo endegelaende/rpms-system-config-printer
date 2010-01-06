@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,6 +19,7 @@ Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-typo.patch
 Patch3: system-config-printer-driver-pre-selection.patch
 Patch4: system-config-printer-foomatic-recommended.patch
+Patch5: system-config-printer-jobviewer-exit.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -82,6 +83,7 @@ printers.
 %patch2 -p1 -b .typo
 %patch3 -p1 -b .driver-pre-selection
 %patch4 -p1 -b .foomatic-recommended
+%patch5 -p1 -b .jobviewer-exit
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -198,6 +200,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jan  6 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-3
+- Avoid traceback in on_jobviewer_exit (bug #550437).
+
 * Wed Dec 23 2009 Tim Waugh <twaugh@redhat.com> - 1.1.16-2
 - Prefer foomatic-recommended drivers (bug #550108).
 - Pre-select correct driver when adding or changing a queue (bug #550075).
