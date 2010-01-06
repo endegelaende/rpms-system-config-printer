@@ -25,6 +25,8 @@ Patch7: system-config-printer-notification-timeouts.patch
 Patch8: system-config-printer-select-nonexistent-printer.patch
 Patch9: system-config-printer-ink-levels.patch
 
+Patch101: pycups-request-readio.patch
+
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: libsmbclient-devel >= 3.2
@@ -92,6 +94,10 @@ printers.
 %patch7 -p1 -b .notification-timeouts
 %patch8 -p1 -b .select-nonexistent-printer
 %patch9 -p1 -b .ink-levels
+
+pushd pycups-%{pycups_version}
+%patch101 -p1 -b .request-readio
+popd
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -209,6 +215,7 @@ exit 0
 
 %changelog
 * Wed Jan  6 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-3
+- Fixed pycups IPPRequest attribute handling bug.
 - Make sure there are enough ink level values (bug #541882).
 - Make sure the printer we added still exists before selecting it
   (bug #551436).
