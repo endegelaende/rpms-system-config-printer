@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -24,6 +24,7 @@ Patch6: system-config-printer-npinit-traceback.patch
 Patch7: system-config-printer-notification-timeouts.patch
 Patch8: system-config-printer-select-nonexistent-printer.patch
 Patch9: system-config-printer-ink-levels.patch
+Patch10: system-config-printer-auth-no-pw.patch
 
 Patch101: pycups-request-readio.patch
 
@@ -94,6 +95,7 @@ printers.
 %patch7 -p1 -b .notification-timeouts
 %patch8 -p1 -b .select-nonexistent-printer
 %patch9 -p1 -b .ink-levels
+%patch10 -p1 -b .auth-no-pw
 
 pushd pycups-%{pycups_version}
 %patch101 -p1 -b .request-readio
@@ -214,6 +216,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jan  7 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-6
+- Fixed crash when using keyring for auth without password (bug #553141).
+
 * Thu Jan  7 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-5
 - Fixed typo introduced in recent fix (bug #551436).
 
