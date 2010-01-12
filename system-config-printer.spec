@@ -223,7 +223,7 @@ exit 0
   set (bug #554268).
 
 * Mon Jan 11 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-7
-- Fixed traceback introduced in recent fix (bug #554376).
+- Fixed traceback introduced in recent fix (bug #554372).
 
 * Thu Jan  7 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-6
 - Fixed crash when using keyring for auth without password (bug #553141).
