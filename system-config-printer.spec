@@ -29,6 +29,7 @@ Patch11: system-config-printer-copy-crash.patch
 Patch12: system-config-printer-check-still-connecting.patch
 Patch13: system-config-printer-async-fallback.patch
 Patch14: system-config-printer-userdefault-traceback.patch
+Patch15: system-config-printer-serial-widgets.patch
 
 Patch101: pycups-request-readio.patch
 
@@ -104,6 +105,7 @@ printers.
 %patch12 -p1 -b .check-still-connecting
 %patch13 -p1 -b .async-fallback
 %patch14 -p1 -b .userdefault-traceback
+%patch15 -p1 -b .serial-widgets
 
 pushd pycups-%{pycups_version}
 %patch101 -p1 -b .request-readio
@@ -225,6 +227,7 @@ exit 0
 
 %changelog
 * Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
+- Make sure serial device widgets are always initialized (bug #556488).
 - Handle errors more gracefully in userdefault.py (bug #556345).
 - Don't rely on cups-pk-helper being around (bug #556170).
 - Avoid traceback when checking on connecting backends (bug #555552).
