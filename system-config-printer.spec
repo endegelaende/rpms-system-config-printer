@@ -27,6 +27,7 @@ Patch9: system-config-printer-ink-levels.patch
 Patch10: system-config-printer-auth-no-pw.patch
 Patch11: system-config-printer-copy-crash.patch
 Patch12: system-config-printer-check-still-connecting.patch
+Patch13: system-config-printer-async-fallback.patch
 
 Patch101: pycups-request-readio.patch
 
@@ -100,6 +101,7 @@ printers.
 %patch10 -p1 -b .auth-no-pw
 %patch11 -p1 -b .copy-crash
 %patch12 -p1 -b .check-still-connecting
+%patch13 -p1 -b .async-fallback
 
 pushd pycups-%{pycups_version}
 %patch101 -p1 -b .request-readio
@@ -221,6 +223,7 @@ exit 0
 
 %changelog
 * Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
+- Don't rely on cups-pk-helper being around (bug #556170).
 - Avoid traceback when checking on connecting backends (bug #555552).
 
 * Mon Jan 11 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-8
