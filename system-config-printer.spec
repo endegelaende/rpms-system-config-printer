@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -26,6 +26,7 @@ Patch8: system-config-printer-select-nonexistent-printer.patch
 Patch9: system-config-printer-ink-levels.patch
 Patch10: system-config-printer-auth-no-pw.patch
 Patch11: system-config-printer-copy-crash.patch
+Patch12: system-config-printer-check-still-connecting.patch
 
 Patch101: pycups-request-readio.patch
 
@@ -98,6 +99,7 @@ printers.
 %patch9 -p1 -b .ink-levels
 %patch10 -p1 -b .auth-no-pw
 %patch11 -p1 -b .copy-crash
+%patch12 -p1 -b .check-still-connecting
 
 pushd pycups-%{pycups_version}
 %patch101 -p1 -b .request-readio
@@ -218,6 +220,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
+- Avoid traceback when checking on connecting backends (bug #555552).
+
 * Mon Jan 11 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-8
 - Fixed traceback when copying printer with certain job options
   set (bug #554268).
