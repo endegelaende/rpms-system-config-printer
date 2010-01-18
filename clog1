@@ -1,2 +1,2 @@
 * Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
-- Make sure serial device widgets are always initialized (bug #556488).
+- Clean up temporary files when localizing statereason (bug #552768).
