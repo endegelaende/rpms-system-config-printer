@@ -1,2 +1,2 @@
 * Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
-- Don't rely on cups-pk-helper being around (bug #556170).
+- Handle errors more gracefully in userdefault.py (bug #556345).
