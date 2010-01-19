@@ -1,4 +1,4 @@
-%global pycups_version 1.9.47
+%global pycups_version 1.9.48
 %global pysmbc_version 1.0.6
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.16
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -31,8 +31,6 @@ Patch13: system-config-printer-async-fallback.patch
 Patch14: system-config-printer-userdefault-traceback.patch
 Patch15: system-config-printer-serial-widgets.patch
 Patch16: system-config-printer-statereason-tmp.patch
-
-Patch101: pycups-request-readio.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -108,10 +106,6 @@ printers.
 %patch14 -p1 -b .userdefault-traceback
 %patch15 -p1 -b .serial-widgets
 %patch16 -p1 -b .statereason-tmp
-
-pushd pycups-%{pycups_version}
-%patch101 -p1 -b .request-readio
-popd
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -228,6 +222,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Jan 19 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-10
+- Update pycups to 1.9.48.
+
 * Mon Jan 18 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-9
 - Clean up temporary files when localizing statereason (bug #552768).
 - Make sure serial device widgets are always initialized (bug #556488).

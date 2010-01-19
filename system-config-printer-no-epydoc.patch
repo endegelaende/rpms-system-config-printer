@@ -1,7 +1,7 @@
-diff -up system-config-printer-1.1.13/Makefile.am.no-epydoc system-config-printer-1.1.13/Makefile.am
---- system-config-printer-1.1.13/Makefile.am.no-epydoc	2009-09-04 10:35:47.000000000 +0100
-+++ system-config-printer-1.1.13/Makefile.am	2009-10-30 11:32:02.265645319 +0000
-@@ -251,7 +251,9 @@ $(man_MANS): $(top_srcdir)/man/system-co
+diff -up system-config-printer-1.1.16/Makefile.am.no-epydoc system-config-printer-1.1.16/Makefile.am
+--- system-config-printer-1.1.16/Makefile.am.no-epydoc	2009-12-22 14:44:19.000000000 +0000
++++ system-config-printer-1.1.16/Makefile.am	2010-01-19 12:50:09.018955351 +0000
+@@ -256,7 +256,9 @@ $(man_MANS): $(top_srcdir)/man/system-co
  
  html:	$(EXPORT_MODULES)
  	rm -rf html
@@ -12,10 +12,10 @@ diff -up system-config-printer-1.1.13/Makefile.am.no-epydoc system-config-printe
  
  distcheck-hook: update-po
  
-diff -up system-config-printer-1.1.13/Makefile.in.no-epydoc system-config-printer-1.1.13/Makefile.in
---- system-config-printer-1.1.13/Makefile.in.no-epydoc	2009-09-14 15:14:03.000000000 +0100
-+++ system-config-printer-1.1.13/Makefile.in	2009-10-30 11:32:02.266644059 +0000
-@@ -1435,7 +1435,9 @@ $(man_MANS): $(top_srcdir)/man/system-co
+diff -up system-config-printer-1.1.16/Makefile.in.no-epydoc system-config-printer-1.1.16/Makefile.in
+--- system-config-printer-1.1.16/Makefile.in.no-epydoc	2009-12-22 14:44:34.000000000 +0000
++++ system-config-printer-1.1.16/Makefile.in	2010-01-19 12:50:09.020955776 +0000
+@@ -1440,7 +1440,9 @@ $(man_MANS): $(top_srcdir)/man/system-co
  
  html:	$(EXPORT_MODULES)
  	rm -rf html
@@ -26,9 +26,9 @@ diff -up system-config-printer-1.1.13/Makefile.in.no-epydoc system-config-printe
  
  distcheck-hook: update-po
  
-diff -up system-config-printer-1.1.13/pycups-1.9.47/Makefile.no-epydoc system-config-printer-1.1.13/pycups-1.9.47/Makefile
---- system-config-printer-1.1.13/pycups-1.9.47/Makefile.no-epydoc	2009-10-30 11:32:53.089519286 +0000
-+++ system-config-printer-1.1.13/pycups-1.9.47/Makefile	2009-10-30 11:33:07.606519162 +0000
+diff -up system-config-printer-1.1.16/pycups-1.9.48/Makefile.no-epydoc system-config-printer-1.1.16/pycups-1.9.48/Makefile
+--- system-config-printer-1.1.16/pycups-1.9.48/Makefile.no-epydoc	2010-01-19 12:34:47.000000000 +0000
++++ system-config-printer-1.1.16/pycups-1.9.48/Makefile	2010-01-19 12:50:30.098955294 +0000
 @@ -14,7 +14,9 @@ cups.so: $(SOURCES)
  
  doc:	cups.so
@@ -40,9 +40,9 @@ diff -up system-config-printer-1.1.13/pycups-1.9.47/Makefile.no-epydoc system-co
  
  clean:
  	-rm -rf build cups.so *.pyc *~
-diff -up system-config-printer-1.1.13/pysmbc-1.0.6/Makefile.no-epydoc system-config-printer-1.1.13/pysmbc-1.0.6/Makefile
---- system-config-printer-1.1.13/pysmbc-1.0.6/Makefile.no-epydoc	2009-10-30 11:32:18.597519903 +0000
-+++ system-config-printer-1.1.13/pysmbc-1.0.6/Makefile	2009-10-30 11:32:43.671520242 +0000
+diff -up system-config-printer-1.1.16/pysmbc-1.0.6/Makefile.no-epydoc system-config-printer-1.1.16/pysmbc-1.0.6/Makefile
+--- system-config-printer-1.1.16/pysmbc-1.0.6/Makefile.no-epydoc	2008-10-20 15:51:14.000000000 +0100
++++ system-config-printer-1.1.16/pysmbc-1.0.6/Makefile	2010-01-19 12:50:30.100081172 +0000
 @@ -12,7 +12,9 @@ smbc.so: $(SOURCES)
  
  doc: smbc.so
