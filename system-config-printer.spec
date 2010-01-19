@@ -6,31 +6,16 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.16
-Release: 10%{?dist}
+Version: 1.1.90
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
-Source0: http://cyberelk.net/tim/data/system-config-printer/1.1/system-config-printer-%{version}.tar.xz
+Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-typo.patch
-Patch3: system-config-printer-driver-pre-selection.patch
-Patch4: system-config-printer-foomatic-recommended.patch
-Patch5: system-config-printer-jobviewer-exit.patch
-Patch6: system-config-printer-npinit-traceback.patch
-Patch7: system-config-printer-notification-timeouts.patch
-Patch8: system-config-printer-select-nonexistent-printer.patch
-Patch9: system-config-printer-ink-levels.patch
-Patch10: system-config-printer-auth-no-pw.patch
-Patch11: system-config-printer-copy-crash.patch
-Patch12: system-config-printer-check-still-connecting.patch
-Patch13: system-config-printer-async-fallback.patch
-Patch14: system-config-printer-userdefault-traceback.patch
-Patch15: system-config-printer-serial-widgets.patch
-Patch16: system-config-printer-statereason-tmp.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -91,21 +76,6 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
-%patch2 -p1 -b .typo
-%patch3 -p1 -b .driver-pre-selection
-%patch4 -p1 -b .foomatic-recommended
-%patch5 -p1 -b .jobviewer-exit
-%patch6 -p1 -b .npinit-traceback
-%patch7 -p1 -b .notification-timeouts
-%patch8 -p1 -b .select-nonexistent-printer
-%patch9 -p1 -b .ink-levels
-%patch10 -p1 -b .auth-no-pw
-%patch11 -p1 -b .copy-crash
-%patch12 -p1 -b .check-still-connecting
-%patch13 -p1 -b .async-fallback
-%patch14 -p1 -b .userdefault-traceback
-%patch15 -p1 -b .serial-widgets
-%patch16 -p1 -b .statereason-tmp
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -145,6 +115,7 @@ rm -rf %buildroot
 %doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
 %doc --parents pysmbc-%{pysmbc_version}/{ChangeLog,README,NEWS,TODO,test.py,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/printerdriversinstaller.conf
 %{python_sitearch}/cups.so
 %{python_sitearch}/cups-1.0-py%{pyver}.egg-info
 %{python_sitearch}/smbc.so
@@ -168,33 +139,32 @@ rm -rf %buildroot
 %doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
-%{_bindir}/my-default-printer
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/asyncconn.py*
 %{_datadir}/%{name}/asyncipp.py*
 %{_datadir}/%{name}/asyncpk1.py*
-%{_datadir}/%{name}/asyncpk0.py*
 %{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
 %{_datadir}/%{name}/debug.py*
 %{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/firewall.py*
-%{_datadir}/%{name}/glade.py*
 %{_datadir}/%{name}/GroupsPane.py*
 %{_datadir}/%{name}/GroupsPaneModel.py*
 %{_datadir}/%{name}/gtkinklevel.py*
 %{_datadir}/%{name}/gtkspinner.py*
+%{_datadir}/%{name}/gui.py*
 %{_datadir}/%{name}/HIG.py*
+%{_datadir}/%{name}/installdriver.py*
 %{_datadir}/%{name}/installpackage.py*
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
-%{_datadir}/%{name}/my-default-printer.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/PhysicalDevice.py*
 %{_datadir}/%{name}/ppdippstr.py*
+%{_datadir}/%{name}/ppdsloader.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
 %{_datadir}/%{name}/SearchCriterion.py*
@@ -209,11 +179,10 @@ rm -rf %buildroot
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
-%dir %{_datadir}/%{name}/glade
-%{_datadir}/%{name}/glade/*.glade
+%dir %{_datadir}/%{name}/ui
+%{_datadir}/%{name}/ui/*.glade
 %{_datadir}/applications/system-config-printer.desktop
 %{_datadir}/applications/manage-print-jobs.desktop
-%{_datadir}/applications/my-default-printer.desktop
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/*
 
@@ -222,6 +191,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Jan 19 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-1
+- 1.1.90 development release.
+
 * Tue Jan 19 2010 Tim Waugh <twaugh@redhat.com> - 1.1.16-10
 - Update pycups to 1.9.48.
 
