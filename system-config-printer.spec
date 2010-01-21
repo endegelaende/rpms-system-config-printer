@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-copy-printer.patch
+Patch3: system-config-printer-spinbuttons.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -78,6 +79,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .copy-printer
+%patch3 -p1 -b .spinbuttons
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -194,6 +196,7 @@ exit 0
 
 %changelog
 * Thu Jan 21 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-2
+- Added GtkAdjustments for all XML-declared SpinButtons.
 - Fixed traceback when renaming a printer.
 
 * Tue Jan 19 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-1
