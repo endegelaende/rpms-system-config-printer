@@ -21,6 +21,7 @@ Patch3: system-config-printer-spinbuttons.patch
 Patch4: system-config-printer-raw-statereason.patch
 Patch5: system-config-printer-async-fallback-2.patch
 Patch6: system-config-printer-duplicate-current.patch
+Patch7: system-config-printer-lpd-model.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -86,6 +87,7 @@ printers.
 %patch4 -p1 -b .raw-statereason
 %patch5 -p1 -b .async-fallback-2
 %patch6 -p1 -b .duplicate-current
+%patch7 -p1 -b .lpd-model
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -202,6 +204,7 @@ exit 0
 
 %changelog
 * Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
+- Set model for LPD queue ComboEntry (bug #558484).
 - Only add current device to list when all devices found (bug #558524).
 - Fixed statereason localization for raw queues (bug #558156).
 - Fixed async fallback again (bug #557854).
