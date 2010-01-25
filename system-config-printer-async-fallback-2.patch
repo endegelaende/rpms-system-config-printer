@@ -1,0 +1,26 @@
+diff -up system-config-printer-1.1.90/asyncpk1.py.async-fallback-2 system-config-printer-1.1.90/asyncpk1.py
+--- system-config-printer-1.1.90/asyncpk1.py.async-fallback-2	2010-01-18 17:38:54.000000000 +0000
++++ system-config-printer-1.1.90/asyncpk1.py	2010-01-25 16:00:32.950084610 +0000
+@@ -299,15 +299,15 @@ class PK1Connection:
+     def _call_with_pk (self, use_pycups, pk_method_name, pk_args,
+                        reply_handler, error_handler, unpack_fn,
+                        fallback_fn, args, kwds):
++        asyncmethodcall = _PK1AsyncMethodCall (self._system_bus, self,
++                                               pk_method_name, pk_args,
++                                               reply_handler,
++                                               error_handler,
++                                               unpack_fn, fallback_fn,
++                                               args, kwds)
++
+         if not use_pycups:
+             try:
+-                asyncmethodcall = _PK1AsyncMethodCall (self._system_bus, self,
+-                                                       pk_method_name, pk_args,
+-                                                       reply_handler,
+-                                                       error_handler,
+-                                                       unpack_fn, fallback_fn,
+-                                                       args, kwds)
+-
+                 debugprint ("Calling PK method %s" % pk_method_name)
+                 asyncmethodcall.call ()
+             except dbus.DBusException, e:

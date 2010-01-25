@@ -19,6 +19,7 @@ Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-copy-printer.patch
 Patch3: system-config-printer-spinbuttons.patch
 Patch4: system-config-printer-raw-statereason.patch
+Patch5: system-config-printer-async-fallback-2.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -82,6 +83,7 @@ printers.
 %patch2 -p1 -b .copy-printer
 %patch3 -p1 -b .spinbuttons
 %patch4 -p1 -b .raw-statereason
+%patch5 -p1 -b .async-fallback-2
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -199,6 +201,7 @@ exit 0
 %changelog
 * Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
 - Fixed statereason localization for raw queues (bug #558156).
+- Fixed async fallback again (bug #557854).
 
 * Thu Jan 21 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-2
 - Added GtkAdjustments for all XML-declared SpinButtons.
