@@ -1,2 +1,2 @@
-* Thu Jan 21 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-2
-- Added GtkAdjustments for all XML-declared SpinButtons.
+* Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
+- Only add current device to list when all devices found (bug #558524).
