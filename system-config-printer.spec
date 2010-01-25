@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.90
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,6 +18,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-copy-printer.patch
 Patch3: system-config-printer-spinbuttons.patch
+Patch4: system-config-printer-raw-statereason.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -80,6 +81,7 @@ printers.
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .copy-printer
 %patch3 -p1 -b .spinbuttons
+%patch4 -p1 -b .raw-statereason
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -195,6 +197,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
+- Fixed statereason localization for raw queues (bug #558156).
+
 * Thu Jan 21 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-2
 - Added GtkAdjustments for all XML-declared SpinButtons.
 - Fixed traceback when renaming a printer.
