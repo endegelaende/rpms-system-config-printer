@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.90
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -36,7 +36,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: pygtk2 >= 2.4.0, pygtk2-libglade
 Requires: pygobject2
-Requires: usermode >= 1.94
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: dbus-python
@@ -203,6 +202,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Feb  8 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-4
+- No longer requires usermode (bug #562270).
+
 * Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
 - Set model for LPD queue ComboEntry (bug #558484).
 - Only add current device to list when all devices found (bug #558524).
