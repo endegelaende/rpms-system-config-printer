@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.90
-Release: 4%{?dist}
+Version: 1.1.91
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,12 +16,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-copy-printer.patch
-Patch3: system-config-printer-spinbuttons.patch
-Patch4: system-config-printer-raw-statereason.patch
-Patch5: system-config-printer-async-fallback-2.patch
-Patch6: system-config-printer-duplicate-current.patch
-Patch7: system-config-printer-lpd-model.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -81,12 +75,6 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
-%patch2 -p1 -b .copy-printer
-%patch3 -p1 -b .spinbuttons
-%patch4 -p1 -b .raw-statereason
-%patch5 -p1 -b .async-fallback-2
-%patch6 -p1 -b .duplicate-current
-%patch7 -p1 -b .lpd-model
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -202,7 +190,8 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Mon Feb  8 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-4
+* Mon Feb  8 2010 Tim Waugh <twaugh@redhat.com> - 1.1.91-1
+- 1.1.91.
 - No longer requires usermode (bug #562270).
 
 * Mon Jan 25 2010 Tim Waugh <twaugh@redhat.com> - 1.1.90-3
