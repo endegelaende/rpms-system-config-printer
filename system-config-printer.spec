@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.91
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,6 +17,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-device-settings.patch
+Patch3: system-config-printer-lowercase-mfg-mdl.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -77,6 +78,7 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .device-settings
+%patch3 -p1 -b .lowercase-mfg-mdl
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -192,6 +194,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 17 2010 Tim Waugh <twaugh@redhat.com> - 1.1.91-3
+- Convert MFG and MDL to lowercase before D-Bus call to work around
+  bug #566217.
+
 * Thu Feb 11 2010 Tim Waugh <twaugh@redhat.com> - 1.1.91-2
 - Avoid clearing device settings when adding printer (bug #563989).
 
