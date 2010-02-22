@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.92
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,6 +18,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-device-ids-warning.patch
+Patch4: system-config-printer-cupsGetPPD2.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -79,6 +80,7 @@ printers.
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .lowercase-mfg-mdl
 %patch3 -p1 -b .device-ids-warning
+%patch4 -p1 -b .cupsGetPPD2
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -194,6 +196,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Feb 22 2010 Jiri Popelka <jpopelka@redhat.com> 1.1.92-3
+- Catch RuntimeError in statereason.py when cupsGetPPD2 fails (bug #566938).
+
 * Sun Feb 21 2010 Tim Waugh <twaugh@redhat.com> - 1.1.92-2
 - Display a warning when the wrong IEEE 1284 Device ID is detected.
 
