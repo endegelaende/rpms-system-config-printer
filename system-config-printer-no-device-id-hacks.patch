@@ -1,0 +1,24 @@
+diff -up system-config-printer-1.1.92/cupshelpers/ppds.py.no-device-id-hacks system-config-printer-1.1.92/cupshelpers/ppds.py
+--- system-config-printer-1.1.92/cupshelpers/ppds.py.no-device-id-hacks	2010-02-22 17:16:47.012355185 +0000
++++ system-config-printer-1.1.92/cupshelpers/ppds.py	2010-02-22 17:17:57.924354751 +0000
+@@ -900,20 +900,10 @@ class PPDs:
+             if not id:
+                 continue
+ 
+-            # Fix up broken Kyocera IDs
+-            v = id.find (":Model")
+-            if v != -1:
+-                id = id[:v] + ';' + id[v + 1:]
+-
+             id_dict = parseDeviceID (id)
+             lmfg = id_dict['MFG'].lower ()
+             lmdl = id_dict['MDL'].lower ()
+ 
+-            # Consider "HP" and "Hewlett-Packard" as equal, as the ID returned
+-            # by the CUPS "usb" backend and HPLIP's "hp" backend are different
+-            if lmfg == "hewlett-packard":
+-                lmfg = "hp"
+-
+             bad = False
+             if len (lmfg) == 0:
+                 _debugprint ("Missing MFG field for %s" % ppdname)
