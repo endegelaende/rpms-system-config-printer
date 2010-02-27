@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.1.92
-Release: 4%{?dist}
+Version: 1.1.93
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,9 +17,6 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-lowercase-mfg-mdl.patch
-Patch3: system-config-printer-device-ids-warning.patch
-Patch4: system-config-printer-cupsGetPPD2.patch
-Patch5: system-config-printer-no-device-id-hacks.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -80,9 +77,6 @@ printers.
 %setup -q -a 1 -a 2
 %patch1 -p1 -b .no-epydoc
 %patch2 -p1 -b .lowercase-mfg-mdl
-%patch3 -p1 -b .device-ids-warning
-%patch4 -p1 -b .cupsGetPPD2
-%patch5 -p1 -b .no-device-id-hacks
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -152,6 +146,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/asyncipp.py*
 %{_datadir}/%{name}/asyncpk1.py*
 %{_datadir}/%{name}/authconn.py*
+%{_datadir}/%{name}/check-device-ids.py*
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
 %{_datadir}/%{name}/debug.py*
@@ -198,6 +193,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Sat Feb 27 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-1
+- 1.1.93.
+
 * Mon Feb 22 2010 Tim Waugh <twaugh@redhat.com> - 1.1.92-4
 - Removed Device ID hacks for Kyocera and HP.  This avoids a false
   positive for the incorrect-Device-ID warning.
