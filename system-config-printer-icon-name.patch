@@ -1,0 +1,27 @@
+diff -up system-config-printer-1.1.93/system-config-printer.py.icon-name system-config-printer-1.1.93/system-config-printer.py
+--- system-config-printer-1.1.93/system-config-printer.py.icon-name	2010-02-26 15:15:26.000000000 +0000
++++ system-config-printer-1.1.93/system-config-printer.py	2010-03-01 18:53:04.502609395 +0000
+@@ -1463,19 +1463,19 @@ class GUI(GtkGUI, monitor.Watcher):
+                               'i-network-printer'),
+                          'local-printer':
+                              (_("Printer"),
+-                              'gnome-dev-printer'),
++                              'printer'),
+                          'local-fax':
+                              (_("Fax"),
+-                              'gnome-dev-printer'),
++                              'printer'),
+                          'local-class':
+                              (_("Class"),
+-                              'gnome-dev-printer'),
++                              'printer'),
+                          'ipp-printer':
+                              (_("Network printer"),
+                               'i-network-printer'),
+                          'smb-printer':
+                              (_("Network print share"),
+-                              'gnome-dev-printer'),
++                              'printer'),
+                          'network-printer':
+                              (_("Network printer"),
+                               'i-network-printer'),
