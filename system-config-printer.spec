@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.93
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,6 +19,7 @@ Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-import-gobject.patch
 Patch4: system-config-printer-check-install.patch
+Patch5: system-config-printer-icon-name.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -81,6 +82,7 @@ printers.
 %patch2 -p1 -b .lowercase-mfg-mdl
 %patch3 -p1 -b .import-gobject
 %patch4 -p1 -b .check-install
+%patch5 -p1 -b .icon-name
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -197,6 +199,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Mar  1 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-4
+- Use icon name 'printer' instead of 'gnome-dev-printer'.
+
 * Mon Mar  1 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-3
 - Attempt to install drivers in the Device ID checker.
 
