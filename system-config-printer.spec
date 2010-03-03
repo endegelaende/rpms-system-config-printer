@@ -7,12 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.93
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
+# Python bindings for libcups
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
+# Python bindings for libsmbclient
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
@@ -78,10 +80,19 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
+# Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
+
+# Convert InstallPrinterDriver requests to lower-case.
 %patch2 -p1 -b .lowercase-mfg-mdl
+
+# Import gobject in gtkspinner.
 %patch3 -p1 -b .import-gobject
+
+# Attempt to install relevant driver packages in Device IDs checker.
 %patch4 -p1 -b .check-install
+
+# Use 'printer' icon name instead of 'gnome-dev-printer'.
 %patch5 -p1 -b .icon-name
 
 %build
@@ -119,8 +130,8 @@ rm -rf %buildroot
 
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
-%doc --parents pycups-%{pycups_version}/{ChangeLog,README,NEWS,TODO,examples,html}
-%doc --parents pysmbc-%{pysmbc_version}/{ChangeLog,README,NEWS,TODO,test.py,html}
+%doc --parents pycups-%{pycups_version}/{COPYING,ChangeLog,README,NEWS,TODO,examples,html}
+%doc --parents pysmbc-%{pysmbc_version}/{COPYING,ChangeLog,README,NEWS,TODO,test.py,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/printerdriversinstaller.conf
 %{python_sitearch}/cups.so
@@ -143,7 +154,7 @@ rm -rf %buildroot
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog README
+%doc COPYING ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %dir %{_datadir}/%{name}
@@ -199,6 +210,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Mar  3 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-5
+- Added comments for all sources and patches.
+- Ship COPYING files.
+
 * Mon Mar  1 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-4
 - Use icon name 'printer' instead of 'gnome-dev-printer'.
 
