@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.93
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -22,6 +22,7 @@ Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-import-gobject.patch
 Patch4: system-config-printer-check-install.patch
 Patch5: system-config-printer-icon-name.patch
+Patch6: system-config-printer-cupsconnection-dealloc.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -94,6 +95,9 @@ printers.
 
 # Use 'printer' icon name instead of 'gnome-dev-printer'.
 %patch5 -p1 -b .icon-name
+
+# Fix pycups Connection_dealloc()
+%patch6 -p1 -b .cupsconnection-dealloc
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -210,6 +214,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Mar  8 2010 Jiri Popelka <jpopelka@redhat.com> 1.1.93-6
+- Fixed pycups to be more cautious when removing
+  the Connection object from the list (bug #567386).
+
 * Wed Mar  3 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-5
 - Added comments for all sources and patches.
 - Ship COPYING files.
