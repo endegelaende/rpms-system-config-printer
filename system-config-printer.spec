@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.1.93
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -23,6 +23,7 @@ Patch3: system-config-printer-import-gobject.patch
 Patch4: system-config-printer-check-install.patch
 Patch5: system-config-printer-icon-name.patch
 Patch6: system-config-printer-cupsconnection-dealloc.patch
+Patch7: system-config-printer-missing-imports.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -98,6 +99,9 @@ printers.
 
 # Fix pycups Connection_dealloc()
 %patch6 -p1 -b .cupsconnection-dealloc
+
+# Import modules we catch exceptions from (bug #574117).
+%patch7 -p1 -b .missing-imports
 
 %build
 %configure --with-udev-rules --with-polkit-1
@@ -214,6 +218,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Mar 16 2010 Tim Waugh <twaugh@redhat.com> - 1.1.93-7
+- Import modules we catch exceptions from (bug #574117).
+
 * Mon Mar  8 2010 Jiri Popelka <jpopelka@redhat.com> 1.1.93-6
 - Fixed pycups to be more cautious when removing
   the Connection object from the list (bug #567386).
