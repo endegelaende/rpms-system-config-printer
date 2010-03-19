@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -20,6 +20,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-cdi-no-drivers.patch
+Patch4: system-config-printer-cdi-cmd.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -87,6 +88,9 @@ printers.
 # Fixed traceback in check-driver-ids.py when no drivers are found
 # (bug #574827).
 %patch3 -p1 -b .cdi-no-drivers
+
+# Show CMD field in check-device-ids.py.
+%patch4 -p1 -b .cdi-cmd
 
 %build
 %configure --with-udev-rules
@@ -203,6 +207,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Mar 19 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-3
+- Show CMD field in check-device-ids.py.
+
 * Thu Mar 18 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-2
 - Fixed traceback in check-driver-ids.py when no drivers are found
   (bug #574827).
