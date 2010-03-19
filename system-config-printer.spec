@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -22,6 +22,7 @@ Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-cdi-no-drivers.patch
 Patch4: system-config-printer-cdi-cmd.patch
 Patch5: system-config-printer-kyocera-mita.patch
+Patch6: system-config-printer-cdi-filename.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -95,6 +96,9 @@ printers.
 
 # The canonical name for Kyocera is Kyocera Mita.
 %patch5 -p1 -b .kyocera-mita
+
+# check-device-ids.py: Fixed driver-URI to filename mapping.
+%patch6 -p1 -b .cdi-filename
 
 %build
 %configure --with-udev-rules
@@ -211,6 +215,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Mar 19 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-4
+- check-device-ids.py: Fixed driver-URI to filename mapping.
+
 * Fri Mar 19 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-3
 - The canonical name for Kyocera is Kyocera Mita.
 - Show CMD field in check-device-ids.py.
