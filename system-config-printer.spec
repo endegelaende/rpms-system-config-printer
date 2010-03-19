@@ -21,6 +21,7 @@ Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-lowercase-mfg-mdl.patch
 Patch3: system-config-printer-cdi-no-drivers.patch
 Patch4: system-config-printer-cdi-cmd.patch
+Patch5: system-config-printer-kyocera-mita.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -91,6 +92,9 @@ printers.
 
 # Show CMD field in check-device-ids.py.
 %patch4 -p1 -b .cdi-cmd
+
+# The canonical name for Kyocera is Kyocera Mita.
+%patch5 -p1 -b .kyocera-mita
 
 %build
 %configure --with-udev-rules
@@ -208,6 +212,7 @@ exit 0
 
 %changelog
 * Fri Mar 19 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-3
+- The canonical name for Kyocera is Kyocera Mita.
 - Show CMD field in check-device-ids.py.
 
 * Thu Mar 18 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-2
