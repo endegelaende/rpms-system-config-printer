@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -24,6 +24,7 @@ Patch4: system-config-printer-cdi-cmd.patch
 Patch5: system-config-printer-kyocera-mita.patch
 Patch6: system-config-printer-cdi-filename.patch
 Patch7: system-config-printer-reconnect-error.patch
+Patch8: system-config-printer-downloadable-drivers.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -105,6 +106,9 @@ printers.
 
 # Fixed reconnection error handling in IPPAuthOperation class (bug #575198).
 %patch7 -p1 -b .reconnect-error
+
+# Initialize downloadable_drivers when OpenPrinting query fails (bug #574562).
+%patch8 -p1 -b .downloadable-drivers
 
 pushd pycups-%{pycups_version}
 
@@ -228,6 +232,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Mar 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-6
+- Initialize downloadable_drivers when OpenPrinting query fails (bug #574562).
+
 * Mon Mar 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-5
 - Fixed pycups build with new distutils.
 - Fixed reconnection error handling in IPPAuthOperation class (bug #575198).
