@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.2.0/asyncpk1.py.JobCancel system-config-printer-1.2.0/asyncpk1.py
+--- system-config-printer-1.2.0/asyncpk1.py.JobCancel	2010-02-18 15:17:50.000000000 +0000
++++ system-config-printer-1.2.0/asyncpk1.py	2010-03-24 09:37:25.782824070 +0000
+@@ -431,7 +431,7 @@ class PK1Connection:
+                                           args, kwds)
+ 
+         self._call_with_pk (use_pycups,
+-                            'JobCancel', tup, reply_handler, error_handler,
++                            'JobCancelPurge', tup, reply_handler, error_handler,
+                             self._nothing_to_unpack,
+                             self._conn.cancelJob, args, kwds)
+ 

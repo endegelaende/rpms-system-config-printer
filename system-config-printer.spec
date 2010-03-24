@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -25,6 +25,7 @@ Patch5: system-config-printer-kyocera-mita.patch
 Patch6: system-config-printer-cdi-filename.patch
 Patch7: system-config-printer-reconnect-error.patch
 Patch8: system-config-printer-downloadable-drivers.patch
+Patch9: system-config-printer-JobCancel.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -109,6 +110,9 @@ printers.
 
 # Initialize downloadable_drivers when OpenPrinting query fails (bug #574562).
 %patch8 -p1 -b .downloadable-drivers
+
+# Use new JobCancelPurge cups-pk-helper method (bug #576496).
+%patch9 -p1 -b .JobCancel
 
 pushd pycups-%{pycups_version}
 
@@ -232,6 +236,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Mar 24 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-7
+- Use new JobCancelPurge cups-pk-helper method (bug #576496).
+
 * Mon Mar 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-6
 - Initialize downloadable_drivers when OpenPrinting query fails (bug #574562).
 
