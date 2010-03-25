@@ -29,6 +29,7 @@ Patch9: system-config-printer-JobCancel.patch
 Patch10: system-config-printer-inklevel.patch
 Patch11: system-config-printer-cdi-search-harder.patch
 Patch12: system-config-printer-asyncipp-traceback.patch
+Patch13: system-config-printer-cdi-lsb-paths.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -125,6 +126,9 @@ printers.
 
 # Fixed traceback in asyncipp (bug #576932).
 %patch12 -p1 -b .cdi-search-harder
+
+# check-device-ids: use correct paths for LSB model URIs.
+%patch13 -p1 -b .cdi-lsb-paths
 
 pushd pycups-%{pycups_version}
 
@@ -249,6 +253,7 @@ exit 0
 
 %changelog
 * Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9
+- check-device-ids: use correct paths for LSB model URIs.
 - Fixed cdi-search-harder patch.
 
 * Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-8
