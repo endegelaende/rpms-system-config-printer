@@ -28,6 +28,7 @@ Patch8: system-config-printer-downloadable-drivers.patch
 Patch9: system-config-printer-JobCancel.patch
 Patch10: system-config-printer-inklevel.patch
 Patch11: system-config-printer-cdi-search-harder.patch
+Patch12: system-config-printer-asyncipp-traceback.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -121,6 +122,9 @@ printers.
 
 # check-device-ids: search harder for missing Device IDs.
 %patch11 -p1 -b .cdi-search-harder
+
+# Fixed traceback in asyncipp (bug #576932).
+%patch12 -p1 -b .cdi-search-harder
 
 pushd pycups-%{pycups_version}
 
@@ -245,6 +249,7 @@ exit 0
 
 %changelog
 * Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-8
+- Fixed traceback in asyncipp (bug #576932).
 - check-device-ids: search harder for missing Device IDs.
 - Make inklevel widget easier to read (bug #576930).
 
