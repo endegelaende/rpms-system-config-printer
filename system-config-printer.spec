@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 9%{?dist}
+Release: 9.1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -252,7 +252,7 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9
+* Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9.1
 - check-device-ids: use correct paths for LSB model URIs.
 - Fixed cdi-search-harder patch.
 
