@@ -17,7 +17,7 @@ diff -up system-config-printer-1.2.0/check-device-ids.py.cdi-search-harder syste
 -            for each in missing:
 -                print "%s       MISSING  %s [%s]" % (more, each,
 -                                                     driver_uri_to_pkg (each))
-+            matches += set (bestmatches)
++            matches = matches.union (set (bestmatches))
 +
 +    missing = set (matches) - set (drivers)
 +    for each in missing:
