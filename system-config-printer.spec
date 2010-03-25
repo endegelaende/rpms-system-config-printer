@@ -27,6 +27,7 @@ Patch7: system-config-printer-reconnect-error.patch
 Patch8: system-config-printer-downloadable-drivers.patch
 Patch9: system-config-printer-JobCancel.patch
 Patch10: system-config-printer-inklevel.patch
+Patch11: system-config-printer-cdi-search-harder.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -117,6 +118,9 @@ printers.
 
 # Make inklevel widget easier to read (bug #576930).
 %patch10 -p1 -b .inklevel
+
+# check-device-ids: search harder for missing Device IDs.
+%patch11 -p1 -b .cdi-search-harder
 
 pushd pycups-%{pycups_version}
 
@@ -241,6 +245,7 @@ exit 0
 
 %changelog
 * Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-8
+- check-device-ids: search harder for missing Device IDs.
 - Make inklevel widget easier to read (bug #576930).
 
 * Wed Mar 24 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-7
