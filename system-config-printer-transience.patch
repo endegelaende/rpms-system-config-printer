@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.2.0/system-config-printer.py.transience system-config-printer-1.2.0/system-config-printer.py
+--- system-config-printer-1.2.0/system-config-printer.py.transience	2010-03-26 10:31:28.943600745 +0000
++++ system-config-printer-1.2.0/system-config-printer.py	2010-03-26 10:31:36.738725437 +0000
+@@ -4012,7 +4012,7 @@ class NewPrinterGUI(GtkGUI):
+         self.btnNetworkFind.set_sensitive (True)
+         self.lblNetworkFindNotFound.hide ()
+ 
+-        if dialog_mode == "ppd":
++        if dialog_mode in ["ppd", "device"]:
+             self.parent = self.mainapp.PrinterPropertiesDialog
+         else:
+             self.parent = self.mainapp.PrintersWindow
