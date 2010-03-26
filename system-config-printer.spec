@@ -30,6 +30,7 @@ Patch10: system-config-printer-inklevel.patch
 Patch11: system-config-printer-cdi-search-harder.patch
 Patch12: system-config-printer-asyncipp-traceback.patch
 Patch13: system-config-printer-cdi-lsb-paths.patch
+Patch14: system-config-printer-transience.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -130,6 +131,9 @@ printers.
 
 # check-device-ids: use correct paths for LSB model URIs.
 %patch13 -p1 -b .cdi-lsb-paths
+
+# Fixed window transience for 'Change Device URI'.
+%patch14 -p1 -b .transience
 
 pushd pycups-%{pycups_version}
 
@@ -254,6 +258,7 @@ exit 0
 
 %changelog
 * Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-10
+- Fixed window transience for 'Change Device URI'.
 - More async traceback fixes (Ubuntu #547075).
 
 * Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9
