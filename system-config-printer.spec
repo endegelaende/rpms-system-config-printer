@@ -120,6 +120,7 @@ printers.
 %patch9 -p1 -b .JobCancel
 
 # Make inklevel widget easier to read (bug #576930).
+# Better inklevel 25/50/75 markers.
 %patch10 -p1 -b .inklevel
 
 # check-device-ids: search harder for missing Device IDs.
@@ -258,6 +259,7 @@ exit 0
 
 %changelog
 * Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-10
+- Better inklevel 25/50/75 markers.
 - Fixed window transience for 'Change Device URI'.
 - More async traceback fixes (Ubuntu #547075).
 
