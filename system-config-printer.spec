@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -258,6 +258,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-11
+- More async traceback fixes (Ubuntu #547075).
+
 * Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-10
 - Better inklevel 25/50/75 markers.
 - Fixed window transience for 'Change Device URI'.

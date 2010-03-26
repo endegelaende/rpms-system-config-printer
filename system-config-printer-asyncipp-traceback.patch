@@ -1,6 +1,6 @@
 diff -up system-config-printer-1.2.0/asyncipp.py.asyncipp-traceback system-config-printer-1.2.0/asyncipp.py
---- system-config-printer-1.2.0/asyncipp.py.asyncipp-traceback	2010-03-26 10:26:00.420734896 +0000
-+++ system-config-printer-1.2.0/asyncipp.py	2010-03-26 10:26:03.187725661 +0000
+--- system-config-printer-1.2.0/asyncipp.py.asyncipp-traceback	2010-03-26 12:50:39.829627667 +0000
++++ system-config-printer-1.2.0/asyncipp.py	2010-03-26 12:50:51.888627367 +0000
 @@ -59,6 +59,7 @@ class _IPPConnectionThread(threading.Thr
          self._auth_handler = auth_handler
          self._auth_queue = Queue.Queue (1)
@@ -17,28 +17,35 @@ diff -up system-config-printer-1.2.0/asyncipp.py.asyncipp-traceback system-confi
          del self._conn # already destroyed
          del self._reply_handler
          del self._error_handler
-@@ -189,18 +191,20 @@ class _IPPConnectionThread(threading.Thr
+@@ -188,21 +190,23 @@ class _IPPConnectionThread(threading.Thr
+         return password
  
      def _reply (self, result):
-         def send_reply (result):
+-        def send_reply (result):
 -            self._reply_handler (self._conn, result)
-+            if not self._destroyed and self._reply_handler:
-+                self._reply_handler (self._conn, result)
++        def send_reply (handler, result):
++            if not self._destroyed:
++                handler (self._conn, result)
              return False
  
 -        if self._reply_handler:
+-            gobject.idle_add (send_reply, result)
 +        if not self._destroyed and self._reply_handler:
-             gobject.idle_add (send_reply, result)
++            gobject.idle_add (send_reply, self._reply_handler, result)
  
      def _error (self, exc):
-         def send_error (exc):
+-        def send_error (exc):
 -            self._error_handler (self._conn, exc)
-+            if not self._destroyed and self._error_handler:
-+                self._error_handler (self._conn, exc)
++        def send_error (handler, exc):
++            if not self._destroyed:
++                handler (self._conn, exc)
              return False
  
 -        if self._error_handler:
 +        if not self._destroyed and self._error_handler:
              debugprint ("Add %s to idle" % self._error_handler)
-             gobject.idle_add (send_error, exc)
+-            gobject.idle_add (send_error, exc)
++            gobject.idle_add (send_error, self._error_handler, exc)
  
+ ###
+ ### This is the user-visible class.  Although it does not inherit from
