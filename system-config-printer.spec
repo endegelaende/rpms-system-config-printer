@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 9.1%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -125,7 +125,8 @@ printers.
 %patch11 -p1 -b .cdi-search-harder
 
 # Fixed traceback in asyncipp (bug #576932).
-%patch12 -p1 -b .cdi-search-harder
+# More async traceback fixes (Ubuntu #547075).
+%patch12 -p1 -b .asyncipp-traceback
 
 # check-device-ids: use correct paths for LSB model URIs.
 %patch13 -p1 -b .cdi-lsb-paths
@@ -252,7 +253,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9.1
+* Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-10
+- More async traceback fixes (Ubuntu #547075).
+
+* Thu Mar 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-9
 - check-device-ids: use correct paths for LSB model URIs.
 - Fixed cdi-search-harder patch.
 
