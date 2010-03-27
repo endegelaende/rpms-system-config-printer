@@ -31,6 +31,7 @@ Patch11: system-config-printer-cdi-search-harder.patch
 Patch12: system-config-printer-asyncipp-traceback.patch
 Patch13: system-config-printer-cdi-lsb-paths.patch
 Patch14: system-config-printer-transience.patch
+Patch15: system-config-printer-cdi-make-and-model.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -135,6 +136,9 @@ printers.
 
 # Fixed window transience for 'Change Device URI'.
 %patch14 -p1 -b .transience
+
+# check-device-ids: use make-and-model field for best-matching.
+%patch15 -p1 -b .cdi-make-and-model
 
 pushd pycups-%{pycups_version}
 
@@ -259,6 +263,7 @@ exit 0
 
 %changelog
 * Sat Mar 27 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-12
+- check-device-ids: use make-and-model field for best-matching.
 - Use upstream fix for async bugs.
 
 * Fri Mar 26 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-11
