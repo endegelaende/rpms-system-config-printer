@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.0
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -32,6 +32,7 @@ Patch12: system-config-printer-asyncipp-traceback.patch
 Patch13: system-config-printer-cdi-lsb-paths.patch
 Patch14: system-config-printer-transience.patch
 Patch15: system-config-printer-cdi-make-and-model.patch
+Patch16: system-config-printer-jobcancel-compat.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -139,6 +140,10 @@ printers.
 
 # check-device-ids: use make-and-model field for best-matching.
 %patch15 -p1 -b .cdi-make-and-model
+
+# Use JobCancel compatibility method until cups-pk-helper-0.1.0 is
+# packaged (bug #581315).
+%patch16 -p1 -b .jobcancel-compat
 
 pushd pycups-%{pycups_version}
 
@@ -262,6 +267,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Apr 12 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-13
+- Use JobCancel compatibility method until cups-pk-helper-0.1.0 is
+  packaged (bug #581315).
+
 * Sat Mar 27 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-12
 - check-device-ids: use make-and-model field for best-matching.
 - Use upstream fix for async bugs.
