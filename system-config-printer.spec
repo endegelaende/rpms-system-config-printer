@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.0
-Release: 13%{?dist}
+Version: 1.2.1
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,21 +18,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-lowercase-mfg-mdl.patch
-Patch3: system-config-printer-cdi-no-drivers.patch
-Patch4: system-config-printer-cdi-cmd.patch
-Patch5: system-config-printer-kyocera-mita.patch
-Patch6: system-config-printer-cdi-filename.patch
-Patch7: system-config-printer-reconnect-error.patch
-Patch8: system-config-printer-downloadable-drivers.patch
-Patch9: system-config-printer-JobCancel.patch
-Patch10: system-config-printer-inklevel.patch
-Patch11: system-config-printer-cdi-search-harder.patch
-Patch12: system-config-printer-asyncipp-traceback.patch
-Patch13: system-config-printer-cdi-lsb-paths.patch
-Patch14: system-config-printer-transience.patch
-Patch15: system-config-printer-cdi-make-and-model.patch
-Patch16: system-config-printer-jobcancel-compat.patch
 
 Patch100: system-config-printer-pycups-build.patch
 
@@ -95,55 +80,6 @@ printers.
 %setup -q -a 1 -a 2
 # Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
-
-# Convert InstallPrinterDriver requests to lower-case.
-%patch2 -p1 -b .lowercase-mfg-mdl
-
-# Fixed traceback in check-driver-ids.py when no drivers are found
-# (bug #574827).
-%patch3 -p1 -b .cdi-no-drivers
-
-# Show CMD field in check-device-ids.py.
-%patch4 -p1 -b .cdi-cmd
-
-# The canonical name for Kyocera is Kyocera Mita.
-%patch5 -p1 -b .kyocera-mita
-
-# check-device-ids.py: Fixed driver-URI to filename mapping.
-%patch6 -p1 -b .cdi-filename
-
-# Fixed reconnection error handling in IPPAuthOperation class (bug #575198).
-%patch7 -p1 -b .reconnect-error
-
-# Initialize downloadable_drivers when OpenPrinting query fails (bug #574562).
-%patch8 -p1 -b .downloadable-drivers
-
-# Use new JobCancelPurge cups-pk-helper method (bug #576496).
-%patch9 -p1 -b .JobCancel
-
-# Make inklevel widget easier to read (bug #576930).
-# Better inklevel 25/50/75 markers.
-%patch10 -p1 -b .inklevel
-
-# check-device-ids: search harder for missing Device IDs.
-%patch11 -p1 -b .cdi-search-harder
-
-# Fixed traceback in asyncipp (bug #576932).
-# More async traceback fixes (Ubuntu #547075).
-%patch12 -p1 -b .asyncipp-traceback
-
-# check-device-ids: use correct paths for LSB model URIs.
-%patch13 -p1 -b .cdi-lsb-paths
-
-# Fixed window transience for 'Change Device URI'.
-%patch14 -p1 -b .transience
-
-# check-device-ids: use make-and-model field for best-matching.
-%patch15 -p1 -b .cdi-make-and-model
-
-# Use JobCancel compatibility method until cups-pk-helper-0.1.0 is
-# packaged (bug #581315).
-%patch16 -p1 -b .jobcancel-compat
 
 pushd pycups-%{pycups_version}
 
@@ -267,6 +203,18 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Apr 15 2010 Tim Waugh <twaugh@redhat.com> - 1.2.1-1
+- Updated to 1.2.1:
+  - Fixed missing translations (bug #580442).
+  - Offer to adjust firewall when necessary.
+  - Avoid tracebacks when adjusting server settings.
+  - Handle IPP failure fetching printer attributes for completed jobs
+    (Ubuntu #562679).
+  - monitor: don't crash if job-state attribute is missing
+    (Ubuntu #562441).
+  - troubleshoot: handle IPPError in PrintTestPage module (bug #579957).
+  - Lots of check-device-ids fixes.
+
 * Mon Apr 12 2010 Tim Waugh <twaugh@redhat.com> - 1.2.0-13
 - Use JobCancel compatibility method until cups-pk-helper-0.1.0 is
   packaged (bug #581315).
