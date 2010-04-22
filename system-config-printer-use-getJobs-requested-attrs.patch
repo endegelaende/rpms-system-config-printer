@@ -1,0 +1,34 @@
+diff -up system-config-printer-1.2.1/monitor.py.use-getJobs-requested-attrs system-config-printer-1.2.1/monitor.py
+--- system-config-printer-1.2.1/monitor.py.use-getJobs-requested-attrs	2010-04-15 00:11:33.000000000 +0100
++++ system-config-printer-1.2.1/monitor.py	2010-04-22 16:05:28.493458040 +0100
+@@ -608,11 +608,26 @@ class Monitor:
+             return False
+ 
+         limit = 1
++        r = ["job-id",
++             "job-printer-uri",
++             "job-state",
++             "job-originating-user-name",
++             "job-k-octets",
++             "job-name",
++             "time-at-creation"]
+         try:
+-            fetched = c.getJobs (which_jobs=self.which_jobs,
+-                                 my_jobs=self.my_jobs,
+-                                 first_job_id=self.fetch_first_job_id,
+-                                 limit=limit)
++            try:
++                fetched = c.getJobs (which_jobs=self.which_jobs,
++                                     my_jobs=self.my_jobs,
++                                     first_job_id=self.fetch_first_job_id,
++                                     limit=limit,
++                                     requested_attributes=r)
++            except TypeError:
++                # requested_attributes requires pycups 1.9.50
++                fetched = c.getJobs (which_jobs=self.which_jobs,
++                                     my_jobs=self.my_jobs,
++                                     first_job_id=self.fetch_first_job_id,
++                                     limit=limit)
+         except cups.IPPError, (e, m):
+             self.watcher.cups_ipp_error (self, e, m)
+             self.fetch_jobs_timer = None

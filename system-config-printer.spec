@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,8 +18,10 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
+Patch2: system-config-printer-use-getJobs-requested-attrs.patch
 
 Patch100: system-config-printer-pycups-build.patch
+Patch101: pycups-add-getJobs-requested-attrs.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -81,10 +83,17 @@ printers.
 # Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
 
+# Specify requested attributes in getJobs if possible (bug #584806).
+%patch2 -p1 -b .use-getJobs-requested-attrs.patch
+
 pushd pycups-%{pycups_version}
 
 # Fixed pycups build with new distutils.
 %patch100 -p1 -b .pycups-build
+
+# Added optional requested_attributes argument to Connection.getJobs
+# (bug #584806).
+%patch101 -p1 -b .add-getJobs-requested-attrs
 
 popd
 
@@ -203,6 +212,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Apr 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.1-2
+- Specify requested attributes in getJobs if possible (bug #584806).
+- Added optional requested_attributes argument to Connection.getJobs
+  (bug #584806).
+
 * Thu Apr 15 2010 Tim Waugh <twaugh@redhat.com> - 1.2.1-1
 - Updated to 1.2.1:
   - Fixed missing translations (bug #580442).
