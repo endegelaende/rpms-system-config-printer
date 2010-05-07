@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.1
-Release: 2%{?dist}
+Version: 1.2.2
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,7 +18,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-use-getJobs-requested-attrs.patch
 
 Patch100: system-config-printer-pycups-build.patch
 Patch101: pycups-add-getJobs-requested-attrs.patch
@@ -82,9 +81,6 @@ printers.
 %setup -q -a 1 -a 2
 # Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
-
-# Specify requested attributes in getJobs if possible (bug #584806).
-%patch2 -p1 -b .use-getJobs-requested-attrs.patch
 
 pushd pycups-%{pycups_version}
 
@@ -169,6 +165,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/config.py*
 %{_datadir}/%{name}/cupspk.py*
 %{_datadir}/%{name}/debug.py*
+%{_datadir}/%{name}/dnssdresolve.py*
 %{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/firewall.py*
 %{_datadir}/%{name}/GroupsPane.py*
@@ -212,6 +209,44 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri May  7 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-1
+- Updated to 1.2.2:
+  - Check we are connected to the local server for server firewall
+    changes and package installation.
+  - Avoid Yes/No buttons (trac #204).
+  - Set gettext domain for new printer dialog (Ubuntu #557199).
+  - Make sure the printer we are changing the PPD for still exists
+    and close New Printer window if not (bug #581668).
+  - Specify requested_attributes in getJobs if possible (bug #584806).
+  - Resolve DNS-SD hostnames for physical device comparision
+    (trac #179).
+  - jobviewer: PrinterURIIndex fix when no initial printer names and
+    when looking up by name.
+  - Don't fetch Device ID from network printer if we already know it.
+  - Applet module no longer needs to import statereason.
+  - Removed doubled-up 'translatable' attribute in UI file
+    (Ubuntu #571662).
+  - Fixed indentation in PK1Connection.getDevices.
+  - No need to introspect CupsPkHelper every time, just once.
+  - troubleshoot: turn off debugging before fetching error log.
+  - Fixed localized state reasons (bug #587718).
+  - Match Kyocera as manufacturer when only model name reported
+    (Ubuntu #564633).
+  - Fixed TreeIter handling in update_job_creation_times (bug #588409).
+  - Make Verify buttons auto-sized (Ubuntu #575048).
+  - Fixed a troubleshooter string and some SMB auth dialog strings
+    that were not being translated (Ubuntu #557199).
+  - Show unmatched IEEE 1284 Device IDs in less confusing format.
+  - check-device-ids: run SNMP query for lpd URIs too.
+  - Handle HTTPError from AdvancedServerSettingsDialog, and treat any
+    HTTP errors as failures (bug #587744).
+  - asyncconn/asyncipp: some fixes for connection/reconnection
+    failures.
+  - ppdsloader: watch out for errors when connecting.
+  - Initialise GUI.printers in constructor (bug #589793).
+  - Always use close_fds=True in subprocess.Popen calls (bug #587830).
+  - Translation updates.
+
 * Thu Apr 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.1-2
 - Specify requested attributes in getJobs if possible (bug #584806).
 - Added optional requested_attributes argument to Connection.getJobs
