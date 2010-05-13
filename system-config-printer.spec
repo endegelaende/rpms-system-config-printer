@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,6 +18,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
+Patch2: system-config-printer-cupspk-fileget-tmp.patch
 
 Patch100: system-config-printer-pycups-build.patch
 Patch101: pycups-add-getJobs-requested-attrs.patch
@@ -81,6 +82,10 @@ printers.
 %setup -q -a 1 -a 2
 # Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
+
+# cups-pk-helper FileGet method requires directory it can write to
+# (bug #587744).
+%patch2 -p1 -b .no-epydoc
 
 pushd pycups-%{pycups_version}
 
@@ -209,6 +214,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu May 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-2
+- cups-pk-helper FileGet method requires directory it can write to
+  (bug #587744).
+
 * Fri May  7 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-1
 - Updated to 1.2.2:
   - Check we are connected to the local server for server firewall
