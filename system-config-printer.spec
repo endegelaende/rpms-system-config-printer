@@ -85,7 +85,7 @@ printers.
 
 # cups-pk-helper FileGet method requires directory it can write to
 # (bug #587744).
-%patch2 -p1 -b .no-epydoc
+%patch2 -p1 -b .cupspk-fileget-tmp
 
 pushd pycups-%{pycups_version}
 
