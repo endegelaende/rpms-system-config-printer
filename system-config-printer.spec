@@ -1,4 +1,4 @@
-%global pycups_version 1.9.49
+%global pycups_version 1.9.50
 %global pysmbc_version 1.0.7
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -19,9 +19,6 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-cupspk-fileget-tmp.patch
-
-Patch100: system-config-printer-pycups-build.patch
-Patch101: pycups-add-getJobs-requested-attrs.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -87,17 +84,6 @@ printers.
 # (bug #587744).
 %patch2 -p1 -b .cupspk-fileget-tmp
 
-pushd pycups-%{pycups_version}
-
-# Fixed pycups build with new distutils.
-%patch100 -p1 -b .pycups-build
-
-# Added optional requested_attributes argument to Connection.getJobs
-# (bug #584806).
-%patch101 -p1 -b .add-getJobs-requested-attrs
-
-popd
-
 %build
 %configure --with-udev-rules
 
@@ -138,7 +124,7 @@ rm -rf %buildroot
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/printerdriversinstaller.conf
 %{python_sitearch}/cups.so
-%{python_sitearch}/cups-1.0-py%{pyver}.egg-info
+%{python_sitearch}/pycups-%{pycups_version}-py%{pyver}.egg-info
 %{python_sitearch}/smbc.so
 %{python_sitearch}/pysmbc-%{pysmbc_version}-py%{pyver}.egg-info
 %dir %{python_sitelib}/cupshelpers
@@ -215,6 +201,7 @@ exit 0
 
 %changelog
 * Tue May 18 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-3
+- Updated pycups to 1.9.50.
 - Updated pysmbc to 1.0.7.
 
 * Thu May 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-2

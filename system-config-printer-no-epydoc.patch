@@ -26,9 +26,9 @@ diff -up system-config-printer-1.2.2/Makefile.in.no-epydoc system-config-printer
  
  distcheck-hook: update-po missing-imports
  
-diff -up system-config-printer-1.2.2/pycups-1.9.49/Makefile.no-epydoc system-config-printer-1.2.2/pycups-1.9.49/Makefile
---- system-config-printer-1.2.2/pycups-1.9.49/Makefile.no-epydoc	2010-03-10 09:45:10.000000000 +0000
-+++ system-config-printer-1.2.2/pycups-1.9.49/Makefile	2010-05-18 12:57:39.226942671 +0100
+diff -up system-config-printer-1.2.2/pycups-1.9.50/Makefile.no-epydoc system-config-printer-1.2.2/pycups-1.9.50/Makefile
+--- system-config-printer-1.2.2/pycups-1.9.50/Makefile.no-epydoc	2010-03-10 09:45:10.000000000 +0000
++++ system-config-printer-1.2.2/pycups-1.9.50/Makefile	2010-05-18 12:57:39.226942671 +0100
 @@ -14,7 +14,9 @@ cups.so: $(SOURCES)
  
  doc:	cups.so
