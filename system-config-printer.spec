@@ -1,5 +1,5 @@
 %global pycups_version 1.9.49
-%global pysmbc_version 1.0.6
+%global pysmbc_version 1.0.7
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -134,13 +134,13 @@ rm -rf %buildroot
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
 %doc --parents pycups-%{pycups_version}/{COPYING,ChangeLog,README,NEWS,TODO,examples,html}
-%doc --parents pysmbc-%{pysmbc_version}/{COPYING,ChangeLog,README,NEWS,TODO,test.py,html}
+%doc --parents pysmbc-%{pysmbc_version}/{COPYING,README,NEWS,TODO,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/printerdriversinstaller.conf
 %{python_sitearch}/cups.so
 %{python_sitearch}/cups-1.0-py%{pyver}.egg-info
 %{python_sitearch}/smbc.so
-%{python_sitearch}/smbc-1.0-py%{pyver}.egg-info
+%{python_sitearch}/pysmbc-%{pysmbc_version}-py%{pyver}.egg-info
 %dir %{python_sitelib}/cupshelpers
 %{python_sitelib}/cupshelpers/__init__.py*
 %{python_sitelib}/cupshelpers/cupshelpers.py*
@@ -214,6 +214,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue May 18 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-3
+- Updated pysmbc to 1.0.7.
+
 * Thu May 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-2
 - cups-pk-helper FileGet method requires directory it can write to
   (bug #587744).
