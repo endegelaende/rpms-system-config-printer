@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,6 +19,7 @@ Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
 Patch2: system-config-printer-cupspk-fileget-tmp.patch
+Patch3: system-config-printer-auto_make.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -83,6 +84,9 @@ printers.
 # cups-pk-helper FileGet method requires directory it can write to
 # (bug #587744).
 %patch2 -p1 -b .cupspk-fileget-tmp
+
+#Initialise auto_make to the empty string (bug #590193).
+%patch3 -p1 -b .auto_make
 
 %build
 %configure --with-udev-rules
@@ -200,6 +204,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Jun 02 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.2-4
+- Initialise auto_make to the empty string (bug #590193).
+
 * Tue May 18 2010 Tim Waugh <twaugh@redhat.com> - 1.2.2-3
 - Updated pycups to 1.9.50.
 - Updated pysmbc to 1.0.7.
