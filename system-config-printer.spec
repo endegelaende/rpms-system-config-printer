@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.2
-Release: 4%{?dist}
+Version: 1.2.3
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -18,8 +18,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
 Patch1: system-config-printer-no-epydoc.patch
-Patch2: system-config-printer-cupspk-fileget-tmp.patch
-Patch3: system-config-printer-auto_make.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -27,7 +25,7 @@ BuildRequires: libsmbclient-devel >= 3.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
-BuildRequires: libusb-devel, libudev-devel
+BuildRequires: libusb-devel, libudev-devel, glib2-devel
 BuildRequires: xmlto
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -81,13 +79,6 @@ printers.
 # Don't require epydoc.
 %patch1 -p1 -b .no-epydoc
 
-# cups-pk-helper FileGet method requires directory it can write to
-# (bug #587744).
-%patch2 -p1 -b .cupspk-fileget-tmp
-
-#Initialise auto_make to the empty string (bug #590193).
-%patch3 -p1 -b .auto_make
-
 %build
 %configure --with-udev-rules
 
@@ -103,7 +94,9 @@ popd
 
 %install
 rm -rf %buildroot
-make DESTDIR=%buildroot install
+make DESTDIR=%buildroot install \
+	udevrulesdir=/lib/udev/rules.d \
+	udevhelperdir=/lib/udev
 
 pushd pycups-%{pycups_version}
 make DESTDIR=%buildroot install
@@ -204,6 +197,36 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jun 24 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-1
+- Updated to 1.2.3:
+  - Use toolbar instead of menubar in JobsViewer (trac #205).
+  - Fixed HTTPError status code handling when changing server
+    settings.
+  - Fixed traceback with driver auto-selection (bug #590193).
+  - Only local filenames can be selected for troubleshoot.txt
+    (bug #590529).
+  - Fixed cups-pk-helper FileGet usage (bug #587744).
+  - Escape printer names in error dialog markup (Ubuntu #567324).
+  - Avoid traceback changing PPD for queue with bad PPD.
+  - Attempt to translate backend device-info strings (Ubuntu #557199).
+  - Don't buffer debugging output.
+  - Avoid leaking Connection objects when cancelling jobs.
+  - Threading fixes (trac #206).
+  - Canon naming fixes from vendor.
+  - Make deep copy of list of job ids to cancel (bug #598249).
+  - Bluetooth auto-config support.
+  - Restored keybindings/tooltips lost in switch to action groups
+    (trac #208).
+  - Spinner icon has to have more than one frame (bug #603034).
+  - Add job to active_jobs only if we're interested in it
+    (bug #604492).
+  - Make sure automatically-created queues will work; delete queue if
+    missing executables.
+  - Don't add queues for Graphtec devices (bug #547171).
+  - Avoid KeyError in AdvancedServerSettings.py (bug #606798).
+  - Handle empty notify-subscribed-event subscription attributes
+    (bug #606909).
+
 * Wed Jun 02 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.2-4
 - Initialise auto_make to the empty string (bug #590193).
 
