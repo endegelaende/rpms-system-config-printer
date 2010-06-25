@@ -1,4 +1,4 @@
-%global pycups_version 1.9.50
+%global pycups_version 1.9.51
 %global pysmbc_version 1.0.7
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,8 +17,6 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
 Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 
-Patch1: system-config-printer-no-epydoc.patch
-
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: libsmbclient-devel >= 3.2
@@ -26,7 +24,7 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel, glib2-devel
-BuildRequires: xmlto
+BuildRequires: epydoc, xmlto
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -76,8 +74,6 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-# Don't require epydoc.
-%patch1 -p1 -b .no-epydoc
 
 %build
 %configure --with-udev-rules
@@ -197,6 +193,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jun 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-2
+- Updated pycups to 1.9.51 (bug #584991).
+
 * Thu Jun 24 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-1
 - Updated to 1.2.3:
   - Use toolbar instead of menubar in JobsViewer (trac #205).
