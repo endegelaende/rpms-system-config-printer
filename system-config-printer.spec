@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -112,6 +112,7 @@ rm -rf %buildroot
 
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
+%doc COPYING
 %doc --parents pycups-%{pycups_version}/{COPYING,ChangeLog,README,NEWS,TODO,examples,html}
 %doc --parents pysmbc-%{pysmbc_version}/{COPYING,README,NEWS,TODO,html}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
@@ -136,7 +137,7 @@ rm -rf %buildroot
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING ChangeLog README
+%doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
 %dir %{_datadir}/%{name}
@@ -193,6 +194,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jul 12 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.3-4
+- Moved COPYING file to libs sub-package.
+
 * Fri Jun 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-3
 - Updated pycups to 1.9.51 (bug #584991).
 
