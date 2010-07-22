@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -194,6 +194,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Mon Jul 12 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.3-4
 - Moved COPYING file to libs sub-package.
 
