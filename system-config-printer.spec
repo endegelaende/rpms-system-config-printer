@@ -1,5 +1,5 @@
 %global pycups_version 1.9.51
-%global pysmbc_version 1.0.7
+%global pysmbc_version 1.0.9
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
@@ -15,8 +15,8 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{versio
 # Python bindings for libcups
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
-Source2: http://cyberelk.net/tim/data/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-
+Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
+Patch1: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: libsmbclient-devel >= 3.2
@@ -74,6 +74,10 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
+
+pushd pysmbc-%{pysmbc_version}
+%patch1 -p1 -b .doczip
+popd
 
 %build
 %configure --with-udev-rules
@@ -194,6 +198,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Sun Aug 22 2010 Tim Waugh <twaugh@redhat.com>
+- Updated pysmbc to 1.0.9.
+
 * Mon Jul 12 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.3-4
 - Moved COPYING file to libs sub-package.
 
