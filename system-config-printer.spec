@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -198,7 +198,7 @@ rm -rf %buildroot
 exit 0
 
 %changelog
-* Sun Aug 22 2010 Tim Waugh <twaugh@redhat.com>
+* Sun Aug 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-6
 - Updated pysmbc to 1.0.9.
 
 * Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.3-5
