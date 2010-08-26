@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.3
-Release: 6%{?dist}
+Version: 1.2.4
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -198,6 +198,40 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Aug 26 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.4-1
+- Updated to 1.2.4:
+  - Error checking in on_job_cancel_prompt_response (bug #608283).
+  - Fixed UDEV_RULES conditional; also, avoid unnecessary tests.
+  - Fill in username before calling set_auth_info (bug #609515).
+  - Make the 'Add' button actually do something.
+  - Initialise downloadable_drivers dict earlier (bug #608815).
+  - Strip ' BR-Script3' from the names of Brother PPDs.
+  - Sanitize loading of non-existing icon (bug #612415).
+  - udev helper: use CUPS defaults when connecting.
+  - Blacklist certain printer state reasons (bug #520815).
+  - Exclude dnssd backend from udev search.
+  - Avoid double-destroy in ppdsloader.
+  - Catch KeyError in jobviewer when printer uri not known (bug #615727).
+  - Changed shebang in executables (bug #618357).
+  - Make udev-configure-printer work for Bluetooth (Bastien Nocera).
+  - Merged Till Kamppeter's patches.
+    - Access OpenPrinting via the web query API with redirect support.
+    - Prioritize DNS-SD-based URIs against IP-based URIs.
+    - Added missing "import gobject" to probe_printer.py.
+    - On discovered network printers do not only cache make and model but also the device ID.
+    - Fix recognition of remote CUPS queues when setting up an IPP queue.
+    - Added delay to the auto-start of the applet.
+    - Do not error out on missing firewall D-Bus service.
+    - Make multi-threaded driver package search via Jockey work.
+    - Prioritize HP's hpcups driver against HPIJS.
+    - Silence error messages of missing PrinterDriversInstaller D-Bus service.
+    - Improvements for setting up Bluetooth printers.
+    - udev-configure-printer: Match usblp, libusb, HPLIP, and USB device file URIs.
+    - Fill the queue list when clicking "Probe" in LPD printer setup screen.
+    - Remove the ":9100" from discovered "socket://..." URIs.
+    - Integration of the dnssd CUPS backend and assosiation of DNS-SD names and IPs.
+    - When setting up a printer search for local drivers before searching the internet.
+
 * Sun Aug 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.3-6
 - Updated pysmbc to 1.0.9.
 
