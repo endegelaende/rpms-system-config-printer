@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,7 +16,8 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{versio
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
 Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: pysmbc-doczip.patch
+Patch1: system-config-printer-translations.patch
+Patch101: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
 BuildRequires: libsmbclient-devel >= 3.2
@@ -75,8 +76,10 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 
+%patch1 -p1 -b .translations
+
 pushd pysmbc-%{pysmbc_version}
-%patch1 -p1 -b .doczip
+%patch101 -p1 -b .doczip
 popd
 
 %build
@@ -198,6 +201,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Sep 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.4-2
+- Rebuilt with updated translations.
+
 * Thu Aug 26 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.4-1
 - Updated to 1.2.4:
   - Error checking in on_job_cancel_prompt_response (bug #608283).
