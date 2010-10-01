@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,6 +17,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
 Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-translations.patch
+Patch2: system-config-printer-device-id-msg.patch
 Patch101: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,7 +77,11 @@ printers.
 %prep
 %setup -q -a 1 -a 2
 
+# Updated translations.
 %patch1 -p1 -b .translations
+
+# Use actual device ID in debug output (bug #630350).
+%patch2 -p1 -b .device-id-msg
 
 pushd pysmbc-%{pysmbc_version}
 %patch101 -p1 -b .doczip
@@ -201,6 +206,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Oct  1 2010 Tim Waugh <twaugh@redhat.com> - 1.2.4-3
+- Use actual device ID in debug output (bug #630350).
+
 * Mon Sep 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.4-2
 - Rebuilt with updated translations.
 
