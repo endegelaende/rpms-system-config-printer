@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.4
-Release: 3%{?dist}
+Version: 1.2.5
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -16,8 +16,6 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{versio
 Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
 Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-translations.patch
-Patch2: system-config-printer-device-id-msg.patch
 Patch101: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -76,12 +74,6 @@ printers.
 
 %prep
 %setup -q -a 1 -a 2
-
-# Updated translations.
-%patch1 -p1 -b .translations
-
-# Use actual device ID in debug output (bug #630350).
-%patch2 -p1 -b .device-id-msg
 
 pushd pysmbc-%{pysmbc_version}
 %patch101 -p1 -b .doczip
@@ -206,6 +198,30 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Oct 13 2010 Tim Waugh <twaugh@redhat.com> - 1.2.5-1
+- 1.2.5:
+  - CMD-field matching for PPDs (bug #630058).
+  - Avoid crash in jobviewer (bug #640904).
+  - Don't try to modify firewall for SNMP broadcast responses
+    as it doesn't work (trac #214).
+  - Correctly parse snmp backend output when fetching
+    Device ID (bug #639394).
+  - XmlHelper: Don't indent output when saving to file (bug #639586).
+  - GroupsPaneModel: Avoid crash when removing queue (bug #639586).
+  - Use "Do It Later" instead of "Cancel" for adjust firewall
+    dialog (trac #213).
+  - Delete Bluetooth printer's queue when unpaired.
+  - Show examples of IPP URIs (bug #575795).
+  - Use actual Device ID strings in 'no match' debug
+    message (bug #630350).
+  - Prevent disallowed characters in text entry fields when adding
+    new printer (bug #621199).
+  - Fixed race condition while renaming printer (bug #625502).
+  - Request required job attributes rather than assuming they will
+    be present in response (bug #635719).
+  - Discard disallowed characters when renaming (bug #612315).
+  - Mark more translatable strings (bug #634436).
+
 * Fri Oct  1 2010 Tim Waugh <twaugh@redhat.com> - 1.2.4-3
 - Use actual device ID in debug output (bug #630350).
 
