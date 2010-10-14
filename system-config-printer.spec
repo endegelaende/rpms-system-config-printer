@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -17,6 +17,7 @@ Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
 # Python bindings for libsmbclient
 Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
 Patch1: system-config-printer-InstallPrinterDrivers-debug.patch
+Patch2: system-config-printer-mfg-mdl.patch
 Patch101: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: python-devel >= 2.4
@@ -78,6 +79,10 @@ printers.
 
 # Show debug output whenever InstallPrinterDrivers is called.
 %patch1 -p1 -b .InstallPrinterDrivers-debug
+
+# Always use MFG and MDL fields for InstallPrinterDrivers interface
+# (bug #643073).
+%patch2 -p1 -b .mfg-mdl
 
 pushd pysmbc-%{pysmbc_version}
 %patch101 -p1 -b .doczip
@@ -202,6 +207,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Oct 14 2010 Tim Waugh <twaugh@redhat.com> - 1.2.5-3
+- Always use MFG and MDL fields for InstallPrinterDrivers interface
+  (bug #643073).
+
 * Thu Oct 14 2010 Tim Waugh <twaugh@redhat.com> - 1.2.5-2
 - Show debug output whenever InstallPrinterDrivers is called.
 
