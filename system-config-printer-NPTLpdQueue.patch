@@ -19,7 +19,7 @@ diff -up system-config-printer-1.2.5/ui/NewPrinterWindow.glade.NPTLpdQueue syste
                                                <relation type="labelled-by" target="label201"/>
                                              </accessibility>
 -                                            <signal name="changed" handler="on_entNPTDevice_changed"/>
-+                                            <signal name="changed" handler=on_cmbentNPTLpdQueue_changed""/>
++                                            <signal name="changed" handler="on_cmbentNPTLpdQueue_changed"/>
                                            </object>
                                            <packing>
                                              <property name="left_attach">1</property>
