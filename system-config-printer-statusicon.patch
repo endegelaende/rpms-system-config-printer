@@ -1,6 +1,72 @@
+diff -up system-config-printer-1.2.5/applet.py.statusicon system-config-printer-1.2.5/applet.py
+--- system-config-printer-1.2.5/applet.py.statusicon	2010-10-12 17:03:22.000000000 +0100
++++ system-config-printer-1.2.5/applet.py	2010-11-22 13:19:08.690523505 +0000
+@@ -80,7 +80,7 @@ class NewPrinterNotification(dbus.servic
+                 pass
+             runloop = gobject.MainLoop ()
+             viewer = jobviewer.JobViewer(bus=bus, loop=runloop,
+-                                         trayicon=trayicon,
++                                         applet=applet,
+                                          suppress_icon_hide=True)
+ 
+     @dbus.service.method(PDS_IFACE, in_signature='', out_signature='')
+@@ -292,7 +292,7 @@ def show_version ():
+ 
+ global waitloop, runloop, viewer
+ 
+-trayicon = True
++applet = True
+ waitloop = runloop = None
+ viewer = None
+ 
+@@ -316,7 +316,7 @@ if __name__ == '__main__':
+             show_version ()
+             sys.exit (0)
+         if opt == "--no-tray-icon":
+-            trayicon = False
++            applet = False
+         elif opt == "--debug":
+             set_debugging (True)
+ 
+@@ -328,7 +328,7 @@ if __name__ == '__main__':
+         except:
+             pass
+ 
+-    if trayicon:
++    if applet:
+         # Stop running when the session ends.
+         def monitor_session (*args):
+             pass
+@@ -352,7 +352,7 @@ if __name__ == '__main__':
+         finally:
+             sys.exit (1)
+ 
+-    if trayicon:
++    if applet:
+         try:
+             NewPrinterNotification(bus)
+         except:
+@@ -374,7 +374,7 @@ if __name__ == '__main__':
+             except:
+                 pass
+ 
+-    if trayicon and get_debugging () == False:
++    if applet and get_debugging () == False:
+         # Start off just waiting for print jobs.
+         def any_jobs ():
+             try:
+@@ -437,7 +437,7 @@ if __name__ == '__main__':
+         runloop = gobject.MainLoop ()
+         gtk.window_set_default_icon_name ('printer')
+         viewer = jobviewer.JobViewer(bus=bus, loop=runloop,
+-                                     trayicon=trayicon)
++                                     applet=applet)
+ 
+     try:
+         runloop.run()
 diff -up system-config-printer-1.2.5/jobviewer.py.statusicon system-config-printer-1.2.5/jobviewer.py
 --- system-config-printer-1.2.5/jobviewer.py.statusicon	2010-10-13 13:11:15.000000000 +0100
-+++ system-config-printer-1.2.5/jobviewer.py	2010-11-03 14:08:59.741352866 +0000
++++ system-config-printer-1.2.5/jobviewer.py	2010-11-22 13:22:40.847137433 +0000
 @@ -277,15 +277,18 @@ class JobViewer (GtkGUI, monitor.Watcher
                                     'time-at-creation'])
  
