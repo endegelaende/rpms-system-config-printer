@@ -1,35 +1,21 @@
-%global pycups_version 1.9.51
-%global pysmbc_version 1.0.9
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.5
-Release: 8%{?dist}
+Version: 1.2.95
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
-# Python bindings for libcups
-Source1: http://cyberelk.net/tim/data/pycups/pycups-%{pycups_version}.tar.bz2
-# Python bindings for libsmbclient
-Source2: http://pypi.python.org/packages/source/p/pysmbc/pysmbc-%{pysmbc_version}.tar.bz2
-Patch1: system-config-printer-InstallPrinterDrivers-debug.patch
-Patch2: system-config-printer-mfg-mdl.patch
-Patch3: system-config-printer-NPTLpdQueue.patch
-Patch4: system-config-printer-uint32.patch
-Patch5: system-config-printer-statusicon.patch
-Patch101: pysmbc-doczip.patch
 BuildRequires: cups-devel >= 1.2
-BuildRequires: python-devel >= 2.4
-BuildRequires: libsmbclient-devel >= 3.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel, glib2-devel
-BuildRequires: epydoc, xmlto
+BuildRequires: xmlto
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -44,6 +30,7 @@ Requires: desktop-notification-daemon
 Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: libxml2-python
+Requires: python-smbc
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -59,8 +46,7 @@ the user to configure a CUPS print server.
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
-Provides: pycups = %{pycups_version}
-Provides: pysmbc = %{pysmbc_version}
+Requires: python-cups
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
@@ -78,54 +64,16 @@ The udev rules and helper programs for automatically configuring USB
 printers.
 
 %prep
-%setup -q -a 1 -a 2
-
-# Show debug output whenever InstallPrinterDrivers is called.
-%patch1 -p1 -b .InstallPrinterDrivers-debug
-
-# Always use MFG and MDL fields for InstallPrinterDrivers interface
-# (bug #643073).
-%patch2 -p1 -b .mfg-mdl
-
-# Don't check ComboBoxEntry for allowed characters (bug #644131).
-%patch3 -p1 -b .NPTLpdQueue
-
-# Make sure InstallPrinterDrivers gets correctly typed values (bug #647270).
-%patch4 -p1 -b .uint32
-
-# Don't use status icon if notification server supports persistence.
-%patch5 -p1 -b .statusicon
-
-pushd pysmbc-%{pysmbc_version}
-%patch101 -p1 -b .doczip
-popd
+%setup -q
 
 %build
 %configure --with-udev-rules
-
-pushd pycups-%{pycups_version}
-make
-make doc
-popd
-
-pushd pysmbc-%{pysmbc_version}
-make
-make doc
-popd
 
 %install
 rm -rf %buildroot
 make DESTDIR=%buildroot install \
 	udevrulesdir=/lib/udev/rules.d \
 	udevhelperdir=/lib/udev
-
-pushd pycups-%{pycups_version}
-make DESTDIR=%buildroot install
-popd
-
-pushd pysmbc-%{pysmbc_version}
-make DESTDIR=%buildroot install
-popd
 
 %{__mkdir_p} %buildroot%{_localstatedir}/run/udev-configure-printer
 touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
@@ -138,19 +86,18 @@ rm -rf %buildroot
 %files libs -f system-config-printer.lang
 %defattr(-,root,root,-)
 %doc COPYING
-%doc --parents pycups-%{pycups_version}/{COPYING,ChangeLog,README,NEWS,TODO,examples,html}
-%doc --parents pysmbc-%{pysmbc_version}/{COPYING,README,NEWS,TODO,html}
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/newprinternotification.conf
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/printerdriversinstaller.conf
-%{python_sitearch}/cups.so
-%{python_sitearch}/pycups-%{pycups_version}-py%{pyver}.egg-info
-%{python_sitearch}/smbc.so
-%{python_sitearch}/pysmbc-%{pysmbc_version}-py%{pyver}.egg-info
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.NewPrinterNotification.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.PrinterDriversInstaller.conf
+%dir %{_sysconfdir}/cupshelpers
+%config(noreplace) %{_sysconfdir}/cupshelpers/preferreddrivers.xml
 %dir %{python_sitelib}/cupshelpers
 %{python_sitelib}/cupshelpers/__init__.py*
+%{python_sitelib}/cupshelpers/config.py*
 %{python_sitelib}/cupshelpers/cupshelpers.py*
+%{python_sitelib}/cupshelpers/installdriver.py*
 %{python_sitelib}/cupshelpers/openprinting.py*
 %{python_sitelib}/cupshelpers/ppds.py*
+%{python_sitelib}/cupshelpers/xmldriverprefs.py*
 %{python_sitelib}/*.egg-info
 
 %files udev
@@ -165,8 +112,10 @@ rm -rf %buildroot
 %doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
+%{_bindir}/scp-dbus-service
+%{_datadir}/dbus-1/interfaces/*.xml
+%{_datadir}/dbus-1/services/*.service
 %dir %{_datadir}/%{name}
-%{_datadir}/%{name}/AdvancedServerSettings.py*
 %{_datadir}/%{name}/asyncconn.py*
 %{_datadir}/%{name}/asyncipp.py*
 %{_datadir}/%{name}/asyncpk1.py*
@@ -184,18 +133,22 @@ rm -rf %buildroot
 %{_datadir}/%{name}/gtkspinner.py*
 %{_datadir}/%{name}/gui.py*
 %{_datadir}/%{name}/HIG.py*
-%{_datadir}/%{name}/installdriver.py*
 %{_datadir}/%{name}/installpackage.py*
 %{_datadir}/%{name}/jobviewer.py*
 %{_datadir}/%{name}/monitor.py*
+%{_datadir}/%{name}/newprinter.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
 %{_datadir}/%{name}/PhysicalDevice.py*
+%{_datadir}/%{name}/ppdcache.py*
 %{_datadir}/%{name}/ppdippstr.py*
 %{_datadir}/%{name}/ppdsloader.py*
+%{_datadir}/%{name}/printerproperties.py*
 %{_datadir}/%{name}/probe_printer.py*
 %{_datadir}/%{name}/pysmb.py*
+%{_datadir}/%{name}/scp-dbus-service.py*
 %{_datadir}/%{name}/SearchCriterion.py*
+%{_datadir}/%{name}/serversettings.py*
 %{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/system-config-printer.py*
@@ -207,10 +160,12 @@ rm -rf %buildroot
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
+%dir %{_datadir}/%{name}/xml
+%{_datadir}/%{name}/xml/*.rng
+%{_datadir}/%{name}/xml/validate.py*
 %dir %{_datadir}/%{name}/ui
 %{_datadir}/%{name}/ui/*.glade
 %{_datadir}/applications/system-config-printer.desktop
-%{_datadir}/applications/manage-print-jobs.desktop
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/*
 
@@ -219,6 +174,11 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Nov 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.95-1
+- 1.2.95.
+- Removed pycups and pysmbc tarballs as they are now packaged
+  separately as python-cups and python-smbc.
+
 * Mon Nov 22 2010 Tim Waugh <twaugh@redhat.com> - 1.2.5-8
 - Added in missing part of patch for last change (bug #655317).
 
