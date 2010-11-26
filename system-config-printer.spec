@@ -5,7 +5,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.95
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -104,8 +104,8 @@ rm -rf %buildroot
 %defattr(-,root,root,-)
 /lib/udev/rules.d/*.rules
 /lib/udev/udev-*-printer
-%dir %{_localstatedir}/run/udev-configure-printer
-%verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
+%ghost %dir %{_localstatedir}/run/udev-configure-printer
+%ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %files
 %defattr(-,root,root,-)
@@ -174,6 +174,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Nov 26 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.95-2
+- Added %%ghost to /var/run/udev-configure-printer/usb-uris (bug #656698).
+
 * Thu Nov 25 2010 Tim Waugh <twaugh@redhat.com> - 1.2.95-1
 - 1.2.95.
 - Removed pycups and pysmbc tarballs as they are now packaged
