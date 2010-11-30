@@ -5,11 +5,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.95
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
+Patch1: system-config-printer-attach-to-status-icon.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -65,6 +66,7 @@ printers.
 
 %prep
 %setup -q
+%patch1 -p1 -b .attach-to-status-icon
 
 %build
 %configure --with-udev-rules
@@ -174,6 +176,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Nov 30 2010 Tim Waugh <twaugh@redhat.com> - 1.2.95-3
+- Removed calls to pynotify.Notification.attach_to_status_icon()
+  (bug #657722).
+
 * Fri Nov 26 2010 Jiri Popelka <jpopelka@redhat.com> 1.2.95-2
 - Added %%ghost to /var/run/udev-configure-printer/usb-uris (bug #656698).
 

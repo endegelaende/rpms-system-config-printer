@@ -1,0 +1,23 @@
+diff -up system-config-printer-1.2.95/jobviewer.py.attach-to-status-icon system-config-printer-1.2.95/jobviewer.py
+--- system-config-printer-1.2.95/jobviewer.py.attach-to-status-icon	2010-11-24 17:26:25.000000000 +0000
++++ system-config-printer-1.2.95/jobviewer.py	2010-11-30 13:07:10.328607041 +0000
+@@ -1673,9 +1673,6 @@ class JobViewer (GtkGUI):
+                               self.on_state_reason_notification_closed)
+         self.state_reason_notifications[reason.get_tuple ()] = notification
+         self.set_statusicon_visibility ()
+-        if not self.notify_has_persistence:
+-            notification.attach_to_status_icon (self.statusicon)
+-
+         try:
+             notification.show ()
+         except gobject.GError:
+@@ -1731,9 +1728,6 @@ class JobViewer (GtkGUI):
+         notification.set_data ('jobid', jobid)
+         self.completed_job_notifications[jobid] = notification
+         self.set_statusicon_visibility ()
+-        if not self.notify_has_persistence:
+-            notification.attach_to_status_icon (self.statusicon)
+-
+         try:
+             notification.show ()
+         except gobject.GError:
