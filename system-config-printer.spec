@@ -4,14 +4,12 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.95
-Release: 4%{?dist}
+Version: 1.2.96
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
-Patch1: system-config-printer-attach-to-status-icon.patch
-Patch2: system-config-printer-compiz-rename.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -67,8 +65,6 @@ printers.
 
 %prep
 %setup -q
-%patch1 -p1 -b .attach-to-status-icon
-%patch2 -p1 -b .compiz-rename
 
 %build
 %configure --with-udev-rules
@@ -168,7 +164,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/xml/*.rng
 %{_datadir}/%{name}/xml/validate.py*
 %dir %{_datadir}/%{name}/ui
-%{_datadir}/%{name}/ui/*.glade
+%{_datadir}/%{name}/ui/*.ui
 %{_datadir}/applications/system-config-printer.desktop
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/*
@@ -178,6 +174,14 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Mon Jan 17 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-1
+- 1.2.96:
+  - Remove reference to current printer on exit (bug #556548).
+  - Handle cups.Connection() failure in PrinterURIIndexr (bug #648014).
+  - Block unwanted characters when editing queue name (bug #658550).
+  - Initialise D-Bus threading in timedops module (bug #662047).
+  - many other fixes
+
 * Thu Dec  2 2010 Tim Waugh <twaugh@redhat.com> - 1.2.95-4
 - Grab focus on the IconView after setting it editable (bug #650995).
 
