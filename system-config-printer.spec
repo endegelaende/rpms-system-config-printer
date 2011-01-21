@@ -5,12 +5,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.96
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
 Patch1:  system-config-printer-dnssd-URI.patch 
+Patch2:  system-config-printer-duplicate-PPDs.patch
+Patch3:  system-config-printer-ungrab-focus.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -69,6 +71,12 @@ printers.
 
 # Allow %, ( and ) characters in dnssd URI (bug #669820).
 %patch1 -p1 -b .dnssd-URI
+
+# Fixed driver selection when there are duplicate PPDs available. (#667571)
+%patch2 -p1 -b .duplicate-PPDs
+
+# Grabbing focus for editing breaks it (bug #650995).
+%patch3 -p1 -b .ungrab-focus
 
 %build
 %configure --with-udev-rules
@@ -178,6 +186,10 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Jan 21 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-3
+- Fixed driver selection when there are duplicate PPDs available. (#667571)
+- Grabbing focus for editing breaks it (bug #650995).
+
 * Tue Jan 18 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-2
 - Allow %, ( and ) characters in dnssd URI (bug #669820).
 
