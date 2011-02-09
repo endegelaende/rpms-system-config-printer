@@ -5,7 +5,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.2.97
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -175,6 +175,9 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.97-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Wed Feb 09 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.97-1
 - 1.2.97:
   - Handle failure to connect in PrinterURIIndex (bug #668568).
