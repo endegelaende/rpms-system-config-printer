@@ -4,15 +4,12 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.96
-Release: 3%{?dist}
+Version: 1.2.97
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
-Patch1:  system-config-printer-dnssd-URI.patch 
-Patch2:  system-config-printer-duplicate-PPDs.patch
-Patch3:  system-config-printer-ungrab-focus.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -34,6 +31,7 @@ Requires: notify-python
 Requires: gnome-python2-gnomekeyring
 Requires: libxml2-python
 Requires: python-smbc
+Requires: python-slip-gtk
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -68,15 +66,6 @@ printers.
 
 %prep
 %setup -q
-
-# Allow %, ( and ) characters in dnssd URI (bug #669820).
-%patch1 -p1 -b .dnssd-URI
-
-# Fixed driver selection when there are duplicate PPDs available. (#667571)
-%patch2 -p1 -b .duplicate-PPDs
-
-# Grabbing focus for editing breaks it (bug #650995).
-%patch3 -p1 -b .ungrab-focus
 
 %build
 %configure --with-udev-rules
@@ -186,6 +175,19 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 09 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.97-1
+- 1.2.97:
+  - Handle failure to connect in PrinterURIIndex (bug #668568).
+  - Fixed bugs in gtk_label_autowrap.py (bug #637829).
+  - Avoid Foomatic/pxlmono until output size issue is fixed (bug #661814).
+  - Avoid traceback when notification daemon has persistence (bug #671375).
+  - Don't crash when DISPLAY is unset (bug #676339, #676343).
+  - Improvements for DNS-SD support from Till Kamppeter
+  - troubleshoot: handle wrong server name but right IP address.
+  - Update printer properties after NewPrinter dialog has changed PPD/device.
+  - Don't rely on CUPS_PRINTER_COMMANDS alone.
+  - Use set_autowrap() from slip.gtk module when possible.
+
 * Fri Jan 21 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-3
 - Fixed driver selection when there are duplicate PPDs available. (#667571)
 - Grabbing focus for editing breaks it (bug #650995).
