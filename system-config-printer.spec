@@ -4,8 +4,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.2.97
-Release: 2%{?dist}
+Version: 1.3.0
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -175,6 +175,16 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Wed Feb 16 2011 Tim Waugh <twaugh@redhat.com> 1.3.0-1
+- 1.3.0:
+  - Prevent look-up failures in dnssdresolve (Ubuntu #716357).
+  - Install libsane-hpaio when appropriate (bug #585362).
+  - Avoid double-checking networked HPLIP-able devices.
+  - Use #!/usr/bin/python throughout, even for non-executables.
+  - Don't display tooltips in the jobviewer as they do not work at
+    all.
+  - Translation updates.
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.97-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
