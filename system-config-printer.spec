@@ -4,14 +4,13 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.0
-Release: 3%{?dist}
+Version: 1.3.1
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-job-notifications.patch
-Patch2: system-config-printer-hp-scannable.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -68,8 +67,9 @@ printers.
 
 %prep
 %setup -q
+
+# Don't show job notifications.
 %patch1 -p1 -b .no-job-notifications
-%patch2 -p1 -b .hp-scannable
 
 %build
 %configure --with-udev-rules
@@ -179,6 +179,15 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Thu Feb 17 2011 Tim Waugh <twaugh@redhat.com> 1.3.1-1
+- 1.3.1:
+  - Fixed page sequence when adding a printer with an exactly-matching
+    driver.
+  - firewall: fixed cache behaviour.
+  - Defer calls to populateList initiated by monitor.
+  - Removed duplicate method definition.
+  - monitor: always set self.bus even when D-Bus not available.
+
 * Thu Feb 17 2011 Tim Waugh <twaugh@redhat.com> 1.3.0-3
 - Prevent traceback during libsane-hpaio installation check.
 
