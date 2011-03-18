@@ -4,7 +4,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.1
+Version: 1.3.2
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -169,7 +169,7 @@ rm -rf %buildroot
 %{_datadir}/%{name}/xml/*.rng
 %{_datadir}/%{name}/xml/validate.py*
 %dir %{_datadir}/%{name}/ui
-%{_datadir}/%{name}/ui/*.ui
+%{_datadir}/%{name}/ui/*.glade
 %{_datadir}/applications/system-config-printer.desktop
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/*
@@ -179,6 +179,46 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Fri Mar 18 2011 Tim Waugh <twaugh@redhat.com> 1.3.2-1
+- 1.3.2:
+  - Set connected state when connecting to server fails (bug #685098).
+  - Handle the situation where cupsd has died/restarted more gracefully.
+  - Renamed ui/*.ui -> ui/*.glade again, fixing translations.
+  - Just hide Printer Properties dialog on delete-event (Ubuntu #729966).
+  - Extra job options: print-quality, printer-resolution, output-bin.
+  - Automatically show horizontal scrollbar in job options screen.
+  - Ignore "output-mode-default" attribute as it is not settable.
+  - Handle IPP_TAG_RESOLUTION types (requires pycups-1.9.55).
+  - Don't traceback if option value cannot be handled.
+  - Fixed traceback in options.py (bug #679103).
+  - Handle URIs in Find Network Printer entry, and use 'Enter URI'
+    instead of 'Other' (bug #685091).
+  - Use "Do It Later" instead of "Cancel" for adjust firewall dialog
+    (trac #213).
+  - Fixed an instance where NewPrinterGUI might not have self.printers
+    set (bug #680683).
+  - IPPHostname can contain colon (to specify port).
+  - Fixed automatic driver installation when changing the driver.
+  - Removed stale code left over from conversion to gobjects.
+  - Ensure all uses of ppdsloader supply the Device ID.
+  - Fixed some small typos in newprinter --help output.
+  - Prevent traceback after 2nd drivers search dialog is cancelled
+    (bug #680288).
+  - Activated and fixed testing mode for device ID/driver association
+  - Match HP-Fax2/3/... PPDs, as well as Ubuntu/Debian hpijs-ppds
+    packages.
+  - preferreddrivers.xml: Identify hpcups and hpijs fax PPDs.
+  - Match native hpijs driver (drv:///hp/hpijs.drv/...) as "hpijs".
+  - Handle Ubuntu locations of hpcups.drv and hpijs.drv.
+  - preferreddrivers.xml: match OpenPrinting gutenprint PPD names as
+    gutenprint.
+  - Removed DES field check altogether.
+  - xmldriverprefs.test: show order more clearly.
+  - Make xmldriverprefs.test() debugging optional.
+  - More debugging during PPD selection.
+  - Prefer foomatic PostScript drivers before PCL drivers (except
+    foomatic-recommended ones).
+
 * Thu Feb 17 2011 Tim Waugh <twaugh@redhat.com> 1.3.1-1
 - 1.3.1:
   - Fixed page sequence when adding a printer with an exactly-matching
