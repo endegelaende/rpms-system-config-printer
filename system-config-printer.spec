@@ -5,12 +5,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
-Patch1: system-config-printer-no-job-notifications.patch
+Patch1: system-config-printer-no-applet-in-gnome.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -68,8 +68,8 @@ printers.
 %prep
 %setup -q
 
-# Don't show job notifications.
-%patch1 -p1 -b .no-job-notifications
+# Don't start the applet in GNOME.
+%patch1 -p1 -b .no-applet-in-gnome
 
 %build
 %configure --with-udev-rules
@@ -179,6 +179,12 @@ rm -rf %buildroot
 exit 0
 
 %changelog
+* Tue Mar 22 2011 Tim Waugh <twaugh@redhat.com> 1.3.2-2
+- Don't start the applet in GNOME at all (bug #677676), now that GNOME
+  Shell is capable of handling New Printer notifications. (Note that
+  automatic driver installation won't work until GNOME Shell implements
+  that part.)
+
 * Fri Mar 18 2011 Tim Waugh <twaugh@redhat.com> 1.3.2-1
 - 1.3.2:
   - Set connected state when connecting to server fails (bug #685098).
