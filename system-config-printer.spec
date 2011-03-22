@@ -12,6 +12,7 @@ Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.2/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-check-device-ids.patch
+Patch3: system-config-printer-self.printers.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -74,6 +75,9 @@ printers.
 
 # Improvements for check-device-ids from upstream.
 %patch2 -p1 -b .check-device-ids
+
+# Fixed traceback in newprinter.py (bug #680683).
+%patch3 -p1 -b .self.printers
 
 %build
 %configure --with-udev-rules
@@ -184,6 +188,7 @@ exit 0
 
 %changelog
 * Tue Mar 22 2011 Tim Waugh <twaugh@redhat.com> 1.3.2-2
+- Fixed traceback in newprinter.py (bug #680683).
 - Improvements for check-device-ids from upstream.
 - Don't start the applet in GNOME at all (bug #677676), now that GNOME
   Shell is capable of handling New Printer notifications. (Note that
