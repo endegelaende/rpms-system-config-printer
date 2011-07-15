@@ -4,7 +4,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.3
+Version: 1.3.4
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -17,6 +17,7 @@ BuildRequires: gettext-devel
 BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel, glib2-devel
 BuildRequires: xmlto
+BuildRequires: systemd-units
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -33,6 +34,9 @@ Requires: gnome-python2-gnomekeyring
 Requires: libxml2-python
 Requires: python-smbc
 Requires: python-slip-gtk
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
 
 Obsoletes: system-config-printer-gui <= 0.6.152
 Provides: system-config-printer-gui = 0.6.152
@@ -111,6 +115,7 @@ rm -rf %buildroot
 /lib/udev/udev-*-printer
 %ghost %dir %{_localstatedir}/run/udev-configure-printer
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
+%{_unitdir}/udev-configure-printer.service
 
 %files
 %defattr(-,root,root,-)
@@ -132,8 +137,6 @@ rm -rf %buildroot
 %{_datadir}/%{name}/dnssdresolve.py*
 %{_datadir}/%{name}/errordialogs.py*
 %{_datadir}/%{name}/firewall.py*
-%{_datadir}/%{name}/GroupsPane.py*
-%{_datadir}/%{name}/GroupsPaneModel.py*
 %{_datadir}/%{name}/gtkinklevel.py*
 %{_datadir}/%{name}/gtkspinner.py*
 %{_datadir}/%{name}/gui.py*
@@ -160,7 +163,6 @@ rm -rf %buildroot
 %{_datadir}/%{name}/timedops.py*
 %{_datadir}/%{name}/ToolbarSearchEntry.py*
 %{_datadir}/%{name}/userdefault.py*
-%{_datadir}/%{name}/XmlHelper.py*
 %{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
@@ -178,7 +180,59 @@ rm -rf %buildroot
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
 exit 0
 
+%post udev
+if [ $1 -eq 1 ] ; then
+    # Initial installation
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%preun udev
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /bin/systemctl --no-reload disable udev-configure-printer.service >/dev/null 2>&1 || :
+    /bin/systemctl stop udev-configure-printer.service >/dev/null 2>&1 || :
+fi
+
+%postun udev
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart udev-configure-printer.service >/dev/null 2>&1 || :
+fi
+
 %changelog
+* Fri Jul 15 2011 Tim Waugh <twaugh@redhat.com> 1.3.4-1
+- 1.3.4:
+  - Don't rely on retriggering printers; enumerate them from systemd
+    instead.
+  - Don't complain about missing/invalid device ID for devices we've
+    already handled.
+  - Removed unused Printer Groups feature.
+  - Don't show "No printers configured" page if the printers are
+    filtered in any way.
+  - URL-quote URIs when using "Find Network Printer" (Ubuntu #808137).
+  - Downloadable drivers: don't display printers for which there are
+    no drivers (bug #668154).
+  - Kerberos support for the SMB 'Verify' button (requires new enough
+    pycups).
+  - Removed IPP/HTTP device screen in favour of "Enter URI"
+    (bug #685091).
+  - Converted ComboBoxEntry widgets to Entry+EntryCompletion in
+    NewPrinterWindow.ui.
+  - Robustness in ppdsloader in the face of errors (Ubuntu #766818).
+  - Changed Make/Model/State labels into GtkEntry widgets so contents
+    are always fully selectable (bug #719217).
+  - Convert iters to paths before comparing (bug #717062, Ubuntu #791690,
+    trac #221).
+  - Set translation domain in D-Bus service (Ubuntu #783967).
+  - Ensure consistency in jobviewer if add_job fails (bug #693055,
+    bug #632551).
+  - Avoid PostScript for HP LaserJet 2100 Series (bug #710231).
+  - Raised priority for SpliX driver (Ubuntu bug #793741).
+  - Updated Free Software Foundation (FSF) address.
+  - Adjusted test code in asyncpk1.py so it doesn't look like a
+    tempfile vulnerability.
+
 * Fri Jun 03 2011 Jiri Popelka <jpopelka@redhat.com> 1.3.3-1
 - 1.3.3:
   - Set translation domain for ServerSettingsDialog (Ubuntu #777188).
