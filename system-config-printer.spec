@@ -5,7 +5,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -21,7 +21,7 @@ BuildRequires: systemd-units
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires: pygtk2 >= 2.4.0, pygtk2-libglade
+Requires: pygtk2 >= 2.12
 Requires: pygobject2
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
@@ -201,6 +201,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Thu Jul 21 2011 Tim Waugh <twaugh@redhat.com> 1.3.4-2
+- No longer requires glade (uses GtkBuilder instead).
+
 * Fri Jul 15 2011 Tim Waugh <twaugh@redhat.com> 1.3.4-1
 - 1.3.4:
   - Don't rely on retriggering printers; enumerate them from systemd
