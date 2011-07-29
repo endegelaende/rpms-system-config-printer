@@ -101,6 +101,41 @@ rm -rf %buildroot
 %doc COPYING
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.NewPrinterNotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.PrinterDriversInstaller.conf
+%{_datadir}/dbus-1/interfaces/*.xml
+%{_datadir}/dbus-1/services/*.service
+%{_bindir}/scp-dbus-service
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/asyncconn.py*
+%{_datadir}/%{name}/asyncipp.py*
+%{_datadir}/%{name}/asyncpk1.py*
+%{_datadir}/%{name}/authconn.py*
+%{_datadir}/%{name}/config.py*
+%{_datadir}/%{name}/cupspk.py*
+%{_datadir}/%{name}/debug.py*
+%{_datadir}/%{name}/dnssdresolve.py*
+%{_datadir}/%{name}/errordialogs.py*
+%{_datadir}/%{name}/firewall.py*
+%{_datadir}/%{name}/gtkinklevel.py*
+%{_datadir}/%{name}/gtk_label_autowrap.py*
+%{_datadir}/%{name}/gtkspinner.py*
+%{_datadir}/%{name}/gui.py*
+%{_datadir}/%{name}/installpackage.py*
+%{_datadir}/%{name}/jobviewer.py*
+%{_datadir}/%{name}/monitor.py*
+%{_datadir}/%{name}/newprinter.py*
+%{_datadir}/%{name}/options.py*
+%{_datadir}/%{name}/optionwidgets.py*
+%{_datadir}/%{name}/PhysicalDevice.py*
+%{_datadir}/%{name}/ppdcache.py*
+%{_datadir}/%{name}/ppdippstr.py*
+%{_datadir}/%{name}/ppdsloader.py*
+%{_datadir}/%{name}/printerproperties.py*
+%{_datadir}/%{name}/probe_printer.py*
+%{_datadir}/%{name}/pysmb.py*
+%{_datadir}/%{name}/scp-dbus-service.py*
+%{_datadir}/%{name}/smburi.py*
+%{_datadir}/%{name}/statereason.py*
+%{_datadir}/%{name}/timedops.py*
 %dir %{_sysconfdir}/cupshelpers
 %config(noreplace) %{_sysconfdir}/cupshelpers/preferreddrivers.xml
 %dir %{python_sitelib}/cupshelpers
@@ -126,48 +161,13 @@ rm -rf %buildroot
 %doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
-%{_bindir}/scp-dbus-service
-%{_datadir}/dbus-1/interfaces/*.xml
-%{_datadir}/dbus-1/services/*.service
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/asyncconn.py*
-%{_datadir}/%{name}/asyncipp.py*
-%{_datadir}/%{name}/asyncpk1.py*
-%{_datadir}/%{name}/authconn.py*
 %{_datadir}/%{name}/check-device-ids.py*
-%{_datadir}/%{name}/config.py*
-%{_datadir}/%{name}/cupspk.py*
-%{_datadir}/%{name}/debug.py*
-%{_datadir}/%{name}/dnssdresolve.py*
-%{_datadir}/%{name}/errordialogs.py*
-%{_datadir}/%{name}/firewall.py*
-%{_datadir}/%{name}/gtkinklevel.py*
-%{_datadir}/%{name}/gtkspinner.py*
-%{_datadir}/%{name}/gui.py*
 %{_datadir}/%{name}/HIG.py*
-%{_datadir}/%{name}/installpackage.py*
-%{_datadir}/%{name}/jobviewer.py*
-%{_datadir}/%{name}/monitor.py*
-%{_datadir}/%{name}/newprinter.py*
-%{_datadir}/%{name}/options.py*
-%{_datadir}/%{name}/optionwidgets.py*
-%{_datadir}/%{name}/PhysicalDevice.py*
-%{_datadir}/%{name}/ppdcache.py*
-%{_datadir}/%{name}/ppdippstr.py*
-%{_datadir}/%{name}/ppdsloader.py*
-%{_datadir}/%{name}/printerproperties.py*
-%{_datadir}/%{name}/probe_printer.py*
-%{_datadir}/%{name}/pysmb.py*
-%{_datadir}/%{name}/scp-dbus-service.py*
 %{_datadir}/%{name}/SearchCriterion.py*
 %{_datadir}/%{name}/serversettings.py*
-%{_datadir}/%{name}/smburi.py*
-%{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/system-config-printer.py*
-%{_datadir}/%{name}/timedops.py*
 %{_datadir}/%{name}/ToolbarSearchEntry.py*
 %{_datadir}/%{name}/userdefault.py*
-%{_datadir}/%{name}/gtk_label_autowrap.py*
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
@@ -221,6 +221,7 @@ fi
   - Updated translations.
 - Also: applied patch to fix serversettings traceback, from upstream
   post-1.3.5 (bug #726682).
+- Move files around so the libs sub-package provides the D-Bus service.
 
 * Thu Jul 21 2011 Tim Waugh <twaugh@redhat.com> 1.3.4-2
 - No longer requires glade (uses GtkBuilder instead).
