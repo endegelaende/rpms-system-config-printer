@@ -4,8 +4,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.4
-Release: 2%{?dist}
+Version: 1.3.5
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -201,6 +201,21 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Fri Jul 29 2011 Tim Waugh <twaugh@redhat.com> 1.3.5-1
+- 1.3.5:
+  - Driver selection, missing executables checking, and physical
+    device grouping now exposed via D-Bus.
+  - Fixed cupsFilter search in missing executables check.
+  - Use PackageKit to resolve missing executable filenames to
+    packages.
+  - Fixed DNSSD hostname resolution.
+  - Fixed firewall code to handle json errors when used with the older
+    system-config-firewall D-Bus service.
+  - Fixed LPD probing (726383).
+  - Use "hostname" instead of "IP address" when asking for names of
+    browse servers (bug #726134).
+  - Updated translations.
+
 * Thu Jul 21 2011 Tim Waugh <twaugh@redhat.com> 1.3.4-2
 - No longer requires glade (uses GtkBuilder instead).
 
