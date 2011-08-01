@@ -5,13 +5,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-bug726682.patch
+Patch3: system-config-printer-packagekit-optional.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -78,6 +79,9 @@ printers.
 
 # Import dbus in serversettings module (bug #726682).
 %patch2 -p1 -b .bug726682
+
+# Make PackageKit optional (bug #726996).
+%patch3 -p1 -b .bug726682
 
 %build
 %configure --with-udev-rules
@@ -205,6 +209,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Mon Aug  1 2011 Tim Waugh <twaugh@redhat.com> 1.3.5-2
+- Make PackageKit optional (bug #726996).
+
 * Fri Jul 29 2011 Tim Waugh <twaugh@redhat.com> 1.3.5-1
 - 1.3.5:
   - Driver selection, missing executables checking, and physical

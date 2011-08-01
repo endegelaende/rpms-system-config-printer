@@ -1,0 +1,26 @@
+diff -up system-config-printer-1.3.5/cupshelpers/cupshelpers.py.packagekit-optional system-config-printer-1.3.5/cupshelpers/cupshelpers.py
+--- system-config-printer-1.3.5/cupshelpers/cupshelpers.py.packagekit-optional	2011-07-28 17:04:13.000000000 +0100
++++ system-config-printer-1.3.5/cupshelpers/cupshelpers.py	2011-08-01 10:47:11.614519332 +0100
+@@ -21,8 +21,12 @@
+ 
+ import cups, pprint, os, tempfile, re, string
+ import locale
+-import packagekit.client, packagekit.enums
+ from . import _debugprint
++try:
++    import packagekit.client, packagekit.enums
++    HAVE_PACKAGEKIT=True
++except ImportError:
++    HAVE_PACKAGEKIT=False
+ 
+ class Printer:
+     _flags_blacklist = ["options", "local"]
+@@ -830,7 +834,7 @@ def missingPackagesAndExecutables(ppd):
+     """
+     executables = missingExecutables(ppd)
+     packages = []
+-    if executables:
++    if executables and HAVE_PACKAGEKIT:
+         unresolved_executables = []
+         client = packagekit.client.PackageKitClient ()
+         for executable in executables:
