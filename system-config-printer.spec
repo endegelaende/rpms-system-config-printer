@@ -1,11 +1,7 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-%{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
-
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.5
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -209,6 +205,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Mon Aug 15 2011 Tim Waugh <twaugh@redhat.com> 1.3.5-4
+- Removed redundant macros, spotted by Jiri Popelka.
+
 * Tue Aug  2 2011 Tim Waugh <twaugh@redhat.com> 1.3.5-3
 - Removed problematic PackageKit client support (bug #726996, bug #726938).
 
