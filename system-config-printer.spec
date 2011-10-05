@@ -1,6 +1,6 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.6
+Version: 1.3.7
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -197,6 +197,25 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Wed Oct  5 2011 Tim Waugh <twaugh@redhat.com> 1.3.7-1
+- 1.3.7:
+  - Show private job attributes for "my jobs" (bug #742279).
+  - Enable Test Page button when application/postscript is supported.
+  - Some preferreddrivers.xml fixes (Ubuntu #855412).
+  - Handle errors saving troubleshoot.txt (Ubuntu #789602).
+  - Removed some stale code.
+  - Make connections list more easily accessible (Ubuntu #842092).
+  - Improved handling of remote CUPS queues via DNS-SD, and IPP devices.
+  - Better display of CUPS servers from "Find Network Printer".
+  - Fixed SMB method for printer finder.
+  - Don't handle tooltips during mainloop recursion (bug #664044,
+    bug #739734).
+  - Fixed bold print of tab labels on option conflicts.
+  - Preserve installable options on driver change.
+  - Update printer properties dialog correctly when PPD changed.
+  - Fixed typo triggered by private job attributes (Ubuntu #827573).
+  - Marked some translatable strings that weren't (bug #734313).
+
 * Mon Aug 22 2011 Tim Waugh <twaugh@redhat.com> 1.3.6-1
 - 1.3.6:
   - Updated translations.
