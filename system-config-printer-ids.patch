@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.3.7/check-device-ids.py.ids system-config-printer-1.3.7/check-device-ids.py
+--- system-config-printer-1.3.7/check-device-ids.py.ids	2011-09-26 16:39:20.000000000 +0100
++++ system-config-printer-1.3.7/check-device-ids.py	2011-10-17 10:56:45.937590097 +0100
+@@ -301,7 +301,7 @@ for device, attrs in devices.iteritems (
+             break
+     if mdls:
+         (s, bestmatches) = ppds._findBestMatchPPDs (mdls, mdl)
+-        if s == ppds.STATUS_SUCCESS:
++        if s == ppds.FIT_EXACT:
+             matches = matches.union (set (bestmatches))
+ 
+     missing = set (matches) - set (drivers)
