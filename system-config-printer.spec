@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,18 +19,18 @@ BuildRequires: systemd-units
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires: pygtk2 >= 2.12
-Requires: pygobject2
+Requires: pygtk2%{?_isa} >= 2.12
+Requires: pygobject2%{?_isa}
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
-Requires: dbus-python
+Requires: dbus-python%{?_isa}
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
-Requires: notify-python
-Requires: gnome-python2-gnomekeyring
-Requires: libxml2-python
-Requires: python-smbc
+Requires: notify-python%{?_isa}
+Requires: gnome-python2-gnomekeyring%{?_isa}
+Requires: libxml2-python%{?_isa}
+Requires: python-smbc%{?_isa}
 Requires: python-slip-gtk
 Requires(post): systemd-units
 Requires(preun): systemd-units
@@ -206,6 +206,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Fri Nov  4 2011 Tim Waugh <twaugh@redhat.com> 1.3.7-3
+- Use arch-specific requirements where appropriate (bug #749834).
+
 * Mon Oct 17 2011 Tim Waugh <twaugh@redhat.com> 1.3.7-2
 - Fixed typo in check-device-ids.py when looking for ID-less matches.
 - Handle new CUPS 1.5 IPP error response IPP_AUTHENTICATION_CANCELED
