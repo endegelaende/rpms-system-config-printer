@@ -1,14 +1,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.7
-Release: 4%{?dist}
+Version: 1.3.8
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-auth.patch
-Patch3: system-config-printer-ids.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -72,13 +70,6 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
-
-# Handle new CUPS 1.5 IPP error response IPP_AUTHENTICATION_CANCELED
-# (Ubuntu #653132).
-%patch2 -p1 -b .auth
-
-# Fixed typo in check-device-ids.py when looking for ID-less matches.
-%patch3 -p1 -b .ids
 
 %build
 %configure --with-udev-rules
@@ -206,6 +197,43 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Tue Jan 24 2012 Tim Waugh <twaugh@redhat.com> 1.3.8-1
+- 1.3.8:
+  - Avoid AttributeError in on_btnNPApply_clicked() (bug #772112).
+  - Added debugging when jobviewer not found (bug #757520).
+  - Applied patch from Till Kamppeter to use pycurl 'https' support
+    for openprinting (CVE-2011-4405).
+  - Always use a sequence as args for timedops.TimedSubprocess()
+    (patch from Vincent Untz).
+  - Added some firewall debugging for bug #755913.
+  - Fixed typo (Ubuntu #844976).
+  - Run probe_printer.py with an argument to run PrinterFinder by hand.
+  - More debugging output in PrinterFinder.
+  - Really fix SMB probing in PrinterFinder.
+  - LpdServer class: spot when we can't connect, and give up (likewise
+    in PrinterFinder).
+  - Ignore ' All-in-one' suffix for printer model names when comparing
+    them (bug #751610).
+  - Handle HTTP errors from openprinting.org (seen in bug #743446).
+  - Don't re-open PPD when already available, just to localize marker
+    names.
+  - Use the monitor's PPD cache in the properties dialog.
+  - monitor: provide method for sharing the monitor's PPD cache.
+  - cupshelpers: avoid re-opening PPD when not needed (not a leak).
+  - Fixed file descriptor leak in PPDCache (Ubuntu #874445).
+  - Fixed typo in check-device-ids.py when looking for ID-less
+    matches.
+  - Require newer pycups; drop compatibility code.
+  - Do not connect to CUPS with an empty user name.
+  - On asynchronous IPP connections make sure that the password dialog
+    is repeated if a wrong password is entered (Ubuntu #653132).
+  - Several fixes on credential caching for IPP authentication (Ubuntu
+    bug 653132).
+  - Don't penalise pxlmono now that bug #661814 is fixed in
+    ghostscript-9.04.
+  - Handle new CUPS 1.5 IPP error response IPP_AUTHENTICATION_CANCELED
+    (Ubuntu #653132).
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.7-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
