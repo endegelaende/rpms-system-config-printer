@@ -1,12 +1,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
+Patch2: system-config-printer-1.3.8-debuginfo.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -14,8 +15,6 @@ BuildRequires: intltool
 BuildRequires: libusb-devel, libudev-devel, glib2-devel
 BuildRequires: xmlto
 BuildRequires: systemd-units
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: pygtk2%{?_isa} >= 2.12
 Requires: pygobject2%{?_isa}
@@ -33,12 +32,6 @@ Requires: python-slip-gtk
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-
-Obsoletes: system-config-printer-gui <= 0.6.152
-Provides: system-config-printer-gui = 0.6.152
-
-Obsoletes: desktop-printing <= 0.20-7.fc7
-Provides: desktop-printing = 0.20-7.fc7
 
 %description
 system-config-printer is a graphical user interface that allows
@@ -58,7 +51,7 @@ the configuration tool.
 Summary: Rules for udev for automatic configuration of USB printers
 Group: System Environment/Base
 Requires: system-config-printer-libs = %{version}-%{release}
-Obsoletes: hal-cups-utils <= 0.6.20
+Obsoletes: hal-cups-utils < 0.6.20
 Provides: hal-cups-utils = 0.6.20
 
 %description udev
@@ -70,12 +63,13 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
+# Fix several debugprints (#785581)
+%patch2 -p1 -b .debugprint
 
 %build
 %configure --with-udev-rules
 
 %install
-rm -rf %buildroot
 make DESTDIR=%buildroot install \
 	udevrulesdir=/lib/udev/rules.d \
 	udevhelperdir=/lib/udev
@@ -85,11 +79,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %find_lang system-config-printer
 
-%clean
-rm -rf %buildroot
-
 %files libs -f system-config-printer.lang
-%defattr(-,root,root,-)
 %doc COPYING
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.NewPrinterNotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.PrinterDriversInstaller.conf
@@ -141,7 +131,6 @@ rm -rf %buildroot
 %{python_sitelib}/*.egg-info
 
 %files udev
-%defattr(-,root,root,-)
 /lib/udev/rules.d/*.rules
 /lib/udev/udev-*-printer
 %ghost %dir %{_localstatedir}/run/udev-configure-printer
@@ -149,7 +138,6 @@ rm -rf %buildroot
 %{_unitdir}/udev-configure-printer.service
 
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
@@ -197,6 +185,10 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Mon Jan 30 2012 Jiri Popelka <jpopelka@redhat.com> 1.3.8-2
+- Fixed several debugprints (#785581).
+- Clean up and modernize spec file.
+
 * Tue Jan 24 2012 Tim Waugh <twaugh@redhat.com> 1.3.8-1
 - 1.3.8:
   - Avoid AttributeError in on_btnNPApply_clicked() (bug #772112).
