@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -42,7 +42,7 @@ the user to configure a CUPS print server.
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
-Requires: python-cups
+Requires: python-cups >= 1.9.60
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
@@ -188,6 +188,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Thu Feb 23 2012 Tim Waugh <twaugh@redhat.com> 1.3.8-4
+- Added version to python-cups dependency (bug #796678).
+
 * Fri Feb  3 2012 Tim Waugh <twaugh@redhat.com> 1.3.8-3
 - Upstream patch to fix ppdcache traceback (bug #786232).
 
