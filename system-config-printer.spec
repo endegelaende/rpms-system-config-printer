@@ -1,14 +1,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.9
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-udev-sys-path.patch
-Patch3: system-config-printer-libudev.patch
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
@@ -66,8 +65,6 @@ printers.
 %patch1 -p1 -b .no-applet-in-gnome
 # replace udev_get_sys_path() with hard-coded "/sys"
 %patch2 -p1 -b .sys-path
-# Fixed build against systemd-devel now there is no libudev-devel.
-%patch3 -p1 -b .libudev
 
 %build
 %configure --with-udev-rules
@@ -188,6 +185,10 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Tue Jul 31 2012 Tim Waugh <twaugh@redhat.com> 1.3.9-5
+- Reverted previous change. New systemd-devel does provide libudev.pc
+  after all.
+
 * Tue Jul 31 2012 Tim Waugh <twaugh@redhat.com> 1.3.9-4
 - Fixed build against systemd-devel now there is no libudev-devel.
 
