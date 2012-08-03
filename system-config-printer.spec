@@ -1,6 +1,6 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.10
+Version: 1.3.11
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -182,6 +182,9 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Fri Aug  3 2012 Tim Waugh <twaugh@redhat.com> 1.3.11-1
+- 1.3.11.
+
 * Wed Aug  1 2012 Tim Waugh <twaugh@redhat.com> 1.3.10-1
 - 1.3.10.
 - Build requirement for libusb has changed to libusb1-devel.
