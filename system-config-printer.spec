@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.11
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -162,26 +162,18 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %post udev
-if [ $1 -eq 1 ] ; then
-    # Initial installation
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
+%systemd_post udev-configure-printer.service
 
 %preun udev
-if [ $1 -eq 0 ] ; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable udev-configure-printer.service >/dev/null 2>&1 || :
-    /bin/systemctl stop udev-configure-printer.service >/dev/null 2>&1 || :
-fi
+%systemd_preun udev-configure-printer.service
 
 %postun udev
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-if [ $1 -ge 1 ] ; then
-    # Package upgrade, not uninstall
-    /bin/systemctl try-restart udev-configure-printer.service >/dev/null 2>&1 || :
-fi
+%systemd_postun_with_restart udev-configure-printer.service
 
 %changelog
+* Wed Aug 22 2012 Jiri Popelka <jpopelka@redhat.com> 1.3.11-2
+- use new systemd-rpm macros (#850334)
+
 * Fri Aug  3 2012 Tim Waugh <twaugh@redhat.com> 1.3.11-1
 - 1.3.11.
 
