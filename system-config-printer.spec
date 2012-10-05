@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.11
-Release: 5%{?dist}
+Version: 1.3.12
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -137,7 +137,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_prefix}/lib/udev/udev-*-printer
 %ghost %dir %{_localstatedir}/run/udev-configure-printer
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
-%{_unitdir}/udev-configure-printer.service
+%{_unitdir}/configure-printer@.service
 
 %files
 %doc ChangeLog README
@@ -166,16 +166,10 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
 exit 0
 
-%post udev
-%systemd_post udev-configure-printer.service
-
-%preun udev
-%systemd_preun udev-configure-printer.service
-
-%postun udev
-%systemd_postun_with_restart udev-configure-printer.service
-
 %changelog
+* Fri Oct  5 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-1
+- 1.3.12.
+
 * Fri Sep 21 2012 Jiri Popelka <jpopelka@redhat.com> 1.3.11-5
 - FirewallD support once again (use D-Bus instead of FirewallD client module)
 
