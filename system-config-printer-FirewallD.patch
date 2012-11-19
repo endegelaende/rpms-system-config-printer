@@ -1,5 +1,3 @@
-diff -up system-config-printer-1.3.11/firewall.py.FirewallD system-config-printer-1.3.11/firewall.py
-diff -up system-config-printer-1.3.11/firewallsettings.py.FirewallD system-config-printer-1.3.11/firewallsettings.py
 --- system-config-printer-1.3.11/firewallsettings.py.FirewallD	2012-09-21 13:34:29.070164405 +0200
 +++ system-config-printer-1.3.11/firewallsettings.py	2012-09-21 13:34:29.070164405 +0200
 @@ -0,0 +1,279 @@
@@ -282,7 +280,6 @@ diff -up system-config-printer-1.3.11/firewallsettings.py.FirewallD system-confi
 +        return self._check_any_allowed (set(["--port=%s:%s" %
 +                                                    (MDNS_PORT, MDNS_PROTOCOL),
 +                                             "--service=" + MDNS_SERVICE]))
-diff -up system-config-printer-1.3.11/Makefile.in.FirewallD system-config-printer-1.3.11/Makefile.in
 --- system-config-printer-1.3.11/Makefile.in.FirewallD	2012-08-03 12:04:49.000000000 +0200
 +++ system-config-printer-1.3.11/Makefile.in	2012-09-21 13:38:04.787202523 +0200
 @@ -358,7 +358,7 @@ nobase_pkgdata_DATA = \
@@ -294,7 +291,6 @@ diff -up system-config-printer-1.3.11/Makefile.in.FirewallD system-config-printe
  	gui.py						\
  	gtkinklevel.py					\
  	gtkspinner.py					\
-diff -up system-config-printer-1.3.11/newprinter.py.FirewallD system-config-printer-1.3.11/newprinter.py
 --- system-config-printer-1.3.11/newprinter.py.FirewallD	2012-05-24 14:03:21.000000000 +0200
 +++ system-config-printer-1.3.11/newprinter.py	2012-09-21 13:34:29.071164392 +0200
 @@ -63,7 +63,7 @@ from smburi import SMBURI
@@ -366,7 +362,6 @@ diff -up system-config-printer-1.3.11/newprinter.py.FirewallD system-config-prin
                      f.write ()
          except (dbus.DBusException, Exception):
              nonfatalException ()
-diff -up system-config-printer-1.3.11/serversettings.py.FirewallD system-config-printer-1.3.11/serversettings.py
 --- system-config-printer-1.3.11/serversettings.py.FirewallD	2012-05-24 14:03:22.000000000 +0200
 +++ system-config-printer-1.3.11/serversettings.py	2012-09-21 13:34:29.072164379 +0200
 @@ -34,7 +34,7 @@ import time
@@ -399,10 +394,31 @@ diff -up system-config-printer-1.3.11/serversettings.py.FirewallD system-config-
                          f.write ()
              except (dbus.DBusException, Exception):
                  nonfatalException ()
-diff -up system-config-printer-1.3.11/system-config-printer.py.FirewallD system-config-printer-1.3.11/system-config-printer.py
---- system-config-printer-1.3.11/system-config-printer.py.FirewallD	2012-08-01 17:48:26.000000000 +0200
-+++ system-config-printer-1.3.11/system-config-printer.py	2012-09-21 13:34:29.073164365 +0200
-@@ -370,6 +370,7 @@ class GUI(GtkGUI):
+--- system-config-printer-1.3.11/system-config-printer.py	2012-09-21 13:34:29.073164365 +0200
++++ system-config-printer-1.3.12/system-config-printer.py	2012-11-19 16:24:49.505775460 +0000
+@@ -2,7 +2,7 @@
+ 
+ ## system-config-printer
+ 
+-## Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Red Hat, Inc.
++## Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012 Red Hat, Inc.
+ ## Authors:
+ ##  Tim Waugh <twaugh@redhat.com>
+ ##  Florian Festi <ffesti@redhat.com>
+@@ -309,9 +309,9 @@
+         self.btnNew.connect ('clicked', self.on_new_printer_activate)
+         self.toolbar.add (self.btnNew)
+         self.toolbar.add (gtk.SeparatorToolItem ())
+-        refreshbutton = gtk.ToolButton (gtk.STOCK_REFRESH)
+-        refreshbutton.connect ('clicked', self.on_btnRefresh_clicked)
+-        self.toolbar.add (refreshbutton)
++        self.refreshbutton = gtk.ToolButton (gtk.STOCK_REFRESH)
++        self.refreshbutton.connect ('clicked', self.on_btnRefresh_clicked)
++        self.toolbar.add (self.refreshbutton)
+         self.toolbar.show_all ()
+ 
+         server_context_menu = gtk.Menu ()
+@@ -370,6 +370,7 @@
          self.newPrinterGUI = np = newprinter.NewPrinterGUI()
          np.connect ("printer-added", self.on_new_printer_added)
          np.connect ("printer-modified", self.on_printer_modified)
@@ -410,7 +426,82 @@ diff -up system-config-printer-1.3.11/system-config-printer.py.FirewallD system-
  
          # Set up "About" dialog
          self.AboutDialog.set_program_name(config.PACKAGE)
-@@ -1728,26 +1729,44 @@ class GUI(GtkGUI):
+@@ -446,6 +447,8 @@
+ 
+         # Printer Properties dialog
+         self.propertiesDlg = printerproperties.PrinterPropertiesDialog ()
++        self.propertiesDlg.connect ("dialog-closed",
++                                    self.on_properties_dialog_closed)
+ 
+         try:
+             self.populateList()
+@@ -506,11 +509,13 @@
+         name = unicode (model.get_value (iter, 2))
+         object = model.get_value (iter, 0)
+ 
++        self.desensitise_main_window_widgets ()
+         try:
+             self.propertiesDlg.show (name, host=self.connect_server,
+                                      encryption=self.connect_encrypt,
+                                      parent=self.PrintersWindow)
+         except cups.IPPError, (e, m):
++            self.sensitise_main_window_widgets ()
+             show_IPP_Error (e, m, self.PrintersWindow)
+             if e == cups.IPP_SERVICE_UNAVAILABLE:
+                 self.cups = None
+@@ -518,12 +523,16 @@
+                 self.populateList ()
+             return
+         except RuntimeError:
++            self.sensitise_main_window_widgets ()
+             # Perhaps cupsGetPPD2 failed for a browsed printer.
+ 
+             # Check that we're still connected.
+             self.monitor.update ()
+             return
+ 
++    def on_properties_dialog_closed (self, obj):
++        self.sensitise_main_window_widgets ()
++
+     def dests_iconview_selection_changed (self, iconview):
+         self.updating_widgets = True
+         paths = iconview.get_selected_items ()
+@@ -1708,6 +1717,34 @@
+     def on_troubleshoot_quit(self, troubleshooter):
+         del self.troubleshooter
+ 
++    def sensitise_main_window_widgets (self, sensitive=True):
++        self.dests_iconview.set_sensitive (sensitive)
++        self.btnNew.set_sensitive (sensitive)
++        self.btnAddFirstPrinter.set_sensitive (sensitive)
++        self.refreshbutton.set_sensitive (sensitive)
++        self.view_discovered_printers.set_sensitive (sensitive)
++        self.search_entry.set_sensitive (sensitive)
++        for action in ["/connect-to-server",
++                       "/server-settings",
++                       "/new-printer",
++                       "/new-class",
++                       "/rename-printer",
++                       "/duplicate-printer",
++                       "/delete-printer",
++                       "/set-default-printer",
++                       "/edit-printer",
++                       "/create-class",
++                       "/enable-printer",
++                       "/share-printer",
++                       "/filter-name",
++                       "/filter-description",
++                       "/filter-location",
++                       "/filter-manufacturer"]:
++            self.ui_manager.get_action (action).set_sensitive (sensitive)
++
++    def desensitise_main_window_widgets (self):
++        self.sensitise_main_window_widgets (False)
++
+     # About dialog
+     def on_about_activate(self, widget):
+         self.AboutDialog.set_transient_for (self.PrintersWindow)
+@@ -1728,26 +1765,44 @@
      # == New Printer Dialog ==============================================
      # ====================================================================
  
@@ -455,7 +546,6 @@ diff -up system-config-printer-1.3.11/system-config-printer.py.FirewallD system-
          self.populateList ()
  
          if not self.printers.has_key (name):
-diff -up system-config-printer-1.3.11/ui/NewPrinterWindow.ui.FirewallD system-config-printer-1.3.11/ui/NewPrinterWindow.ui
 --- system-config-printer-1.3.11/ui/NewPrinterWindow.ui.FirewallD	2012-05-24 14:03:22.000000000 +0200
 +++ system-config-printer-1.3.11/ui/NewPrinterWindow.ui	2012-09-21 13:34:29.075164337 +0200
 @@ -4,7 +4,7 @@
@@ -467,3 +557,103 @@ diff -up system-config-printer-1.3.11/ui/NewPrinterWindow.ui.FirewallD system-co
      <property name="window_position">center-on-parent</property>
      <property name="default_width">600</property>
      <property name="default_height">420</property>
+--- system-config-printer-1.3.12/printerproperties.py.modality	2012-09-17 11:08:52.000000000 +0100
++++ system-config-printer-1.3.12/printerproperties.py	2012-11-19 16:24:49.505775460 +0000
+@@ -2,7 +2,7 @@
+ 
+ ## system-config-printer
+ 
+-## Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Red Hat, Inc.
++## Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012 Red Hat, Inc.
+ ## Authors:
+ ##  Tim Waugh <twaugh@redhat.com>
+ ##  Florian Festi <ffesti@redhat.com>
+@@ -562,6 +562,8 @@ class PrinterPropertiesDialog(GtkGUI):
+         self.newPrinterGUI = newprinter.NewPrinterGUI ()
+         self._connect ("newPrinterGUI", self.newPrinterGUI,
+                        "printer-modified", self.on_printer_modified)
++        self._connect ("newPrinterGUI", self.newPrinterGUI,
++                       "dialog-canceled", self.on_printer_not_modified)
+         if parent:
+             self.dialog.set_transient_for (parent)
+ 
+@@ -1820,30 +1822,47 @@ class PrinterPropertiesDialog(GtkGUI):
+             self.changed.discard(self.tvClassMembers)
+         self.setDataButtonState()
+ 
++    def sensitise_new_printer_widgets (self, sensitive=True):
++        sensitive = sensitive and not (self.printer.discovered or
++                                       bool (self.changed))
++        for button in [self.btnChangePPD,
++                       self.btnSelectDevice]:
++            button.set_sensitive (sensitive)
++
++    def desensitise_new_printer_widgets (self):
++        self.sensitise_new_printer_widgets (False)
++        
+     # change device
+     def on_btnSelectDevice_clicked(self, button):
+         busy (self.dialog)
+-        self.newPrinterGUI.init("device", device_uri=self.printer.device_uri,
+-                                name=self.printer.name,
+-                                host=self._host,
+-                                encryption=self._encryption,
+-                                parent=self.dialog)
++        self.desensitise_new_printer_widgets ()
++        if not self.newPrinterGUI.init("device", device_uri=self.printer.device_uri,
++                                       name=self.printer.name,
++                                       host=self._host,
++                                       encryption=self._encryption,
++                                       parent=self.dialog):
++            self.sensitise_new_printer_widgets ()
++
+         ready (self.dialog)
+ 
+     # change PPD
+     def on_btnChangePPD_clicked(self, button):
+         busy (self.dialog)
+-        self.newPrinterGUI.init("ppd", device_uri=self.printer.device_uri,
+-                                ppd=self.ppd,
+-                                name=self.printer.name,
+-                                host=self._host,
+-                                encryption=self._encryption,
+-                                parent=self.dialog)
++        self.desensitise_new_printer_widgets ()
++        if not self.newPrinterGUI.init("ppd", device_uri=self.printer.device_uri,
++                                       ppd=self.ppd,
++                                       name=self.printer.name,
++                                       host=self._host,
++                                       encryption=self._encryption,
++                                       parent=self.dialog):
++            self.sensitise_new_printer_widgets ()
++
+         ready (self.dialog)
+ 
+     # NewPrinterGUI signal handlers
+     def on_printer_modified (self, obj, name, ppd_has_changed):
+         debugprint ("on_printer_modified called")
++        self.sensitise_new_printer_widgets ()
+         if self.dialog.get_property ('visible') and self.printer:
+             try:
+                 self.printer.getAttributes ()
+@@ -1855,6 +1874,9 @@ class PrinterPropertiesDialog(GtkGUI):
+             except cups.IPPError:
+                 pass
+ 
++    def on_printer_not_modified (self, obj):
++        self.sensitise_new_printer_widgets ()
++
+     # Monitor signal handlers
+     def on_printer_event (self, mon, printer, eventname, event):
+         self.on_printer_modified (None, printer, False)
+--- system-config-printer-1.3.12/ui/PrinterPropertiesDialog.ui.modality	2012-08-08 13:05:21.000000000 +0100
++++ system-config-printer-1.3.12/ui/PrinterPropertiesDialog.ui	2012-11-19 16:24:49.506775465 +0000
+@@ -89,7 +89,7 @@
+   </object>
+   <object class="GtkDialog" id="PrinterPropertiesDialog">
+     <property name="title" translatable="yes">Printer Properties</property>
+-    <property name="modal">True</property>
++    <property name="modal">False</property>
+     <property name="window_position">center-on-parent</property>
+     <property name="type_hint">dialog</property>
+     <child internal-child="vbox">
