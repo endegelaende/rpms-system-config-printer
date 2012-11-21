@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.12
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -175,7 +175,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
-* Tue Nov 20 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-5
+* Wed Nov 21 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-6
 - Avoid traceback in most recent change (bug #878527).
 
 * Mon Nov 19 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-4
