@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.12
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -66,6 +66,9 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
+%if 0%{?rhel}
+sed -i.kde -e 's,NotShowIn=\(.*;\)KDE;,NotShowIn=\1,' print-applet.desktop.in
+%endif
 
 # FirewallD support
 %patch2 -p1 -b .FirewallD
@@ -175,6 +178,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Nov 26 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-7
+- Enable the print applet in KDE (only on Red Hat Enterprise Linux).
+
 * Wed Nov 21 2012 Tim Waugh <twaugh@redhat.com> 1.3.12-6
 - Avoid traceback in most recent change (bug #878527).
 
