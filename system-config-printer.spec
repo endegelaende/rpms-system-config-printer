@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.12
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -66,9 +66,6 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
-%if 0%{?rhel}
-sed -i.kde -e 's,NotShowIn=\(.*;\)KDE;,NotShowIn=\1,' print-applet.desktop.in
-%endif
 
 # FirewallD support
 %patch2 -p1 -b .FirewallD
@@ -178,6 +175,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Feb 27 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-9
+- Disable the print applet in KDE again.
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.12-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
