@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.12
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -45,6 +45,8 @@ Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
 Requires: python-cups >= 1.9.60
+BuildArch: noarch
+Obsoletes: %{name}-libs < 1.3.12-9
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
@@ -175,6 +177,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Mar 19 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-9
+- The libs sub-package is now noarch (bug #921514).
+
 * Wed Feb 27 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-8
 - Disable the print applet in KDE again.
 
