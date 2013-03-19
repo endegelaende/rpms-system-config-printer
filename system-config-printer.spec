@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.3.12
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -44,6 +44,8 @@ Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
 Requires: python-cups >= 1.9.60
+BuildArch: noarch
+Obsoletes: %{name}-libs < 1.3.12-10
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
@@ -174,6 +176,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Mar 19 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-11
+- The libs sub-package is now noarch (bug #921514).
+
 * Fri Mar 15 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-10
 - Removed python-smbc as a dependency as it is not required in all
   situations (bug #921132).
