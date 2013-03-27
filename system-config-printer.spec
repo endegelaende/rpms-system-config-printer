@@ -1,15 +1,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.3.12
-Release: 11%{?dist}
+Version: 1.3.13
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-FirewallD.patch
-Patch3: system-config-printer-systemd.patch
-Patch4: system-config-printer-dnssd-crash.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -70,12 +68,6 @@ printers.
 
 # FirewallD support
 %patch2 -p1 -b .FirewallD
-
-# Fixed systemd config file (bug #862186).
-%patch3 -p1 -b .systemd
-
-# Avoid crash with certain types of dnssd device URI (bug #870000).
-%patch4 -p1 -b .dnssd-crash
 
 %build
 %configure --with-udev-rules
@@ -152,6 +144,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %doc ChangeLog README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-applet
+%{_bindir}/install-printerdriver
 %{_datadir}/%{name}/check-device-ids.py*
 %{_datadir}/%{name}/HIG.py*
 %{_datadir}/%{name}/SearchCriterion.py*
@@ -162,6 +155,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
+%{_datadir}/%{name}/install-printerdriver.py*
 %dir %{_datadir}/%{name}/xml
 %{_datadir}/%{name}/xml/*.rng
 %{_datadir}/%{name}/xml/validate.py*
@@ -176,6 +170,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Mar 27 2013 Tim Waugh <twaugh@redhat.com> 1.3.13-1
+- 1.3.13.
+
 * Tue Mar 19 2013 Tim Waugh <twaugh@redhat.com> 1.3.12-11
 - The libs sub-package is now noarch (bug #921514).
 
