@@ -8,6 +8,7 @@ Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-DISPLAY.patch
+Patch3: system-config-printer-encoding.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -68,6 +69,9 @@ printers.
 
 # Better behaviour when trying to run without valid DISPLAY (bug # #948240).
 %patch2 -p1 -b .DISPLAY
+
+# Fixed some printer name encoding issues (bug #950162).
+%patch3 -p1 -b .encoding
 
 %build
 %configure --with-udev-rules
@@ -169,6 +173,7 @@ exit 0
 
 %changelog
 * Thu Apr 11 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-2
+- Fixed some printer name encoding issues (bug #950162).
 - Better behaviour when trying to run without valid DISPLAY (bug # #948240).
 
 * Wed Mar 27 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-1
