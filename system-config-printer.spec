@@ -173,6 +173,7 @@ exit 0
 
 %changelog
 * Thu Apr 11 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-2
+- Fixed changelog date.
 - Fixed some printer name encoding issues (bug #950162).
 - Better behaviour when trying to run without valid DISPLAY (bug # #948240).
 
@@ -1991,7 +1992,7 @@ exit 0
 * Fri Jun 23 2006 Tim Waugh <twaugh@redhat.com> 0.7.16-1
 - 0.7.16, now with SMB browser.
 
-* Wed Jun 22 2006 Tim Waugh <twaugh@redhat.com> 0.7.15-1
+* Thu Jun 22 2006 Tim Waugh <twaugh@redhat.com> 0.7.15-1
 - 0.7.15.
 - Build requires gettext-devel.
 - Ship translations.
