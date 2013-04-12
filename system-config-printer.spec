@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -9,6 +9,7 @@ Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{versio
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-DISPLAY.patch
 Patch3: system-config-printer-encoding.patch
+Patch4: system-config-printer-quit.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -72,6 +73,9 @@ printers.
 
 # Fixed some printer name encoding issues (bug #950162).
 %patch3 -p1 -b .encoding
+
+# Don't delete mainlist too early when quitting (bug #915483).
+%patch4 -p1 -b .quit
 
 %build
 %configure --with-udev-rules
@@ -172,6 +176,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Apr 12 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-3
+- Don't delete mainlist too early when quitting (bug #915483).
+
 * Thu Apr 11 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-2
 - Fixed changelog date.
 - Fixed some printer name encoding issues (bug #950162).
