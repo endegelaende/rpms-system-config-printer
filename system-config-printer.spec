@@ -43,10 +43,10 @@ Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
 Requires: python-cups >= 1.9.60
-Requires: gobject-introspection%{?_isa}
-Requires: pygobject3-base%{?_isa}
-Requires: gtk2%{?_isa}
-Requires: dbus-python%{?_isa}
+Requires: gobject-introspection
+Requires: pygobject3-base
+Requires: gtk2
+Requires: dbus-python
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
 
