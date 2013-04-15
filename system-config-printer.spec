@@ -180,6 +180,7 @@ exit 0
 
 %changelog
 * Mon Apr 15 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-4
+- Don't call into Gtk directly from scp-dbus-service (bug #951710).
 - Adjusted dependencies now we use GObject introspection.
 
 * Fri Apr 12 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-3
