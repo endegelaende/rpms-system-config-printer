@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -19,18 +19,17 @@ BuildRequires: libusb1-devel, glib2-devel
 BuildRequires: xmlto
 BuildRequires: systemd-units, systemd-devel
 
-Requires: pygtk2%{?_isa} >= 2.12
-Requires: pygobject2%{?_isa}
+Requires: gobject-introspection%{?_isa}
+Requires: pygobject3-base%{?_isa}
+Requires: gtk2%{?_isa}
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: dbus-python%{?_isa}
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
-Requires: notify-python%{?_isa}
-Requires: gnome-python2-gnomekeyring%{?_isa}
-Requires: libxml2-python%{?_isa}
-Requires: python-slip-gtk
+Requires: libnotify%{?_isa}
+Requires: libgnome-keyring%{?_isa}
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -44,6 +43,10 @@ Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python
 Requires: python-cups >= 1.9.60
+Requires: gobject-introspection%{?_isa}
+Requires: pygobject3-base%{?_isa}
+Requires: gtk2%{?_isa}
+Requires: dbus-python%{?_isa}
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
 
@@ -176,6 +179,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Apr 15 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-4
+- Adjusted dependencies now we use GObject introspection.
+
 * Fri Apr 12 2013 Tim Waugh <twaugh@redhat.com> 1.4.0-3
 - Don't delete mainlist too early when quitting (bug #915483).
 
