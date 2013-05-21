@@ -11,6 +11,7 @@ Patch2: system-config-printer-utf8-961882.patch
 Patch3: system-config-printer-utf8-962207.patch
 Patch4: system-config-printer-utf8-964673.patch
 Patch5: system-config-printer-utf8-965578.patch
+Patch6: system-config-printer-typo.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -78,6 +79,9 @@ printers.
 %patch3 -p1 -b .utf8-962207
 %patch4 -p1 -b .utf8-964673
 %patch5 -p1 -b .utf8-965578
+
+# Fixed typo which could cause a traceback (bug #965678).
+%patch6 -p1 -b .typo
 
 %build
 %configure --with-udev-rules
@@ -179,6 +183,7 @@ exit 0
 
 %changelog
 * Tue May 21 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-2
+- Fixed typo which could cause a traceback (bug #965678).
 - Fixes for UTF-8 encoding issues (bug #957444, bug #961882,
   bug #962207, bug #964673, bug #965578).
 

@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.4.1/asyncipp.py.typo system-config-printer-1.4.1/asyncipp.py
+--- system-config-printer-1.4.1/asyncipp.py.typo	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/asyncipp.py	2013-05-21 17:22:48.691678684 +0100
+@@ -354,7 +354,7 @@ class _IPPAuthOperation:
+             self._reconnect = False
+             self._reconnected = True
+             debugprint ("%s (_error_handler): reconnecting (as %s)..." %
+-                        (self, self_user))
++                        (self, self._user))
+             conn.reconnect (self._user,
+                             reply_handler=self._reconnect_reply,
+                             error_handler=self._reconnect_error)
