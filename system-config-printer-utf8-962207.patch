@@ -1,0 +1,62 @@
+diff -up system-config-printer-1.4.1/newprinter.py.utf8-962207 system-config-printer-1.4.1/newprinter.py
+--- system-config-printer-1.4.1/newprinter.py.utf8-962207	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/newprinter.py	2013-05-21 17:20:20.852036184 +0100
+@@ -1632,7 +1632,7 @@ class NewPrinterGUI(GtkGUI):
+ 
+     def on_entNPName_changed(self, widget):
+         # restrict
+-        text = unicode (widget.get_text())
++        text = unicode (widget.get_text(), locale.getpreferredencoding ())
+         new_text = text
+         new_text = new_text.replace("/", "")
+         new_text = new_text.replace("#", "")
+@@ -2516,7 +2516,7 @@ class NewPrinterGUI(GtkGUI):
+             allowed_chars = unicode (allowed_chars, locale.getpreferredencoding())
+         except UnicodeDecodeError:
+             allowed_chars = unicode (allowed_chars)
+-        origtext = unicode (entry.get_text())
++        origtext = unicode (entry.get_text(). locale.getpreferredencoding ())
+         new_text = origtext
+         for char in origtext:
+             if char not in allowed_chars:
+@@ -3881,9 +3881,10 @@ class NewPrinterGUI(GtkGUI):
+             self.dec_spinner_task ()
+ 
+         if self.dialog_mode in ("class", "printer", "printer_with_uri"):
+-            name = unicode (self.entNPName.get_text())
+-            location = unicode (self.entNPLocation.get_text())
+-            info = unicode (self.entNPDescription.get_text())
++            enc = locale.getpreferredencoding ()
++            name = unicode (self.entNPName.get_text(), enc)
++            location = unicode (self.entNPLocation.get_text(), enc)
++            info = unicode (self.entNPDescription.get_text(), enc)
+         else:
+             name = self._name
+ 
+diff -up system-config-printer-1.4.1/printerproperties.py.utf8-962207 system-config-printer-1.4.1/printerproperties.py
+--- system-config-printer-1.4.1/printerproperties.py.utf8-962207	2013-05-09 12:10:45.000000000 +0100
++++ system-config-printer-1.4.1/printerproperties.py	2013-05-21 17:20:20.853036185 +0100
+@@ -683,6 +683,9 @@ class PrinterPropertiesDialog(GtkGUI):
+ 
+         old_value = old_values[widget]
+ 
++        if type (old_value) == unicode:
++            old_value = old_value.encode (locale.getpreferredencoding ())
++
+         if old_value == value:
+             self.changed.discard(widget)
+         else:
+@@ -1034,9 +1037,10 @@ class PrinterPropertiesDialog(GtkGUI):
+                 for member in old_members:
+                     self.cups.deletePrinterFromClass(member, name)
+ 
+-            location = self.entPLocation.get_text()
+-            info = self.entPDescription.get_text()
+-            device_uri = self.entPDevice.get_text()
++            enc = locale.getpreferredencoding ()
++            location = self.entPLocation.get_text().decode (enc)
++            info = self.entPDescription.get_text().decode (enc)
++            device_uri = self.entPDevice.get_text().decode (enc)
+ 
+             enabled = self.chkPEnabled.get_active()
+             accepting = self.chkPAccepting.get_active()

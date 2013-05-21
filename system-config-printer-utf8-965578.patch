@@ -1,0 +1,32 @@
+diff -up system-config-printer-1.4.1/printerproperties.py.utf8-965578 system-config-printer-1.4.1/printerproperties.py
+--- system-config-printer-1.4.1/printerproperties.py.utf8-965578	2013-05-21 17:20:20.853036185 +0100
++++ system-config-printer-1.4.1/printerproperties.py	2013-05-21 17:21:56.763452869 +0100
+@@ -65,10 +65,14 @@ class PrinterPropertiesDialog(GtkGUI):
+         'dialog-closed': ( GObject.SIGNAL_RUN_LAST, None, ()),
+         }
+ 
+-    printer_states = { cups.IPP_PRINTER_IDLE: _("Idle"),
+-                       cups.IPP_PRINTER_PROCESSING: _("Processing"),
+-                       cups.IPP_PRINTER_BUSY: _("Busy"),
+-                       cups.IPP_PRINTER_STOPPED: _("Stopped") }
++    printer_states = { cups.IPP_PRINTER_IDLE:
++                           _("Idle").decode ('utf-8'),
++                       cups.IPP_PRINTER_PROCESSING:
++                           _("Processing").decode ('utf-8'),
++                       cups.IPP_PRINTER_BUSY:
++                           _("Busy").decode ('utf-8'),
++                       cups.IPP_PRINTER_STOPPED:
++                           _("Stopped").decode ('utf-8') }
+ 
+     def __init__(self):
+         GObject.GObject.__init__ (self)
+@@ -1635,7 +1639,8 @@ class PrinterPropertiesDialog(GtkGUI):
+         debugprint ("update printer properties")
+         printer = self.printer
+         self.entPMakeModel.set_text(printer.make_and_model)
+-        state = self.printer_states.get (printer.state, _("Unknown"))
++        state = self.printer_states.get (printer.state,
++                                         _("Unknown").decode ('utf-8'))
+         reason = printer.other_attributes.get ('printer-state-message', '')
+         if len (reason) > 0:
+             state += ' - ' + reason
