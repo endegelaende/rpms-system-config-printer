@@ -15,7 +15,7 @@ diff -up system-config-printer-1.4.1/newprinter.py.utf8-962207 system-config-pri
          except UnicodeDecodeError:
              allowed_chars = unicode (allowed_chars)
 -        origtext = unicode (entry.get_text())
-+        origtext = unicode (entry.get_text(). locale.getpreferredencoding ())
++        origtext = unicode (entry.get_text(), locale.getpreferredencoding ())
          new_text = origtext
          for char in origtext:
              if char not in allowed_chars:

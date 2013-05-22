@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.4.1/asyncpk1.py.utf8-965771 system-config-printer-1.4.1/asyncpk1.py
+--- system-config-printer-1.4.1/asyncpk1.py.utf8-965771	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/asyncpk1.py	2013-05-22 09:01:14.216632448 +0100
+@@ -439,7 +439,7 @@ class PK1Connection:
+         result_str = dict()
+         for key, value in dbusdict.iteritems ():
+             if type (key) == dbus.String:
+-                result_str[str (key)] = str (value)
++                result_str[unicode (key)] = unicode (value)
+             else:
+                 result_str[key] = value
+ 
