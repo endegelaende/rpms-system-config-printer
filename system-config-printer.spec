@@ -14,6 +14,7 @@ Patch5: system-config-printer-utf8-965578.patch
 Patch6: system-config-printer-utf8-965771.patch
 Patch7: system-config-printer-utf8-969846.patch
 Patch8: system-config-printer-typo.patch
+Patch9: system-config-printer-notify-urgency.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -86,6 +87,9 @@ printers.
 
 # Fixed typo which could cause a traceback (bug #965678).
 %patch8 -p1 -b .typo
+
+# Notify urgencies have new names with gi.repository (bug #970646).
+%patch9 -p1 -b .notify-urgency
 
 %build
 %configure --with-udev-rules
@@ -187,6 +191,7 @@ exit 0
 
 %changelog
 * Thu Jun  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-4
+- Notify urgencies have new names with gi.repository (bug #970646).
 - More fixes for UTF-8 encoding issues (bug #969846).
 
 * Wed May 22 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-3

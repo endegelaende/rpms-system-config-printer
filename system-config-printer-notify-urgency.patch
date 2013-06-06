@@ -1,0 +1,54 @@
+diff -up system-config-printer-1.4.1/applet.py.notify-urgency system-config-printer-1.4.1/applet.py
+--- system-config-printer-1.4.1/applet.py.notify-urgency	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/applet.py	2013-06-06 17:10:15.619536855 +0100
+@@ -122,7 +122,7 @@ class NewPrinterNotification(dbus.servic
+                 text = _("No driver for this printer.")
+             n = Notify.Notification (title, text, 'printer')
+             if "actions" in Notify.get_server_caps():
+-                n.set_urgency (Notify.URGENCY_CRITICAL)
++                n.set_urgency (Notify.Urgency.CRITICAL)
+                 n.set_timeout (Notify.EXPIRES_NEVER)
+                 n.add_action ("setup-printer", _("Search"),
+                               lambda x, y:
+@@ -194,7 +194,7 @@ class NewPrinterNotification(dbus.servic
+                 text = _("`%s' is ready for printing.") % name
+                 n = Notify.Notification (title, text)
+                 if "actions" in Notify.get_server_caps():
+-                    n.set_urgency (Notify.URGENCY_NORMAL)
++                    n.set_urgency (Notify.Urgency.NORMAL)
+                     n.add_action ("test-page", _("Print test page"),
+                                   lambda x, y:
+                                       self.print_test_page (x, y, name))
+@@ -206,7 +206,7 @@ class NewPrinterNotification(dbus.servic
+                         (name, driver))
+                 n = Notify.Notification (title, text, 'printer')
+                 if "actions" in Notify.get_server_caps():
+-                    n.set_urgency (Notify.URGENCY_CRITICAL)
++                    n.set_urgency (Notify.Urgency.CRITICAL)
+                     n.add_action ("test-page", _("Print test page"),
+                                   lambda x, y:
+                                       self.print_test_page (x, y, name, devid))
+diff -up system-config-printer-1.4.1/jobviewer.py.notify-urgency system-config-printer-1.4.1/jobviewer.py
+--- system-config-printer-1.4.1/jobviewer.py.notify-urgency	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/jobviewer.py	2013-06-06 17:10:15.619536855 +0100
+@@ -1724,9 +1724,9 @@ class JobViewer (GtkGUI):
+         level = reason.get_level ()
+         if (level == StateReason.ERROR or
+             reason.get_reason () == "connecting-to-device"):
+-            urgency = Notify.URGENCY_NORMAL
++            urgency = Notify.Urgency.NORMAL
+         else:
+-            urgency = Notify.URGENCY_LOW
++            urgency = Notify.Urgency.LOW
+ 
+         (title, text) = reason.get_description ()
+         notification = Notify.Notification (title, text, 'printer')
+@@ -1788,7 +1788,7 @@ class JobViewer (GtkGUI):
+                                               (document.encode ('utf-8'),
+                                                printer.encode ('utf-8')),
+                                               'printer')
+-        notification.set_urgency (Notify.URGENCY_LOW)
++        notification.set_urgency (Notify.Urgency.LOW)
+         notification.connect ('closed',
+                               self.on_completed_job_notification_closed)
+         notification.jobid = jobid
