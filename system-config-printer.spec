@@ -16,6 +16,7 @@ Patch7: system-config-printer-utf8-969846.patch
 Patch8: system-config-printer-utf8-971417.patch
 Patch9: system-config-printer-typo.patch
 Patch10: system-config-printer-notify-urgency.patch
+Patch11: system-config-printer-pointer-grab.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -92,6 +93,10 @@ printers.
 
 # Notify urgencies have new names with gi.repository (bug #970646).
 %patch10 -p1 -b .notify-urgency
+
+# Removed old pointer/keyboard grabbing code as it no longer
+# works (bug #971459).
+%patch11 -p1 -b .pointer-grab
 
 %build
 %configure --with-udev-rules
@@ -193,6 +198,8 @@ exit 0
 
 %changelog
 * Thu Jun  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-4
+- Removed old pointer/keyboard grabbing code as it no longer
+  works (bug #971459).
 - Notify urgencies have new names with gi.repository (bug #970646).
 - More fixes for UTF-8 encoding issues (bug #969846, bug #971417).
 
