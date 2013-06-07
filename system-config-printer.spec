@@ -18,6 +18,7 @@ Patch9: system-config-printer-utf8-971548.patch
 Patch10: system-config-printer-typo.patch
 Patch11: system-config-printer-notify-urgency.patch
 Patch12: system-config-printer-pointer-grab.patch
+Patch13: system-config-printer-np-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -100,6 +101,9 @@ printers.
 # Removed old pointer/keyboard grabbing code as it no longer
 # works (bug #971459).
 %patch12 -p1 -b .pointer-grab
+
+# Fixed new printer dialog traceback (bug #969916).
+%patch13 -p1 -b .np-traceback
 
 %build
 %configure --with-udev-rules
@@ -200,6 +204,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com>
+- Fixed new printer dialog traceback (bug #969916).
+
 * Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-5
 - More fixes for UTF-8 encoding issues (bug #971548).
 
