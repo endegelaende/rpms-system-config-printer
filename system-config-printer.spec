@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -14,9 +14,10 @@ Patch5: system-config-printer-utf8-965578.patch
 Patch6: system-config-printer-utf8-965771.patch
 Patch7: system-config-printer-utf8-969846.patch
 Patch8: system-config-printer-utf8-971417.patch
-Patch9: system-config-printer-typo.patch
-Patch10: system-config-printer-notify-urgency.patch
-Patch11: system-config-printer-pointer-grab.patch
+Patch9: system-config-printer-utf8-971548.patch
+Patch10: system-config-printer-typo.patch
+Patch11: system-config-printer-notify-urgency.patch
+Patch12: system-config-printer-pointer-grab.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -79,7 +80,8 @@ printers.
 %patch1 -p1 -b .no-applet-in-gnome
 
 # Fixes for UTF-8 encoding issues (bug #957444, bug #961882,
-# bug #962207, bug #964673, bug #965578, bug #969846, bug #971417).
+# bug #962207, bug #964673, bug #965578, bug #969846, bug #971417,
+# bug #971548).
 %patch2 -p1 -b .utf8-961882
 %patch3 -p1 -b .utf8-962207
 %patch4 -p1 -b .utf8-964673
@@ -87,16 +89,17 @@ printers.
 %patch6 -p1 -b .utf8-965771
 %patch7 -p1 -b .utf8-969846
 %patch8 -p1 -b .utf8-971417
+%patch9 -p1 -b .utf8-971548
 
 # Fixed typo which could cause a traceback (bug #965678).
-%patch9 -p1 -b .typo
+%patch10 -p1 -b .typo
 
 # Notify urgencies have new names with gi.repository (bug #970646).
-%patch10 -p1 -b .notify-urgency
+%patch11 -p1 -b .notify-urgency
 
 # Removed old pointer/keyboard grabbing code as it no longer
 # works (bug #971459).
-%patch11 -p1 -b .pointer-grab
+%patch12 -p1 -b .pointer-grab
 
 %build
 %configure --with-udev-rules
@@ -197,6 +200,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-5
+- More fixes for UTF-8 encoding issues (bug #971548).
+
 * Thu Jun  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-4
 - Removed old pointer/keyboard grabbing code as it no longer
   works (bug #971459).

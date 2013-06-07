@@ -1,0 +1,384 @@
+diff -up system-config-printer-1.4.1/asyncipp.py.utf8-971548 system-config-printer-1.4.1/asyncipp.py
+--- system-config-printer-1.4.1/asyncipp.py.utf8-971548	2013-06-07 11:13:02.040050636 +0100
++++ system-config-printer-1.4.1/asyncipp.py	2013-06-07 11:13:19.561149594 +0100
+@@ -575,7 +575,7 @@ class _IPPAuthOperation:
+         d.set_default_response (Gtk.ResponseType.OK)
+         d.connect ("response", self._on_retry_server_error_response)
+         debugprint ("%s (_reconnect_error): presenting error dialog (%s; %s)" %
+-                    (self, msg, message))
++                    (self, repr (msg), repr (message)))
+         d.show ()
+ 
+     def _on_retry_server_error_response (self, dialog, response):
+@@ -688,11 +688,11 @@ if __name__ == "__main__":
+                                            error_handler=self.connect_failed)
+ 
+         def connected (self, conn, result):
+-            debugprint ("Success: %s" % result)
++            debugprint ("Success: %s" % repr (result))
+             self.get_devices_button.set_sensitive (True)
+ 
+         def connect_failed (self, conn, exc):
+-            debugprint ("Exc %s" % exc)
++            debugprint ("Exc %s" % repr (exc))
+             self.get_devices_button.set_sensitive (False)
+             self.conn.destroy ()
+ 
+@@ -707,7 +707,7 @@ if __name__ == "__main__":
+                 debugprint ("Ignoring stale reply")
+                 return
+ 
+-            debugprint ("Got devices: %s" % result)
++            debugprint ("Got devices: %s" % repr (result))
+             self.get_devices_button.set_sensitive (True)
+ 
+         def get_devices_error (self, conn, exc):
+@@ -715,7 +715,7 @@ if __name__ == "__main__":
+                 debugprint ("Ignoring stale error")
+                 return
+ 
+-            debugprint ("Error getting devices: %s" % exc)
++            debugprint ("Error getting devices: %s" % repr (exc))
+             self.get_devices_button.set_sensitive (True)
+ 
+     UI ()
+diff -up system-config-printer-1.4.1/asyncpk1.py.utf8-971548 system-config-printer-1.4.1/asyncpk1.py
+--- system-config-printer-1.4.1/asyncpk1.py.utf8-971548	2013-06-07 11:13:02.034050602 +0100
++++ system-config-printer-1.4.1/asyncpk1.py	2013-06-07 11:13:19.562149604 +0100
+@@ -84,7 +84,7 @@ class _PK1AsyncMethodCall:
+                         error_handler=self._pk_error_handler,
+                         timeout=3600)
+         except TypeError, e:
+-            debugprint ("Type error in PK call: %s" % e)
++            debugprint ("Type error in PK call: %s" % repr (e))
+             self.call_fallback_fn ()
+ 
+     def _destroy (self):
+@@ -120,7 +120,7 @@ class _PK1AsyncMethodCall:
+             self._destroy ()
+             return
+ 
+-        debugprint ("PolicyKit method failed with: %s" % repr (str (error)))
++        debugprint ("PolicyKit method failed with: %s" % repr (error))
+         self.call_fallback_fn ()
+ 
+     def _pk_error_handler (self, exc):
+@@ -144,7 +144,7 @@ class _PK1AsyncMethodCall:
+             return
+ 
+         debugprint ("PolicyKit call to %s did not work: %s" %
+-                    (self._pk_method_name, exc))
++                    (self._pk_method_name, repr (exc)))
+         self.call_fallback_fn ()
+ 
+     def call_fallback_fn (self):
+@@ -270,7 +270,7 @@ class PK1Connection:
+                     break
+ 
+             except Exception, e:
+-                debugprint ("Exception assessing DevicesGet API: %s" % e)
++                debugprint ("Exception assessing DevicesGet API: %s" % repr (e))
+ 
+         methodtype = type (self._conn.getPrinters)
+         bindings = []
+diff -up system-config-printer-1.4.1/authconn.py.utf8-971548 system-config-printer-1.4.1/authconn.py
+--- system-config-printer-1.4.1/authconn.py.utf8-971548	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/authconn.py	2013-06-07 11:13:19.562149604 +0100
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
+ 
+-## Copyright (C) 2007, 2008, 2009, 2010, 2011 Red Hat, Inc.
++## Copyright (C) 2007, 2008, 2009, 2010, 2011, 2013 Red Hat, Inc.
+ ## Author: Tim Waugh <twaugh@redhat.com>
+ 
+ ## This program is free software; you can redistribute it and/or modify
+@@ -271,7 +271,7 @@ class Connection:
+                     if self._cancel and not self._cannot_auth:
+                         raise cups.IPPError (0, _("Operation canceled"))
+ 
+-                    debugprint ("%s: %s" % (e, m))
++                    debugprint ("%s: %s" % (e, repr (m)))
+                     raise
+             except cups.HTTPError, (s,):
+                 if not self._cancel:
+diff -up system-config-printer-1.4.1/cupshelpers/cupshelpers.py.utf8-971548 system-config-printer-1.4.1/cupshelpers/cupshelpers.py
+--- system-config-printer-1.4.1/cupshelpers/cupshelpers.py.utf8-971548	2013-06-07 11:13:02.025050551 +0100
++++ system-config-printer-1.4.1/cupshelpers/cupshelpers.py	2013-06-07 11:13:19.562149604 +0100
+@@ -701,7 +701,8 @@ def copyPPDOptions(ppd1, ppd2):
+             for choice in new_option.choices:
+                 if choice["choice"]==value:
+                     ppd2.markOption(new_option.keyword, value)
+-                    _debugprint ("set %s = %s" % (new_option.keyword, value))
++                    _debugprint ("set %s = %s" % (repr (new_option.keyword),
++                                                  repr (value)))
+                     
+ def setPPDPageSize(ppd, language):
+     """
+@@ -722,9 +723,9 @@ def setPPDPageSize(ppd, language):
+             size = 'Letter'
+     try:
+         ppd.markOption ('PageSize', size)
+-        _debugprint ("set PageSize = %s" % size)
++        _debugprint ("set PageSize = %s" % repr (size))
+     except:
+-        _debugprint ("Failed to set PageSize (%s not available?)" % size)
++        _debugprint ("Failed to set PageSize (%s not available?)" % repr (size))
+ 
+ def missingExecutables(ppd):
+     """
+@@ -750,10 +751,10 @@ def missingExecutables(ppd):
+             return "true"
+         if name[0] == '/':
+             if os.access (name, os.X_OK):
+-                _debugprint ("%s: found" % name)
++                _debugprint ("%s: found" % repr (name))
+                 return name
+             else:
+-                _debugprint ("%s: NOT found" % name)
++                _debugprint ("%s: NOT found" % repr (name))
+                 return None
+         if name.find ("=") != -1:
+             return "builtin"
+@@ -768,9 +769,9 @@ def missingExecutables(ppd):
+         for component in path.split (':'):
+             file = component.rstrip (os.path.sep) + os.path.sep + name
+             if os.access (file, os.X_OK):
+-                _debugprint ("%s: found" % file)
++                _debugprint ("%s: found" % repr (file))
+                 return file
+-        _debugprint ("%s: NOT found in %s" % (name,path))
++        _debugprint ("%s: NOT found in %s" % (repr (name), repr (path)))
+         return None
+ 
+     exes_to_install = []
+diff -up system-config-printer-1.4.1/cupspk.py.utf8-971548 system-config-printer-1.4.1/cupspk.py
+--- system-config-printer-1.4.1/cupspk.py.utf8-971548	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/cupspk.py	2013-06-07 11:13:19.562149604 +0100
+@@ -1,6 +1,6 @@
+ # vim: set ts=4 sw=4 et: coding=UTF-8
+ #
+-# Copyright (C) 2008 Novell, Inc.
++# Copyright (C) 2008, 2013 Novell, Inc.
+ # Copyright (C) 2008, 2009, 2010, 2012 Red Hat, Inc.
+ # Copyright (C) 2008, 2009, 2010, 2012 Tim Waugh <twaugh@redhat.com>
+ #
+@@ -141,7 +141,7 @@ class Connection:
+         # exception that wasn't handled, or an error in the mechanism itself)
+         if pk_retval != '':
+             debugprint ('PolicyKit call to %s did not work: %s' %
+-                        (pk_function_name, pk_retval))
++                        (pk_function_name, repr (pk_retval)))
+             return fallback_function(*args, **kwds)
+ 
+ 
+diff -up system-config-printer-1.4.1/dnssdresolve.py.utf8-971548 system-config-printer-1.4.1/dnssdresolve.py
+--- system-config-printer-1.4.1/dnssdresolve.py.utf8-971548	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/dnssdresolve.py	2013-06-07 11:13:19.563149612 +0100
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
+ 
+-## Copyright (C) 2010, 2011, 2012 Red Hat, Inc.
++## Copyright (C) 2010, 2011, 2012, 2013 Red Hat, Inc.
+ ## Authors:
+ ##  Tim Waugh <twaugh@redhat.com>
+ 
+@@ -75,7 +75,7 @@ class DNSSDHostNamesResolver:
+                 server = dbus.Interface (obj,
+                                          "org.freedesktop.Avahi.Server")
+                 self._device_uri_by_name[(name, stype, domain)] = uri
+-                debugprint ("Resolving address for %s" % hostname)
++                debugprint ("Resolving address for %s" % repr (hostname))
+                 server.ResolveService (-1, -1,
+                                         name, stype, domain,
+                                         -1, 0,
+@@ -83,7 +83,7 @@ class DNSSDHostNamesResolver:
+                                         error_handler=lambda e:
+                                             self._error (uri, e))
+             except dbus.DBusException, e:
+-                debugprint ("Failed to resolve address: %s" % e)
++                debugprint ("Failed to resolve address: %s" % repr (e))
+                 self._resolved ()
+ 
+     def _resolved (self):
+@@ -107,7 +107,7 @@ class DNSSDHostNamesResolver:
+         self._resolved ()
+ 
+     def _error (self, uri, error):
+-        debugprint ("Error resolving %s: %s" % (uri, error))
++        debugprint ("Error resolving %s: %s" % (uri, repr (error)))
+         self._resolved ()
+ 
+ if __name__ == '__main__':
+diff -up system-config-printer-1.4.1/jobviewer.py.utf8-971548 system-config-printer-1.4.1/jobviewer.py
+--- system-config-printer-1.4.1/jobviewer.py.utf8-971548	2013-06-07 11:13:02.041050641 +0100
++++ system-config-printer-1.4.1/jobviewer.py	2013-06-07 11:13:19.563149612 +0100
+@@ -957,7 +957,8 @@ class JobViewer (GtkGUI):
+                         ind = auth_info_required.index ('password')
+                         auth_info[ind] = items[0].secret
+                     else:
+-                        debugprint ("gnomekeyring: look-up result %s" % result)
++                        debugprint ("gnomekeyring: look-up result %s" %
++                                    repr (result))
+ 
+                 if try_keyring and c == None:
+                     try:
+@@ -1092,7 +1093,8 @@ class JobViewer (GtkGUI):
+                                                                    val)
+                     id = gnomekeyring.item_create_sync (keyring, type, name,
+                                                         attrs, secret, True)
+-                    debugprint ("keyring: created id %d for %s" % (id, name))
++                    debugprint ("keyring: created id %d for %s" % (repr (id),
++                                                                   repr (name)))
+             except:
+                 nonfatalException ()
+ 
+@@ -1833,7 +1835,8 @@ class JobViewer (GtkGUI):
+             for attr, value in jobdata.iteritems ():
+                 if not self.jobs[jobid].has_key (attr):
+                     self.jobs[jobid][attr] = value
+-                    debugprint ("Add %s=%s (my job)" % (attr, value))
++                    debugprint ("Add %s=%s (my job)" % (repr (attr),
++                                                        repr (value)))
+ 
+         # If we failed to get required attributes for the job, bail.
+         if not self.jobiters.has_key (jobid):
+diff -up system-config-printer-1.4.1/newprinter.py.utf8-971548 system-config-printer-1.4.1/newprinter.py
+--- system-config-printer-1.4.1/newprinter.py.utf8-971548	2013-06-07 11:13:02.038050624 +0100
++++ system-config-printer-1.4.1/newprinter.py	2013-06-07 11:13:19.564149619 +0100
+@@ -186,7 +186,7 @@ def download_gpg_fingerprint(url):
+     try:
+         c.perform()
+     except pycurl.error as e:
+-        debugprint('Cannot retrieve %s: %s' % (url, str(e)))
++        debugprint('Cannot retrieve %s: %s' % (url, repr (e)))
+         return None
+ 
+     keyid_re = re.compile(' ((?:(?:[0-9A-F]{4})(?:\s+|$)){2})$', re.M)
+@@ -898,7 +898,7 @@ class NewPrinterGUI(GtkGUI):
+             debugprint('No packages for driver')
+             return False
+         if len(arches) > 1:
+-            debugprint('Returned more than one matching architecture, please report this as a bug: %s', str(arches))
++            debugprint('Returned more than one matching architecture, please report this as a bug: %s', repr (arches))
+             return False
+ 
+         pkgs = pkgs[arches[0]]
+@@ -933,14 +933,18 @@ class NewPrinterGUI(GtkGUI):
+ 
+         repo = pkgs[pkg].get('repositories', {}).get(self.packageinstaller)
+         if not repo:
+-            debugprint('Local package system %s not found in %s',
+-                          self.packageinstaller, pkgs[pkg].get('repositories', {}))
++            debugprint('Local package system %s not found in %s' %
++                       (self.packageinstaller,
++                        repr (pkgs[pkg].get('repositories', {}))))
+             return False
+ 
+         if onlycheckpresence:
+             return True
+ 
+-        debugprint('Installing driver: "%s"; Repo: "%s"; Key ID: "%s"' % (name, repo, keyid))
++        debugprint('Installing driver: %s; Repo: %s; Key ID: %s' %
++                   (repr (name),
++                    repr (repo),
++                    repr (keyid)))
+ 
+         fmt = _("Installing driver %s" % name)
+         self._installdialog = Gtk.MessageDialog (parent=self.NewPrinterWindow,
+@@ -2521,7 +2525,7 @@ class NewPrinterGUI(GtkGUI):
+         for char in origtext:
+             if char not in allowed_chars:
+                 new_text = new_text.replace(char, "")
+-                debugprint ("removed disallowed character %s" % char)
++                debugprint ("removed disallowed character %s" % repr (char))
+         if origtext!=new_text:
+             entry.set_text(new_text)
+ 
+@@ -2958,7 +2962,7 @@ class NewPrinterGUI(GtkGUI):
+         if text.find (":") != -1:
+             # The user is typing in a URI.  In that case, switch to URI entry.
+             ent.set_text ('')
+-            debugprint ("URI detected (%s) -> Enter URI" % text)
++            debugprint ("URI detected (%s) -> Enter URI" % repr (text))
+             self.entNPTDevice.set_text (text)
+             model = self.tvNPDevices.get_model ()
+             path = model.get_path (self.devices_uri_iter)
+@@ -3146,7 +3150,7 @@ class NewPrinterGUI(GtkGUI):
+         label = self.btnNPDownloadableDriverSearch_label
+         label.set_text (_("Searching"))
+         searchterm = self.entNPDownloadableDriverSearch.get_text ()
+-        debugprint ('Searching for "%s"' % searchterm)
++        debugprint ('Searching for "%s"' % repr (searchterm))
+         self.drivers_lock.acquire ()
+         self.openprinting_query_handle = \
+             self.openprinting.searchPrinters (searchterm,
+@@ -3742,7 +3746,7 @@ class NewPrinterGUI(GtkGUI):
+                             os.unlink(ppdname)
+ 
+         except RuntimeError, e:
+-            debugprint ("RuntimeError: " + str(e))
++            debugprint ("RuntimeError: " + repr (e))
+             if self.rbtnNPFoomatic.get_active():
+                 # Foomatic database problem of some sort.
+                 err_title = _('Database error')
+diff -up system-config-printer-1.4.1/ppdcache.py.utf8-971548 system-config-printer-1.4.1/ppdcache.py
+--- system-config-printer-1.4.1/ppdcache.py.utf8-971548	2013-05-09 12:10:44.000000000 +0100
++++ system-config-printer-1.4.1/ppdcache.py	2013-06-07 11:13:19.564149619 +0100
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
+ 
+-## Copyright (C) 2010, 2011, 2012 Red Hat, Inc.
++## Copyright (C) 2010, 2011, 2012, 2013 Red Hat, Inc.
+ ## Authors:
+ ##  Tim Waugh <twaugh@redhat.com>
+ 
+@@ -73,7 +73,7 @@ class PPDCache:
+ 
+                 return
+ 
+-            debugprint ("%s: fetch PPD for %s" % (self, name))
++            debugprint ("%s: fetch PPD for %s" % (self, repr (name)))
+             self._cups.getPPD3 (name,
+                                 reply_handler=lambda c, r:
+                                     self._got_ppd3 (c, name, r, callback),
+@@ -188,8 +188,8 @@ if __name__ == "__main__":
+ 
+     def signal (name, result, exc):
+         debugprint ("**** %s" % name)
+-        debugprint (result)
+-        debugprint (exc)
++        debugprint (repr (result))
++        debugprint (repr (exc))
+ 
+     c = cups.Connection ()
+     printers = c.getPrinters ()
+diff -up system-config-printer-1.4.1/ppdsloader.py.utf8-971548 system-config-printer-1.4.1/ppdsloader.py
+--- system-config-printer-1.4.1/ppdsloader.py.utf8-971548	2013-05-09 12:10:44.000000000 +0100
++++ system-config-printer-1.4.1/ppdsloader.py	2013-06-07 11:13:19.564149619 +0100
+@@ -222,7 +222,7 @@ class PPDsLoader(GObject.GObject):
+                                          error_handler=self._packagekit_error,
+                                          timeout=3600)
+         except Exception, e:
+-            debugprint ("Failed to talk to PackageKit: %s" % e)
++            debugprint ("Failed to talk to PackageKit: %s" % repr (e))
+             if self._dialog:
+                 self._dialog.show_all ()
+                 self._query_cups ()
+@@ -235,7 +235,7 @@ class PPDsLoader(GObject.GObject):
+             self._query_cups ()
+ 
+     def _packagekit_error (self, exc):
+-        debugprint ("Got PackageKit error: %s" % exc)
++        debugprint ("Got PackageKit error: %s" % repr (exc))
+         if self._dialog:
+             self._dialog.show_all ()
+             self._query_cups ()
+@@ -262,7 +262,7 @@ class PPDsLoader(GObject.GObject):
+         self._query_cups ()
+ 
+     def _jockey_error (self, exc):
+-        debugprint ("Got Jockey error: %s" % exc)
++        debugprint ("Got Jockey error: %s" % repr (exc))
+         if self._need_requery_cups:
+             self._query_cups ()
+         else:
