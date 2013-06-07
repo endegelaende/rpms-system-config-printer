@@ -20,6 +20,7 @@ Patch11: system-config-printer-typo.patch
 Patch12: system-config-printer-notify-urgency.patch
 Patch13: system-config-printer-pointer-grab.patch
 Patch14: system-config-printer-np-traceback.patch
+Patch15: system-config-printer-rename.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -207,6 +208,8 @@ exit 0
 
 %changelog
 * Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-6
+- Use the right signal for spotting when editing is done when renaming
+  a printer (bug #971404).
 - More fixes for UTF-8 encoding issues (bug #968142).
 - Fixed new printer dialog traceback (bug #969916).
 
