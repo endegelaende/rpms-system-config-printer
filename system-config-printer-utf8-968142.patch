@@ -1,0 +1,15 @@
+diff -up system-config-printer-1.4.1/PhysicalDevice.py.utf8-968142 system-config-printer-1.4.1/PhysicalDevice.py
+--- system-config-printer-1.4.1/PhysicalDevice.py.utf8-968142	2013-02-19 16:18:35.000000000 +0000
++++ system-config-printer-1.4.1/PhysicalDevice.py	2013-06-07 12:44:55.756548280 +0100
+@@ -75,6 +75,11 @@ class PhysicalDevice:
+ 
+         if hostport:
+             (host, port) = urllib.splitport (hostport)
++
++        if type (host) == unicode:
++            host = host.encode ('utf-8')
++        if type (dnssdhost) == unicode:
++            dnssdhost = dnssdhost.encode ('utf-8')
+         return host, dnssdhost
+ 
+     def add_device (self, device):

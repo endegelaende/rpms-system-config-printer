@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -15,10 +15,11 @@ Patch6: system-config-printer-utf8-965771.patch
 Patch7: system-config-printer-utf8-969846.patch
 Patch8: system-config-printer-utf8-971417.patch
 Patch9: system-config-printer-utf8-971548.patch
-Patch10: system-config-printer-typo.patch
-Patch11: system-config-printer-notify-urgency.patch
-Patch12: system-config-printer-pointer-grab.patch
-Patch13: system-config-printer-np-traceback.patch
+Patch10: system-config-printer-utf8-968142.patch
+Patch11: system-config-printer-typo.patch
+Patch12: system-config-printer-notify-urgency.patch
+Patch13: system-config-printer-pointer-grab.patch
+Patch14: system-config-printer-np-traceback.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -82,7 +83,7 @@ printers.
 
 # Fixes for UTF-8 encoding issues (bug #957444, bug #961882,
 # bug #962207, bug #964673, bug #965578, bug #969846, bug #971417,
-# bug #971548).
+# bug #971548, bug #968142).
 %patch2 -p1 -b .utf8-961882
 %patch3 -p1 -b .utf8-962207
 %patch4 -p1 -b .utf8-964673
@@ -91,19 +92,20 @@ printers.
 %patch7 -p1 -b .utf8-969846
 %patch8 -p1 -b .utf8-971417
 %patch9 -p1 -b .utf8-971548
+%patch10 -p1 -b .utf8-968142
 
 # Fixed typo which could cause a traceback (bug #965678).
-%patch10 -p1 -b .typo
+%patch11 -p1 -b .typo
 
 # Notify urgencies have new names with gi.repository (bug #970646).
-%patch11 -p1 -b .notify-urgency
+%patch12 -p1 -b .notify-urgency
 
-# Removed old pointer/keyboard grabbing code as it no longer
-# works (bug #971459).
-%patch12 -p1 -b .pointer-grab
+# Removed old pointer/keyboard grabbing code as it no longer works
+# (bug #971459).
+%patch13 -p1 -b .pointer-grab
 
 # Fixed new printer dialog traceback (bug #969916).
-%patch13 -p1 -b .np-traceback
+%patch14 -p1 -b .np-traceback
 
 %build
 %configure --with-udev-rules
@@ -204,7 +206,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
-* Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com>
+* Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-6
+- More fixes for UTF-8 encoding issues (bug #968142).
 - Fixed new printer dialog traceback (bug #969916).
 
 * Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-5
