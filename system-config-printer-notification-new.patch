@@ -1,0 +1,73 @@
+diff -up system-config-printer-1.4.1/applet.py.notification-new system-config-printer-1.4.1/applet.py
+--- system-config-printer-1.4.1/applet.py.notification-new	2013-06-20 10:29:22.210332443 +0200
++++ system-config-printer-1.4.1/applet.py	2013-06-20 10:31:35.804055082 +0200
+@@ -80,9 +80,9 @@ class NewPrinterNotification(dbus.servic
+     def GetReady (self):
+         TIMEOUT=1200000
+         if self.getting_ready == 0:
+-            n = Notify.Notification (_("Configuring new printer"),
+-                                     _("Please wait..."),
+-                                     'printer')
++            n = Notify.Notification.new (_("Configuring new printer"),
++                                         _("Please wait..."),
++                                        'printer')
+             n.set_timeout (TIMEOUT + 5000)
+             n.closed = False
+             n.connect ('closed', self.on_notification_closed)
+@@ -120,7 +120,7 @@ class NewPrinterNotification(dbus.servic
+                 text = _("No printer driver for %s.") % device
+             else:
+                 text = _("No driver for this printer.")
+-            n = Notify.Notification (title, text, 'printer')
++            n = Notify.Notification.new (title, text, 'printer')
+             if "actions" in Notify.get_server_caps():
+                 n.set_urgency (Notify.Urgency.CRITICAL)
+                 n.set_timeout (Notify.EXPIRES_NEVER)
+@@ -169,7 +169,7 @@ class NewPrinterNotification(dbus.servic
+                 pkgs = reduce (lambda x,y: x + ", " + y, missing_pkgs)
+                 title = _("Install printer driver")
+                 text = _("`%s' requires driver installation: %s.") % (name, pkgs)
+-                n = Notify.Notification (title, text)
++                n = Notify.Notification.new (title, text, 'printer')
+                 import installpackage
+                 if "actions" in Notify.get_server_caps():
+                     try:
+@@ -192,7 +192,7 @@ class NewPrinterNotification(dbus.servic
+             elif status == self.STATUS_SUCCESS:
+                 devid = "MFG:%s;MDL:%s;DES:%s;CMD:%s;" % (mfg, mdl, des, cmd)
+                 text = _("`%s' is ready for printing.") % name
+-                n = Notify.Notification (title, text)
++                n = Notify.Notification.new (title, text, 'printer')
+                 if "actions" in Notify.get_server_caps():
+                     n.set_urgency (Notify.Urgency.NORMAL)
+                     n.add_action ("test-page", _("Print test page"),
+@@ -204,7 +204,7 @@ class NewPrinterNotification(dbus.servic
+                 devid = "MFG:%s;MDL:%s;DES:%s;CMD:%s;" % (mfg, mdl, des, cmd)
+                 text = (_("`%s' has been added, using the `%s' driver.") %
+                         (name, driver))
+-                n = Notify.Notification (title, text, 'printer')
++                n = Notify.Notification.new (title, text, 'printer')
+                 if "actions" in Notify.get_server_caps():
+                     n.set_urgency (Notify.Urgency.CRITICAL)
+                     n.add_action ("test-page", _("Print test page"),
+diff -up system-config-printer-1.4.1/jobviewer.py.notification-new system-config-printer-1.4.1/jobviewer.py
+--- system-config-printer-1.4.1/jobviewer.py.notification-new	2013-06-20 10:29:22.211332429 +0200
++++ system-config-printer-1.4.1/jobviewer.py	2013-06-20 10:29:22.224332252 +0200
+@@ -1731,7 +1731,7 @@ class JobViewer (GtkGUI):
+             urgency = Notify.Urgency.LOW
+ 
+         (title, text) = reason.get_description ()
+-        notification = Notify.Notification (title, text, 'printer')
++        notification = Notify.Notification.new (title, text, 'printer')
+         reason.user_notified = True
+         notification.set_urgency (urgency)
+         if self.notify_has_actions:
+@@ -1784,7 +1784,7 @@ class JobViewer (GtkGUI):
+                     return
+ 
+         printer = job.get ('job-printer-name', _("Unknown"))
+-        notification = Notify.Notification (_("Document printed"),
++        notification = Notify.Notification.new (_("Document printed"),
+                                               _("Document `%s' has been sent "
+                                                 "to `%s' for printing.") %
+                                               (document.encode ('utf-8'),

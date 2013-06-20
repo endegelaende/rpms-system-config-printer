@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -21,6 +21,7 @@ Patch12: system-config-printer-notify-urgency.patch
 Patch13: system-config-printer-pointer-grab.patch
 Patch14: system-config-printer-np-traceback.patch
 Patch15: system-config-printer-rename.patch
+Patch16: system-config-printer-notification-new.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -107,6 +108,13 @@ printers.
 
 # Fixed new printer dialog traceback (bug #969916).
 %patch14 -p1 -b .np-traceback
+
+# Use the right signal for spotting when editing is done when renaming
+# a printer (bug #971404).
+%patch15 -p1 -b .rename
+
+# Fix Notify.Notification creation (bug #974845).
+%patch16 -p1 -b .notification-new
 
 %build
 %configure --with-udev-rules
@@ -207,6 +215,10 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Jun 20 2013 Jiri Popelka <jpopelka@redhat.com> - 1.4.1-7
+- Fix Notify.Notification creation (bug #974845).
+- Really apply patch for bug #971404.
+
 * Fri Jun  7 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-6
 - Use the right signal for spotting when editing is done when renaming
   a printer (bug #971404).
