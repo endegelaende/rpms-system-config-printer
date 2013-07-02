@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.4.1/jobviewer.py.misplaced-paren system-config-printer-1.4.1/jobviewer.py
+--- system-config-printer-1.4.1/jobviewer.py.misplaced-paren	2013-07-02 12:54:47.487847459 +0100
++++ system-config-printer-1.4.1/jobviewer.py	2013-07-02 12:56:17.649270440 +0100
+@@ -1953,7 +1953,7 @@ class JobViewer (GtkGUI):
+                 if notify_text.find ("backend errors") != -1:
+                     message = (_("There was a problem sending document `%s' "
+                                  "(job %d) to the printer.") %
+-                               (document.encode ('utf-8', jobid)))
++                               (document.encode ('utf-8'), jobid))
+                 elif notify_text.find ("filter errors") != -1:
+                     message = _("There was a problem processing document `%s' "
+                                 "(job %d).") % (document.encode ('utf-8'),

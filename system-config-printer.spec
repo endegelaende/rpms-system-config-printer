@@ -27,6 +27,7 @@ Patch18: system-config-printer-statusicon-geometry.patch
 Patch19: system-config-printer-remote-missing.patch
 Patch20: system-config-printer-rename-race.patch
 Patch21: system-config-printer-utf8-978970.patch
+Patch22: system-config-printer-misplaced-paren.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -136,6 +137,9 @@ printers.
 # Fixed another codec issue (bug #978970).
 %patch21 -p1 -b .utf8-978970
 
+# Fixed misplaced parenthesis (bug #979119).
+%patch22 -p1 -b .misplaced-paren
+
 %build
 %configure --with-udev-rules
 
@@ -236,6 +240,7 @@ exit 0
 
 %changelog
 * Tue Jul  2 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-8
+- Fixed misplaced parenthesis (bug #979119).
 - Fixed another codec issue (bug #978970).
 - Avoid race when renaming printer (bug #975705).
 - Don't check for missing drivers in remote printers (bug #975058)
