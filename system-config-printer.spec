@@ -23,6 +23,7 @@ Patch14: system-config-printer-np-traceback.patch
 Patch15: system-config-printer-rename.patch
 Patch16: system-config-printer-notification-new.patch
 Patch17: system-config-printer-utf8-971973.patch
+Patch18: system-config-printer-statusicon-geometry.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -119,6 +120,9 @@ printers.
 
 # Fixed another codec issue (bug #971973).
 %patch17 -p1 -b .utf8-971973
+
+# Another fix from the move to gi.repository (bug #973662).
+%patch18 -p1 -b .statusicon-geometry
 
 %build
 %configure --with-udev-rules
@@ -220,6 +224,7 @@ exit 0
 
 %changelog
 * Tue Jul  2 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-8
+- Another fix from the move to gi.repository (bug #973662).
 - Fixed another codec issue (bug #971973).
 
 * Thu Jun 20 2013 Jiri Popelka <jpopelka@redhat.com> - 1.4.1-7
