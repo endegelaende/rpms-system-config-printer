@@ -1,0 +1,14 @@
+diff -up system-config-printer-1.4.1/system-config-printer.py.rename-race system-config-printer-1.4.1/system-config-printer.py
+--- system-config-printer-1.4.1/system-config-printer.py.rename-race	2013-07-02 12:49:47.708150432 +0100
++++ system-config-printer-1.4.1/system-config-printer.py	2013-07-02 12:50:22.388173828 +0100
+@@ -1278,6 +1278,10 @@ class GUI(GtkGUI):
+             return
+ 
+         (res, path, cell) = tuple
++        if path == None:
++            # Printer removed?
++            return
++
+         if type (cell) != Gtk.CellRendererText:
+             cells = self.dests_iconview.get_cells ()
+             for cell in cells:
