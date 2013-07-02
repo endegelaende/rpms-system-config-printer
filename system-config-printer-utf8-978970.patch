@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.4.1/system-config-printer.py.utf8-978970 system-config-printer-1.4.1/system-config-printer.py
+--- system-config-printer-1.4.1/system-config-printer.py.utf8-978970	2013-07-02 12:51:32.083930404 +0100
++++ system-config-printer-1.4.1/system-config-printer.py	2013-07-02 12:53:25.668419559 +0100
+@@ -1324,7 +1324,7 @@ class GUI(GtkGUI):
+             self.rename_entry_sigids.append ((editable, id))
+ 
+     def printer_name_editing (self, entry):
+-        newname = origname = unicode (entry.get_text())
++        newname = origname = entry.get_text().decode ('utf-8')
+         newname = newname.replace("/", "")
+         newname = newname.replace("#", "")
+         newname = newname.replace(" ", "")
