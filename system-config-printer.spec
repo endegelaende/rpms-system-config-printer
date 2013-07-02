@@ -24,6 +24,7 @@ Patch15: system-config-printer-rename.patch
 Patch16: system-config-printer-notification-new.patch
 Patch17: system-config-printer-utf8-971973.patch
 Patch18: system-config-printer-statusicon-geometry.patch
+Patch19: system-config-printer-remote-missing.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -123,6 +124,9 @@ printers.
 
 # Another fix from the move to gi.repository (bug #973662).
 %patch18 -p1 -b .statusicon-geometry
+
+# Don't check for missing drivers in remote printers (bug #975058)
+%patch19 -p1 -b .remote-missing
 
 %build
 %configure --with-udev-rules
@@ -224,6 +228,7 @@ exit 0
 
 %changelog
 * Tue Jul  2 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-8
+- Don't check for missing drivers in remote printers (bug #975058)
 - Another fix from the move to gi.repository (bug #973662).
 - Fixed another codec issue (bug #971973).
 

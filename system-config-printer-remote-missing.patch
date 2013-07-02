@@ -1,0 +1,71 @@
+diff -up system-config-printer-1.4.1/newprinter.py.remote-missing system-config-printer-1.4.1/newprinter.py
+--- system-config-printer-1.4.1/newprinter.py.remote-missing	2013-07-02 12:47:40.326084898 +0100
++++ system-config-printer-1.4.1/newprinter.py	2013-07-02 12:48:29.943214126 +0100
+@@ -3894,9 +3894,6 @@ class NewPrinterGUI(GtkGUI):
+         else:
+             name = self._name
+ 
+-        # Whether to check for missing drivers.
+-        check = False
+-        checkppd = None
+         ppd = self.ppd
+ 
+         if self.dialog_mode == "class":
+@@ -3936,7 +3933,6 @@ class NewPrinterGUI(GtkGUI):
+                 if isinstance(ppd, str) or isinstance(ppd, unicode):
+                     self.cups.addPrinter(name, ppdname=ppd,
+                          device=uri, info=info, location=location)
+-                    check = True
+                 elif ppd is None: # raw queue
+                     self.cups.addPrinter(name, device=uri,
+                                          info=info, location=location)
+@@ -3944,8 +3940,6 @@ class NewPrinterGUI(GtkGUI):
+                     cupshelpers.setPPDPageSize(ppd, self.language[0])
+                     self.cups.addPrinter(name, ppd=ppd, device=uri,
+                                          info=info, location=location)
+-                    check = True
+-                    checkppd = ppd
+             except cups.IPPError, (e, msg):
+                 ready (self.NewPrinterWindow)
+                 self.show_IPP_Error(e, msg)
+@@ -4041,10 +4035,6 @@ class NewPrinterGUI(GtkGUI):
+ 
+             self.cups._end_operation ()
+ 
+-            if not raw:
+-                check = True
+-                checkppd = ppd
+-
+         self.NewPrinterWindow.hide()
+         if self.dialog_mode in ["printer", "printer_with_uri", "class"]:
+             self.emit ('printer-added', name)
+diff -up system-config-printer-1.4.1/system-config-printer.py.remote-missing system-config-printer-1.4.1/system-config-printer.py
+--- system-config-printer-1.4.1/system-config-printer.py.remote-missing	2013-07-02 12:47:40.328085296 +0100
++++ system-config-printer-1.4.1/system-config-printer.py	2013-07-02 12:48:29.944214283 +0100
+@@ -1846,20 +1846,19 @@ class GUI(GtkGUI):
+ 
+             iter = model.iter_next (iter)
+ 
+-        # Finally, suggest printing a test page.
++        # Any missing drivers?
+         self.propertiesDlg.load (name)
+-        if self.propertiesDlg.ppd or \
+-           ((self.propertiesDlg.printer.remote or \
+-             ((self.propertiesDlg.printer.device_uri.startswith('dnssd:') or \
+-               self.propertiesDlg.printer.device_uri.startswith('mdns:')) and \
+-              self.propertiesDlg.printer.device_uri.endswith('/cups'))) and not\
+-            self.propertiesDlg.printer.discovered):
++        if (self.propertiesDlg.ppd and
++            not (self.propertiesDlg.printer.discovered or
++                 self.propertiesDlg.printer.remote)):
+             try:
+                 self.checkDriverExists (self.PrintersWindow, name,
+                                         ppd=self.propertiesDlg.ppd)
+             except:
+                 nonfatalException()
+ 
++        # Finally, suggest printing a test page.
++        if self.propertiesDlg.ppd:
+             q = Gtk.MessageDialog (self.PrintersWindow,
+                                    Gtk.DialogFlags.DESTROY_WITH_PARENT |
+                                    Gtk.DialogFlags.MODAL,
