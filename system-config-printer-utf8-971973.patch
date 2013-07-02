@@ -1,0 +1,540 @@
+diff -up system-config-printer-1.4.1/applet.py.utf8-971973 system-config-printer-1.4.1/applet.py
+--- system-config-printer-1.4.1/applet.py.utf8-971973	2013-07-02 09:36:22.064027939 +0100
++++ system-config-printer-1.4.1/applet.py	2013-07-02 09:36:31.200068904 +0100
+@@ -117,7 +117,7 @@ class NewPrinterNotification(dbus.servic
+                     device = "%s %s" % (mfg, mdl)
+                 else:
+                     device = des
+-                text = _("No printer driver for %s.") % device
++                text = _("No printer driver for %s.").decode ('utf-8') % device
+             else:
+                 text = _("No driver for this printer.")
+             n = Notify.Notification.new (title, text, 'printer')
+@@ -202,7 +202,7 @@ class NewPrinterNotification(dbus.servic
+                                   lambda x, y: self.configure (x, y, name))
+             else: # Model mismatch
+                 devid = "MFG:%s;MDL:%s;DES:%s;CMD:%s;" % (mfg, mdl, des, cmd)
+-                text = (_("`%s' has been added, using the `%s' driver.") %
++                text = (_("`%s' has been added, using the `%s' driver.").decode ('utf-8') %
+                         (name, driver))
+                 n = Notify.Notification.new (title, text, 'printer')
+                 if "actions" in Notify.get_server_caps():
+diff -up system-config-printer-1.4.1/asyncipp.py.utf8-971973 system-config-printer-1.4.1/asyncipp.py
+--- system-config-printer-1.4.1/asyncipp.py.utf8-971973	2013-07-02 09:36:22.056027904 +0100
++++ system-config-printer-1.4.1/asyncipp.py	2013-07-02 09:36:31.200068904 +0100
+@@ -474,7 +474,7 @@ class _IPPAuthOperation:
+         if op == None:
+             d = authconn.AuthDialog (parent=conn.parent)
+         else:
+-            title = _("Authentication (%s)") % op
++            title = _("Authentication (%s)").decode ('utf-8') % op
+             d = authconn.AuthDialog (title=title,
+                                      parent=conn.parent)
+ 
+@@ -551,7 +551,7 @@ class _IPPAuthOperation:
+         if op == None:
+             msg = _("CUPS server error")
+         else:
+-            msg = _("CUPS server error (%s)") % op
++            msg = _("CUPS server error (%s)").decode ('utf-8') % op
+ 
+         d = Gtk.MessageDialog (self._conn.parent,
+                                Gtk.DialogFlags.MODAL |
+diff -up system-config-printer-1.4.1/authconn.py.utf8-971973 system-config-printer-1.4.1/authconn.py
+--- system-config-printer-1.4.1/authconn.py.utf8-971973	2013-07-02 09:36:22.051027881 +0100
++++ system-config-printer-1.4.1/authconn.py	2013-07-02 09:36:31.200068904 +0100
+@@ -286,7 +286,8 @@ class Connection:
+             Gdk.threads_enter ()
+ 
+         try:
+-            msg = _("CUPS server error (%s)") % self._operation_stack[0]
++            msg = (_("CUPS server error (%s)").decode ('utf-8') %
++                   self._operation_stack[0])
+         except IndexError:
+             msg = _("CUPS server error")
+ 
+@@ -461,7 +462,8 @@ class Connection:
+         # Prompt.
+         if len (self._operation_stack) > 0:
+             try:
+-                title = _("Authentication (%s)") % self._operation_stack[0]
++                title = (_("Authentication (%s)").decode ('utf-8') %
++                         self._operation_stack[0])
+             except IndexError:
+                 title = _("Authentication")
+ 
+diff -up system-config-printer-1.4.1/errordialogs.py.utf8-971973 system-config-printer-1.4.1/errordialogs.py
+--- system-config-printer-1.4.1/errordialogs.py.utf8-971973	2013-05-09 12:10:43.000000000 +0100
++++ system-config-printer-1.4.1/errordialogs.py	2013-07-02 09:36:31.201068906 +0100
+@@ -2,7 +2,7 @@
+ 
+ ## system-config-printer
+ 
+-## Copyright (C) 2006, 2007, 2008, 2010 Red Hat, Inc.
++## Copyright (C) 2006, 2007, 2008, 2010, 2013 Red Hat, Inc.
+ ## Authors:
+ ##  Florian Festi <ffesti@redhat.com>
+ ##  Tim Waugh <twaugh@redhat.com>
+@@ -52,7 +52,7 @@ def show_IPP_Error(exception, message, p
+     else:
+         title = _("CUPS server error")
+         text = (_("There was an error during the CUPS "
+-                  "operation: '%s'.")) % message
++                  "operation: '%s'.").decode ('utf-8')) % message
+ 
+     show_error_dialog (title, text, parent)
+ 
+@@ -78,8 +78,8 @@ def show_HTTP_Error(status, parent=None)
+         elif status == -1:
+             msg = _("Not connected")
+         else:
+-            msg = _("status %s") % status
++            msg = _("status %s").decode ('utf-8') % status
+ 
+-        text = _("There was an HTTP error: %s.") % msg
++        text = _("There was an HTTP error: %s.").decode ('utf-8') % msg
+ 
+     show_error_dialog (title, text, parent)
+diff -up system-config-printer-1.4.1/jobviewer.py.utf8-971973 system-config-printer-1.4.1/jobviewer.py
+--- system-config-printer-1.4.1/jobviewer.py.utf8-971973	2013-07-02 09:36:22.064027939 +0100
++++ system-config-printer-1.4.1/jobviewer.py	2013-07-02 09:36:31.201068906 +0100
+@@ -267,7 +267,7 @@ class CancelJobsOperation(GObject.GObjec
+         else:
+             operation = _("canceling job")
+ 
+-        self.connection._begin_operation (operation)
++        self.connection._begin_operation (operation.decode ('utf-8'))
+         self.connection.cancelJob (self.jobids[0], self.purge_job,
+                                    reply_handler=self.cancelJob_finish,
+                                    error_handler=self.cancelJob_error)
+@@ -502,7 +502,7 @@ class JobViewer (GtkGUI):
+                 title = _("my jobs")
+         else:
+             if specific_dests:
+-                title = "%s" % the_dests
++                title = "%s" % the_dests.encode ('utf-8')
+             else:
+                 title = _("all jobs")
+         self.JobsWindow.set_title (_("Document Print Status (%s)") % title)
+@@ -971,7 +971,7 @@ class JobViewer (GtkGUI):
+ 
+                 if try_keyring and auth_info != None:
+                     try:
+-                        c._begin_operation (_("authenticating job"))
++                        c._begin_operation (_("authenticating job").decode ('utf-8'))
+                         c.authenticateJob (job, auth_info)
+                         c._end_operation ()
+                         self.update_monitor ()
+@@ -1053,7 +1053,7 @@ class JobViewer (GtkGUI):
+             return
+ 
+         remember = False
+-        c._begin_operation (_("authenticating job"))
++        c._begin_operation (_("authenticating job").decode ('utf-8'))
+         try:
+             c.authenticateJob (jobid, auth_info)
+             remember = dialog.get_remember_password ()
+@@ -1313,7 +1313,7 @@ class JobViewer (GtkGUI):
+             return
+ 
+         for jobid in self.jobids:
+-            c._begin_operation (_("holding job"))
++            c._begin_operation (_("holding job").decode ('utf-8'))
+             try:
+                 c.setJobHoldUntil (jobid, "indefinite")
+             except cups.IPPError, (e, m):
+@@ -1338,7 +1338,7 @@ class JobViewer (GtkGUI):
+             return
+ 
+         for jobid in self.jobids:
+-            c._begin_operation (_("releasing job"))
++            c._begin_operation (_("releasing job").decode ('utf-8'))
+             try:
+                 c.setJobHoldUntil (jobid, "no-hold")
+             except cups.IPPError, (e, m):
+@@ -2246,7 +2246,8 @@ class JobViewer (GtkGUI):
+                             os.environ["TZ"] = old_tz
+ 
+                         local = time.localtime (simpletime)
+-                        state = _("Held until %s") % time.strftime ("%X", local)
++                        state = (_("Held until %s") %
++                                 time.strftime ("%X", local).encode ('utf-8'))
+                 except ValueError:
+                     pass
+             if until == "day-time":
+diff -up system-config-printer-1.4.1/newprinter.py.utf8-971973 system-config-printer-1.4.1/newprinter.py
+--- system-config-printer-1.4.1/newprinter.py.utf8-971973	2013-07-02 09:36:22.061027926 +0100
++++ system-config-printer-1.4.1/newprinter.py	2013-07-02 09:36:31.202068908 +0100
+@@ -716,8 +716,7 @@ class NewPrinterGUI(GtkGUI):
+                 if scheme in ["socket", "lpd", "ipp"]:
+                     schemes.extend (["snmp", "dnssd"])
+                 self.fetchDevices_conn = asyncconn.Connection ()
+-                self.fetchDevices_conn._begin_operation (_("fetching device "
+-                                                           "list"))
++                self.fetchDevices_conn._begin_operation (_("fetching device list").decode ('utf-8'))
+                 self.inc_spinner_task ()
+                 cupshelpers.getDevices (self.fetchDevices_conn,
+                                         include_schemes=schemes,
+@@ -946,7 +945,7 @@ class NewPrinterGUI(GtkGUI):
+                     repr (repo),
+                     repr (keyid)))
+ 
+-        fmt = _("Installing driver %s" % name)
++        fmt = _("Installing driver %s").decode ('utf-8') % name
+         self._installdialog = Gtk.MessageDialog (parent=self.NewPrinterWindow,
+                                                  flags=Gtk.DialogFlags.MODAL |
+                                                  Gtk.DialogFlags.DESTROY_WITH_PARENT,
+@@ -1986,7 +1985,7 @@ class NewPrinterGUI(GtkGUI):
+ 
+     def start_fetching_devices (self):
+         self.fetchDevices_conn = asyncconn.Connection ()
+-        self.fetchDevices_conn._begin_operation (_("fetching device list"))
++        self.fetchDevices_conn._begin_operation (_("fetching device list").decode ('utf-8'))
+         self.fetchDevices (network=False, current_uri=self.current_uri)
+         del self.current_uri
+ 
+@@ -2625,7 +2624,8 @@ class NewPrinterGUI(GtkGUI):
+                     if queue[0] == '/':
+                         queue = queue[1:]
+ 
+-                    device.menuentry = _("LPD/LPR queue '%s'") % queue
++                    device.menuentry = (_("LPD/LPR queue '%s'").decode ('utf-8')
++                                        % queue)
+                 else:
+                     device.menuentry = _("LPD/LPR queue")
+ 
+@@ -2641,7 +2641,8 @@ class NewPrinterGUI(GtkGUI):
+                     if queue.startswith("printers/"):
+                         queue = queue[9:]
+                 if queue != '':
+-                    device.menuentry = _("IPP") + " (%s)" % queue
++                    device.menuentry = (_("IPP").decode ('utf-8') +
++                                        " (%s)" % queue)
+                 else:
+                     device.menuentry = _("IPP")
+             elif device.type == "http" or device.type == "https":
+@@ -2665,8 +2666,8 @@ class NewPrinterGUI(GtkGUI):
+                     elif name.find("._pdl-datastream") != -1:
+                         protocol = "AppSocket/JetDirect"
+                     if protocol != None:
+-                        device.menuentry = \
+-                            _("%s network printer via DNS-SD") % protocol
++                        device.menuentry = (_("%s network printer via DNS-SD").decode ('utf-8')
++                                            % protocol)
+                     else:
+                         device.menuentry = \
+                             _("Network printer via DNS-SD")
+@@ -3751,7 +3752,7 @@ class NewPrinterGUI(GtkGUI):
+                 # Foomatic database problem of some sort.
+                 err_title = _('Database error')
+                 err_text = _("The '%s' driver cannot be "
+-                             "used with printer '%s %s'.")
++                             "used with printer '%s %s'.").decode ('utf-8')
+                 model, iter = (self.tvNPDrivers.get_selection().
+                                get_selected())
+                 nr = model.get_path(iter)[0]
+@@ -3761,7 +3762,7 @@ class NewPrinterGUI(GtkGUI):
+                     # installed by default.  Point the user at the
+                     # package they need to install.
+                     err = _("You will need to install the '%s' package "
+-                            "in order to use this driver.") % \
++                            "in order to use this driver.").decode ('utf-8') % \
+                             "gutenprint-foomatic"
+                 else:
+                     err = err_text % (driver, self.NPMake, self.NPModel)
+@@ -3796,7 +3797,7 @@ class NewPrinterGUI(GtkGUI):
+         debugprint("ppd: " + repr(ppd))
+ 
+         if isinstance(ppd, str) or isinstance(ppd, unicode):
+-            self.cups._begin_operation (_("fetching PPD"))
++            self.cups._begin_operation (_("fetching PPD").decode ('utf-8'))
+             try:
+                 if ppd != "raw":
+                     f = self.cups.getServerPPD(ppd)
+@@ -3929,8 +3930,8 @@ class NewPrinterGUI(GtkGUI):
+             busy (self.NewPrinterWindow)
+             while Gtk.events_pending ():
+                 Gtk.main_iteration ()
+-            self.cups._begin_operation (_("adding printer %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("adding printer %s").decode ('utf-8')
++                                        % name)
+             try:
+                 if isinstance(ppd, str) or isinstance(ppd, unicode):
+                     self.cups.addPrinter(name, ppdname=ppd,
+@@ -3957,8 +3958,8 @@ class NewPrinterGUI(GtkGUI):
+             self.cups._end_operation()
+             ready (self.NewPrinterWindow)
+         if self.dialog_mode in ("class", "printer", "printer_with_uri"):
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % name)
+             try:
+                 cupshelpers.activateNewPrinter (self.cups, name)
+                 self.cups.setPrinterLocation(name, location)
+@@ -3969,8 +3970,8 @@ class NewPrinterGUI(GtkGUI):
+                 return
+             self.cups._end_operation ()
+         elif self.dialog_mode == "device":
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % name)
+             try:
+                 uri = self.getDeviceURI()
+                 self.cups.addPrinter(name, device=uri)
+@@ -3987,8 +3988,8 @@ class NewPrinterGUI(GtkGUI):
+                     self.nextNPTab(-1)
+                     return
+ 
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % name)
+             # set ppd on server and retrieve it
+             # cups doesn't offer a way to just download a ppd ;(=
+             raw = False
+diff -up system-config-printer-1.4.1/ppdsloader.py.utf8-971973 system-config-printer-1.4.1/ppdsloader.py
+--- system-config-printer-1.4.1/ppdsloader.py.utf8-971973	2013-07-02 09:36:22.053027890 +0100
++++ system-config-printer-1.4.1/ppdsloader.py	2013-07-02 09:36:31.203068915 +0100
+@@ -151,7 +151,7 @@ class PPDsLoader(GObject.GObject):
+             self._cups_connect_reply(self._conn, None)
+ 
+     def _cups_connect_reply (self, conn, UNUSED):
+-        conn._begin_operation (_("fetching PPDs"))
++        conn._begin_operation (_("fetching PPDs").decode ('utf-8'))
+         conn.getPPDs2 (reply_handler=self._cups_reply,
+                        error_handler=self._cups_error)
+ 
+diff -up system-config-printer-1.4.1/printerproperties.py.utf8-971973 system-config-printer-1.4.1/printerproperties.py
+--- system-config-printer-1.4.1/printerproperties.py.utf8-971973	2013-07-02 09:36:22.049027872 +0100
++++ system-config-printer-1.4.1/printerproperties.py	2013-07-02 09:36:31.203068915 +0100
+@@ -1000,11 +1000,11 @@ class PrinterPropertiesDialog(GtkGUI):
+         name = printer.name
+ 
+         if printer.is_class:
+-            self.cups._begin_operation (_("modifying class %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying class %s").decode ('utf-8')
++                                        % name)
+         else:
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % name)
+ 
+         try:
+             if not printer.is_class and self.ppd:
+@@ -1112,7 +1112,7 @@ class PrinterPropertiesDialog(GtkGUI):
+             # but we have never fetched the server settings to see whether
+             # the server is publishing shared printers.  Fetch the settings
+             # now so that we can update the "not published" label if necessary.
+-            self.cups._begin_operation (_("fetching server settings"))
++            self.cups._begin_operation (_("fetching server settings").decode ('utf-8'))
+             try:
+                 self.server_settings = self.cups.adminGetServerSettings()
+             except:
+@@ -1195,7 +1195,7 @@ class PrinterPropertiesDialog(GtkGUI):
+             return
+ 
+         job_id = None
+-        c._begin_operation (_("printing test page"))
++        c._begin_operation (_("printing test page").decode ('utf-8'))
+         try:
+             if custom_testpage and os.path.exists(custom_testpage):
+                 debugprint ('Printing custom test page ' + custom_testpage)
+@@ -1234,7 +1234,7 @@ class PrinterPropertiesDialog(GtkGUI):
+         (tmpfd, tmpfname) = tempfile.mkstemp ()
+         os.write (tmpfd, "#CUPS-COMMAND\n%s\n" % command)
+         os.close (tmpfd)
+-        self.cups._begin_operation (_("sending maintenance command"))
++        self.cups._begin_operation (_("sending maintenance command").decode ('utf-8'))
+         try:
+             format = "application/vnd.cups-command"
+             job_id = self.cups.printTestPage (printer.name,
+@@ -1432,10 +1432,10 @@ class PrinterPropertiesDialog(GtkGUI):
+                     nonfatalException()
+                     option_editable = False
+                     show_error_dialog (_("Error"),
+-                                       _("Option '%s' has value '%s' "
+-                                         "and cannot be edited.") %
+-                                       (option.name.encode ('utf-8'),
+-                                        value.encode ('utf-8')),
++                                       _("Option '%s' has value '%s' and "
++                                         "cannot be edited.").decode ('utf-8') %
++                                       (option.name,
++                                        value),
+                                        self.parent)
+             option.widget.set_sensitive (option_editable)
+             if not editable:
+diff -up system-config-printer-1.4.1/pysmb.py.utf8-971973 system-config-printer-1.4.1/pysmb.py
+--- system-config-printer-1.4.1/pysmb.py.utf8-971973	2013-07-02 09:36:22.059027917 +0100
++++ system-config-printer-1.4.1/pysmb.py	2013-07-02 09:36:31.203068915 +0100
+@@ -109,7 +109,8 @@ class AuthContext:
+         hbox.pack_start (image, False, False, 0)
+         vbox = Gtk.VBox (False, 12)
+         label = Gtk.Label(label='<span weight="bold" size="larger">' +
+-                           _("You must log in to access %s.") % self.for_server +
++                           _("You must log in to access %s.").decode ('utf-8')
++                          % self.for_server +
+                            '</span>')
+         label.set_use_markup (True)
+         label.set_alignment (0, 0)
+diff -up system-config-printer-1.4.1/serversettings.py.utf8-971973 system-config-printer-1.4.1/serversettings.py
+--- system-config-printer-1.4.1/serversettings.py.utf8-971973	2013-05-09 12:10:45.000000000 +0100
++++ system-config-printer-1.4.1/serversettings.py	2013-07-02 09:36:31.204068921 +0100
+@@ -2,7 +2,7 @@
+ 
+ ## system-config-printer
+ 
+-## Copyright (C) 2008, 2009, 2010, 2011, 2012 Red Hat, Inc.
++## Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013 Red Hat, Inc.
+ ## Authors:
+ ##  Tim Waugh <twaugh@redhat.com>
+ 
+@@ -194,7 +194,7 @@ class ServerSettings(GtkGUI):
+ 
+     def _fillBasic(self):
+         self.changed = set()
+-        self.cupsconn._begin_operation (_("fetching server settings"))
++        self.cupsconn._begin_operation (_("fetching server settings").decode ('utf-8'))
+         try:
+             self.server_settings = self.cupsconn.adminGetServerSettings()
+         except cups.IPPError, (e, m):
+@@ -511,7 +511,7 @@ class ServerSettings(GtkGUI):
+             (self.chkServerLogDebug, cups.CUPS_SERVER_DEBUG_LOGGING),]:
+             if not self.server_settings.has_key(setting): continue
+             setting_dict[setting] = str(int(widget.get_active()))
+-        self.cupsconn._begin_operation (_("modifying server settings"))
++        self.cupsconn._begin_operation (_("modifying server settings").decode ('utf-8'))
+         try:
+             self.cupsconn.adminSetServerSettings(setting_dict)
+         except cups.IPPError, (e, m):
+diff -up system-config-printer-1.4.1/system-config-printer.py.utf8-971973 system-config-printer-1.4.1/system-config-printer.py
+--- system-config-printer-1.4.1/system-config-printer.py.utf8-971973	2013-07-02 09:36:22.062027931 +0100
++++ system-config-printer-1.4.1/system-config-printer.py	2013-07-02 09:36:31.204068921 +0100
+@@ -664,10 +664,11 @@ class GUI(GtkGUI):
+         connected = bool(self.cups)
+ 
+         host = CUPS_server_hostname ()
+-        self.PrintersWindow.set_title(_("Print Settings - %s") % host)
++        self.PrintersWindow.set_title(_("Print Settings - %s")
++                                      .decode ('utf-8') % host)
+ 
+         if connected:
+-            status_msg = _("Connected to %s") % host
++            status_msg = _("Connected to %s").decode ('utf-8') % host
+         else:
+             status_msg = _("Not connected")
+         self.statusbarMain.push(self.status_context_id, status_msg)
+@@ -718,7 +719,7 @@ class GUI(GtkGUI):
+         if self.cups:
+             kill_connection = False
+             self.cups._set_prompt_allowed (prompt_allowed)
+-            self.cups._begin_operation (_("obtaining queue details"))
++            self.cups._begin_operation (_("obtaining queue details").decode ('utf-8'))
+             try:
+                 # get Printers
+                 self.printers = cupshelpers.getPrinters(self.cups)
+@@ -1028,8 +1029,8 @@ class GUI(GtkGUI):
+ 
+         servername = self.cmbServername.get_child().get_text()
+ 
+-        self.lblConnecting.set_markup(_("<i>Opening connection to %s</i>") %
+-                                      servername)
++        self.lblConnecting.set_markup(_("<i>Opening connection to %s</i>")
++                                      .decode ('utf-8') % servername)
+         self.ConnectingDialog.set_transient_for(self.PrintersWindow)
+         self.ConnectingDialog.show()
+         GLib.timeout_add (40, self.update_connecting_pbar)
+@@ -1195,7 +1196,7 @@ class GUI(GtkGUI):
+     def set_default_printer (self, name):
+         printer = self.printers[name]
+         reload = False
+-        self.cups._begin_operation (_("setting default printer"))
++        self.cups._begin_operation (_("setting default printer").decode ('utf-8'))
+         try:
+             reload = printer.setAsDefault ()
+         except cups.HTTPError, (s,):
+@@ -1370,7 +1371,7 @@ class GUI(GtkGUI):
+         if not self.is_rename_possible (old_name):
+             return
+ 
+-        self.cups._begin_operation (_("renaming printer"))
++        self.cups._begin_operation (_("renaming printer").decode ('utf-8'))
+         rejecting = self.propertiesDlg.printer.rejecting
+         if not rejecting:
+             try:
+@@ -1523,11 +1524,11 @@ class GUI(GtkGUI):
+             obj = model.get_value (itr, 0)
+             name = model.get_value (itr, 2).decode ('utf-8')
+             if obj.is_class:
+-                message_format = (_("Really delete class '%s'?") %
+-                                  name.encode ('utf-8'))
++                message_format = (_("Really delete class '%s'?").decode ('utf-8')
++                                  % name)
+             else:
+-                message_format = (_("Really delete printer '%s'?") %
+-                                  name.encode ('utf-8'))
++                message_format = (_("Really delete printer '%s'?").decode ('utf-8')
++                                  % name)
+ 
+             to_delete.append (name)
+         else:
+@@ -1554,8 +1555,8 @@ class GUI(GtkGUI):
+ 
+         try:
+             for name in to_delete:
+-                self.cups._begin_operation (_("deleting printer %s") %
+-                                            name.encode ('utf-8'))
++                self.cups._begin_operation (_("deleting printer %s").decode ('utf-8')
++                                            % name)
+                 self.cups.deletePrinter (name)
+                 self.cups._end_operation ()
+         except cups.IPPError, (e, msg):
+@@ -1580,8 +1581,8 @@ class GUI(GtkGUI):
+ 
+         for printer in printers:
+             print repr (printer.name)
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        printer.name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % printer.name)
+             try:
+                 printer.setEnabled (enable)
+             except cups.IPPError, (e, m):
+@@ -1610,8 +1611,8 @@ class GUI(GtkGUI):
+ 
+         success = False
+         for printer in printers:
+-            self.cups._begin_operation (_("modifying printer %s") %
+-                                        printer.name.encode ('utf-8'))
++            self.cups._begin_operation (_("modifying printer %s").decode ('utf-8')
++                                        % printer.name)
+             try:
+                 printer.setShared (share)
+                 success = True
+@@ -1954,8 +1955,8 @@ class GUI(GtkGUI):
+                 install_text = ('<span weight="bold" size="larger">' +
+                                 _('Install driver') + '</span>\n\n' +
+                                 _("Printer '%s' requires the %s package but "
+-                                  "it is not currently installed.") %
+-                                (name.encode ('utf-8'), pkg))
++                                  "it is not currently installed.")
++                                .decode ('utf-8') % (name, pkg))
+                 dialog = self.InstallDialog
+                 self.lblInstall.set_markup(install_text)
+                 dialog.set_transient_for (parent)
+@@ -1972,8 +1973,9 @@ class GUI(GtkGUI):
+                                    _("Printer '%s' requires the '%s' program "
+                                      "but it is not currently installed.  "
+                                      "Please install it before using this "
+-                                     "printer.") % (name.encode ('utf-8'),
+-                                                    (exes + pkgs)[0]),
++                                     "printer.").decode ('utf-8') %
++                                   (name,
++                                    (exes + pkgs)[0]),
+                                    parent)
+ 
+     def on_printer_modified (self, obj, name, ppd_has_changed):
