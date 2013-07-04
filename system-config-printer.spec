@@ -1,11 +1,11 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.1
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
-Source0: http://cyberelk.net/tim/data/system-config-printer/1.3/%{name}-%{version}.tar.xz
+Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-utf8-961882.patch
 Patch3: system-config-printer-utf8-962207.patch
@@ -239,6 +239,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Jul  4 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-9
+- Fixed source URL.
+
 * Tue Jul  2 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-8
 - Fixed misplaced parenthesis (bug #979119).
 - Fixed another codec issue (bug #978970).
