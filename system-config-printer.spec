@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.1
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -239,6 +239,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.1-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Thu Jul  4 2013 Tim Waugh <twaugh@redhat.com> 1.4.1-9
 - Fixed source URL.
 
