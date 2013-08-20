@@ -1,33 +1,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.4.1
-Release: 10%{?dist}
+Version: 1.4.2
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-utf8-961882.patch
-Patch3: system-config-printer-utf8-962207.patch
-Patch4: system-config-printer-utf8-964673.patch
-Patch5: system-config-printer-utf8-965578.patch
-Patch6: system-config-printer-utf8-965771.patch
-Patch7: system-config-printer-utf8-969846.patch
-Patch8: system-config-printer-utf8-971417.patch
-Patch9: system-config-printer-utf8-971548.patch
-Patch10: system-config-printer-utf8-968142.patch
-Patch11: system-config-printer-typo.patch
-Patch12: system-config-printer-notify-urgency.patch
-Patch13: system-config-printer-pointer-grab.patch
-Patch14: system-config-printer-np-traceback.patch
-Patch15: system-config-printer-rename.patch
-Patch16: system-config-printer-notification-new.patch
-Patch17: system-config-printer-utf8-971973.patch
-Patch18: system-config-printer-statusicon-geometry.patch
-Patch19: system-config-printer-remote-missing.patch
-Patch20: system-config-printer-rename-race.patch
-Patch21: system-config-printer-utf8-978970.patch
-Patch22: system-config-printer-misplaced-paren.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -88,57 +67,6 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
-
-# Fixes for UTF-8 encoding issues (bug #957444, bug #961882,
-# bug #962207, bug #964673, bug #965578, bug #969846, bug #971417,
-# bug #971548, bug #968142).
-%patch2 -p1 -b .utf8-961882
-%patch3 -p1 -b .utf8-962207
-%patch4 -p1 -b .utf8-964673
-%patch5 -p1 -b .utf8-965578
-%patch6 -p1 -b .utf8-965771
-%patch7 -p1 -b .utf8-969846
-%patch8 -p1 -b .utf8-971417
-%patch9 -p1 -b .utf8-971548
-%patch10 -p1 -b .utf8-968142
-
-# Fixed typo which could cause a traceback (bug #965678).
-%patch11 -p1 -b .typo
-
-# Notify urgencies have new names with gi.repository (bug #970646).
-%patch12 -p1 -b .notify-urgency
-
-# Removed old pointer/keyboard grabbing code as it no longer works
-# (bug #971459).
-%patch13 -p1 -b .pointer-grab
-
-# Fixed new printer dialog traceback (bug #969916).
-%patch14 -p1 -b .np-traceback
-
-# Use the right signal for spotting when editing is done when renaming
-# a printer (bug #971404).
-%patch15 -p1 -b .rename
-
-# Fix Notify.Notification creation (bug #974845).
-%patch16 -p1 -b .notification-new
-
-# Fixed another codec issue (bug #971973).
-%patch17 -p1 -b .utf8-971973
-
-# Another fix from the move to gi.repository (bug #973662).
-%patch18 -p1 -b .statusicon-geometry
-
-# Don't check for missing drivers in remote printers (bug #975058)
-%patch19 -p1 -b .remote-missing
-
-# Avoid race when renaming printer (bug #975705).
-%patch20 -p1 -b .rename-race
-
-# Fixed another codec issue (bug #978970).
-%patch21 -p1 -b .utf8-978970
-
-# Fixed misplaced parenthesis (bug #979119).
-%patch22 -p1 -b .misplaced-paren
 
 %build
 %configure --with-udev-rules
@@ -239,6 +167,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Aug 20 2013 Tim Waugh <twaugh@redhat.com> 1.4.2-1
+- 1.4.2.
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
