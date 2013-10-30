@@ -1,0 +1,12 @@
+diff -up system-config-printer-1.4.3/applet.py.utf8 system-config-printer-1.4.3/applet.py
+--- system-config-printer-1.4.3/applet.py.utf8	2013-07-22 14:58:32.000000000 +0100
++++ system-config-printer-1.4.3/applet.py	2013-10-30 17:26:40.606867609 +0000
+@@ -117,7 +117,7 @@ class NewPrinterNotification(dbus.servic
+                     device = "%s %s" % (mfg, mdl)
+                 else:
+                     device = des
+-                text = _("No printer driver for %s.") % device
++                text = _("No printer driver for %s.").decode ('utf-8') % device
+             else:
+                 text = _("No driver for this printer.")
+             n = Notify.Notification.new (title, text, 'printer')

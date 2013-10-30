@@ -1,13 +1,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-decorator.patch
+Patch3: system-config-printer-utf8.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -71,6 +72,9 @@ printers.
 
 # Fixed typo in D-Bus signature decorator (bug #1023449).
 %patch2 -p1 -b .decorator
+
+# Fixed encoding issue (bug #1023968).
+%patch3 -p1 -b .utf8
 
 %build
 %configure --with-udev-rules
@@ -171,6 +175,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Oct 30 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-3
+- Fixed encoding issue (bug #1023968).
+
 * Fri Oct 25 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-2
 - Fixed typo in D-Bus signature decorator (bug #1023449).
 
