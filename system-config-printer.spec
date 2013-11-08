@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -28,6 +28,7 @@ Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
 Requires: libnotify%{?_isa}
 Requires: libgnome-keyring%{?_isa}
+Requires: pycairo%{?_isa}
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -171,7 +172,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
-* Fri Nov  8 2013 Tim Waugh <twaugh@redhat.com>
+* Fri Nov  8 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-4
+- Requires pycairo (bug #1028180).
 - Reverted last change as it did not fix the problem.
 
 * Wed Oct 30 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-3
