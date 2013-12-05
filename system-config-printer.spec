@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -75,6 +75,7 @@ printers.
 
 %build
 %configure --with-udev-rules
+make
 
 %install
 make DESTDIR=%buildroot install \
@@ -172,6 +173,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Dec  5 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-5
+- Actually run make in the %%build section.
+
 * Fri Nov  8 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-4
 - Requires pycairo (bug #1028180).
 - Reverted last change as it did not fix the problem.
