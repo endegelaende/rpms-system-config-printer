@@ -1,0 +1,48 @@
+diff -up system-config-printer-1.4.3/Makefile.am.smp-mflags system-config-printer-1.4.3/Makefile.am
+--- system-config-printer-1.4.3/Makefile.am.smp-mflags	2013-10-22 16:33:25.000000000 +0100
++++ system-config-printer-1.4.3/Makefile.am	2013-12-06 11:33:40.227525218 +0000
+@@ -82,6 +82,7 @@ clean-local:
+ 		done;						\
+ 	fi
+ 	rm -f .stamp-distutils-in-builddir
++	rm -f .stamp-man-pages-built
+ 
+ nobase_pkgdata_SCRIPTS=				\
+ 	check-device-ids.py			\
+@@ -281,8 +282,11 @@ EXTRA_DIST=\
+ @INTLTOOL_DESKTOP_RULE@
+ 
+ # The man pages are generated from DocBook XML.
+-$(man_MANS): $(top_srcdir)/man/system-config-printer.xml
++.stamp-man-pages-built: $(top_srcdir)/man/system-config-printer.xml
+ 	xmlto man -o man $<
++	touch .stamp-man-pages-built
++
++$(man_MANS): .stamp-man-pages-built
+ 
+ html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
+ 	rm -rf html
+diff -up system-config-printer-1.4.3/Makefile.in.smp-mflags system-config-printer-1.4.3/Makefile.in
+--- system-config-printer-1.4.3/Makefile.in.smp-mflags	2013-10-22 16:44:44.000000000 +0100
++++ system-config-printer-1.4.3/Makefile.in	2013-12-06 11:33:43.648541700 +0000
+@@ -1922,6 +1922,7 @@ clean-local:
+ 		done;						\
+ 	fi
+ 	rm -f .stamp-distutils-in-builddir
++	rm -f .stamp-man-pages-built
+ 
+ @HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@%.service: %.service.in
+ @HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@	$(AM_V_GEN)sed -e 's,@udevhelperdir\@,$(udevhelperdir),g' $< > $@
+@@ -1951,8 +1952,11 @@ uninstall-desktopDATA:
+ @INTLTOOL_DESKTOP_RULE@
+ 
+ # The man pages are generated from DocBook XML.
+-$(man_MANS): $(top_srcdir)/man/system-config-printer.xml
++.stamp-man-pages-built: $(top_srcdir)/man/system-config-printer.xml
+ 	xmlto man -o man $<
++	touch .stamp-man-pages-built
++
++$(man_MANS): .stamp-man-pages-built
+ 
+ html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
+ 	rm -rf html

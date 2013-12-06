@@ -8,6 +8,7 @@ Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-decorator.patch
+Patch3: system-config-printer-smp-mflags.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -72,6 +73,9 @@ printers.
 
 # Fixed typo in D-Bus signature decorator (bug #1023449).
 %patch2 -p1 -b .decorator
+
+# Fixed makefile to work with _smp_mflags (patch from upstream).
+%patch3 -p1 -b .smp-mflags
 
 %build
 %configure --with-udev-rules
@@ -174,7 +178,7 @@ exit 0
 
 %changelog
 * Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-6
-- Use _smp_mflags for consistency's sake.
+- Use _smp_mflags for consistency's sake (patch from upstream needed).
 
 * Thu Dec  5 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-5
 - Actually run make in the %%build section.
