@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -78,13 +78,14 @@ printers.
 %patch3 -p1 -b .smp-mflags
 
 %build
-%configure --with-udev-rules
+%configure \
+	--with-udev-rules \
+	--udevrulesdir=%{_prefix}/lib/udev/rules.d \
+	--udevhelperdir=%{_prefix}/lib/udev
 make %{?_smp_mflags}
 
 %install
-make DESTDIR=%buildroot install \
-	udevrulesdir=%{_prefix}/lib/udev/rules.d \
-	udevhelperdir=%{_prefix}/lib/udev
+make DESTDIR=%buildroot install
 
 %{__mkdir_p} %buildroot%{_localstatedir}/run/udev-configure-printer
 touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
@@ -177,6 +178,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-7
+- Configure udevhelper directory correctly.
+
 * Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-6
 - Use _smp_mflags for consistency's sake (patch from upstream needed).
 
