@@ -78,10 +78,7 @@ printers.
 %patch3 -p1 -b .smp-mflags
 
 %build
-%configure \
-	--with-udev-rules \
-	--udevrulesdir=%{_prefix}/lib/udev/rules.d \
-	--udevhelperdir=%{_prefix}/lib/udev
+%configure --with-udev-rules
 make %{?_smp_mflags}
 
 %install
@@ -179,7 +176,7 @@ exit 0
 
 %changelog
 * Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-7
-- Configure udevhelper directory correctly.
+- Include upstream Makefile fixes for udev directories.
 
 * Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-6
 - Use _smp_mflags for consistency's sake (patch from upstream needed).

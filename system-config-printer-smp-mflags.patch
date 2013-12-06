@@ -1,6 +1,6 @@
 diff -up system-config-printer-1.4.3/Makefile.am.smp-mflags system-config-printer-1.4.3/Makefile.am
 --- system-config-printer-1.4.3/Makefile.am.smp-mflags	2013-10-22 16:33:25.000000000 +0100
-+++ system-config-printer-1.4.3/Makefile.am	2013-12-06 11:33:40.227525218 +0000
++++ system-config-printer-1.4.3/Makefile.am	2013-12-06 14:59:09.088540880 +0000
 @@ -82,6 +82,7 @@ clean-local:
  		done;						\
  	fi
@@ -9,7 +9,31 @@ diff -up system-config-printer-1.4.3/Makefile.am.smp-mflags system-config-printe
  
  nobase_pkgdata_SCRIPTS=				\
  	check-device-ids.py			\
-@@ -281,8 +282,11 @@ EXTRA_DIST=\
+@@ -179,21 +180,17 @@ bin_SCRIPTS=					\
+ 	dbus/scp-dbus-service
+ 
+ if UDEV_RULES
+-udevrulesdir=$(sysconfdir)/udev/rules.d
+ udevrules_DATA=udev/70-printers.rules
+ udev_udev_configure_printer_SOURCES=\
+ 	udev/udev-configure-printer.c
+ udev_udev_configure_printer_LDADD= -lcups -ludev $(libusb_LIBS) $(GLIB_LIBS)
+ udev_udev_configure_printer_CFLAGS= $(AM_CFLAGS) $(libusb_CFLAGS) $(GLIB_CFLAGS)
+-udevhelperdir=$(sysconfdir)/udev
+-udevhelper_PROGRAMS=\
++udev_PROGRAMS=\
+ 	udev/udev-configure-printer
+-udevhelper_SCRIPTS=\
++udev_SCRIPTS=\
+ 	udev/udev-add-printer
+ 
+ if HAVE_SYSTEMD
+-%.service: %.service.in
+-	$(AM_V_GEN)sed -e 's,@udevhelperdir\@,$(udevhelperdir),g' $< > $@
+ systemdsystemunit_DATA = \
+ 	udev/configure-printer@.service
+ CLEANFILES = \
+@@ -281,8 +278,11 @@ EXTRA_DIST=\
  @INTLTOOL_DESKTOP_RULE@
  
  # The man pages are generated from DocBook XML.
@@ -22,18 +46,309 @@ diff -up system-config-printer-1.4.3/Makefile.am.smp-mflags system-config-printe
  
  html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
  	rm -rf html
-diff -up system-config-printer-1.4.3/Makefile.in.smp-mflags system-config-printer-1.4.3/Makefile.in
+diff -up system-config-printer-1.4.3/configure.in.smp-mflags system-config-printer-1.4.3/configure.in
+--- system-config-printer-1.4.3/configure.in.smp-mflags	2013-10-22 16:43:02.000000000 +0100
++++ system-config-printer-1.4.3/configure.in	2013-12-06 14:59:09.089540885 +0000
+@@ -44,13 +44,22 @@ AC_ARG_WITH(udev-rules,
+ 	    [with_udev_rules=no])
+ AM_CONDITIONAL([UDEV_RULES], [test x$with_udev_rules != xno])
+ 
+-if test x$with_udev_rules != xno; then
++AC_ARG_WITH([udevdir],
++	AS_HELP_STRING([--with-udevdir=DIR], [Directory for udev helper programs]),
++	[], [with_udevdir=$($PKG_CONFIG --variable=udevdir udev)])
++if test "x$with_udevdir" != xno; then
++	AC_SUBST([udevdir], [$with_udevdir])
++	AC_SUBST([udevrulesdir], [$with_udevdir/rules.d])
++fi
++
++if test "x$with_udev_rules" != xno -a "x$with_udevdir" != xno; then
+    PKG_CHECK_MODULES(libudev, [libudev >= 172], has_libudev=yes, has_libudev=no)
+    PKG_CHECK_MODULES(libusb, libusb-1.0, has_libusb=yes, has_libusb=no)
+    if test x$has_glib == xno -o \
++           x$has_udev == xno -o \
+            x$has_libudev == xno -o \
+-           x$has_libusb == xno; then
+-      AC_MSG_ERROR([Missing libraries])
++           x$has_libusb == xno ; then
++      AC_MSG_ERROR([Missing packages])
+    fi
+ 
+    AM_PROG_CC_C_O
+@@ -73,5 +82,6 @@ system-config-printer
+ system-config-printer-applet
+ install-printerdriver
+ dbus/scp-dbus-service
++udev/configure-printer@.service
+ ])
+ AC_OUTPUT
+--- system-config-printer-1.4.3/aclocal.m4.smp-mflags	2013-12-06 15:14:53.714187797 +0000
++++ system-config-printer-1.4.3/aclocal.m4	2013-12-06 15:15:15.785285999 +0000
+@@ -6,7 +6,7 @@
+ # gives unlimited permission to copy and/or distribute it,
+ # with or without modifications, as long as this notice is preserved.
+ 
+-# This program is distributed in the hope that it will be useful,
++# This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+ # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ # PARTICULAR PURPOSE.
 --- system-config-printer-1.4.3/Makefile.in.smp-mflags	2013-10-22 16:44:44.000000000 +0100
-+++ system-config-printer-1.4.3/Makefile.in	2013-12-06 11:33:43.648541700 +0000
-@@ -1922,6 +1922,7 @@ clean-local:
++++ system-config-printer-1.4.3/Makefile.in	2013-12-06 15:24:48.838048931 +0000
+@@ -80,8 +80,7 @@ PRE_UNINSTALL = :
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-@UDEV_RULES_TRUE@udevhelper_PROGRAMS =  \
+-@UDEV_RULES_TRUE@	udev/udev-configure-printer$(EXEEXT)
++@UDEV_RULES_TRUE@udev_PROGRAMS = udev/udev-configure-printer$(EXEEXT)
+ subdir = .
+ DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
+ 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+@@ -89,8 +88,9 @@ DIST_COMMON = INSTALL NEWS README AUTHOR
+ 	$(srcdir)/system-config-printer.in \
+ 	$(srcdir)/system-config-printer-applet.in \
+ 	$(srcdir)/install-printerdriver.in \
+-	$(top_srcdir)/dbus/scp-dbus-service.in ABOUT-NLS depcomp \
+-	test-driver COPYING compile config.guess config.rpath \
++	$(top_srcdir)/dbus/scp-dbus-service.in \
++	$(top_srcdir)/udev/configure-printer@.service.in ABOUT-NLS \
++	depcomp test-driver COPYING compile config.guess config.rpath \
+ 	config.sub install-sh missing
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/configure.in
+@@ -101,16 +101,16 @@ am__CONFIG_DISTCLEAN_FILES = config.stat
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_CLEAN_FILES = system-config-printer \
+ 	system-config-printer-applet install-printerdriver \
+-	dbus/scp-dbus-service
++	dbus/scp-dbus-service udev/configure-printer@.service
+ CONFIG_CLEAN_VPATH_FILES =
+-am__installdirs = "$(DESTDIR)$(udevhelperdir)" "$(DESTDIR)$(bindir)" \
+-	"$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(udevhelperdir)" \
++am__installdirs = "$(DESTDIR)$(udevdir)" "$(DESTDIR)$(bindir)" \
++	"$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(udevdir)" \
+ 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(cupshelpersdir)" \
+ 	"$(DESTDIR)$(dbusdir)" "$(DESTDIR)$(dbusinterfacesdir)" \
+ 	"$(DESTDIR)$(dbusservicesdir)" "$(DESTDIR)$(desktopdir)" \
+ 	"$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(systemdsystemunitdir)" \
+ 	"$(DESTDIR)$(udevrulesdir)"
+-PROGRAMS = $(udevhelper_PROGRAMS)
++PROGRAMS = $(udev_PROGRAMS)
+ am__udev_udev_configure_printer_SOURCES_DIST =  \
+ 	udev/udev-configure-printer.c
+ am__dirstamp = $(am__leading_dot)dirstamp
+@@ -150,8 +150,7 @@ am__uninstall_files_from_dir = { \
+     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+          $(am__cd) "$$dir" && rm -f $$files; }; \
+   }
+-SCRIPTS = $(bin_SCRIPTS) $(nobase_pkgdata_SCRIPTS) \
+-	$(udevhelper_SCRIPTS)
++SCRIPTS = $(bin_SCRIPTS) $(nobase_pkgdata_SCRIPTS) $(udev_SCRIPTS)
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+ am__v_P_0 = false
+@@ -601,6 +600,8 @@ target_alias = @target_alias@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
++udevdir = @udevdir@
++udevrulesdir = @udevrulesdir@
+ SUBDIRS = po
+ EXPORT_MODULES = \
+ 	cupshelpers/__init__.py			\
+@@ -708,15 +709,13 @@ bin_SCRIPTS = \
+ 	system-config-printer-applet		\
+ 	dbus/scp-dbus-service
+ 
+-@UDEV_RULES_TRUE@udevrulesdir = $(sysconfdir)/udev/rules.d
+ @UDEV_RULES_TRUE@udevrules_DATA = udev/70-printers.rules
+ @UDEV_RULES_TRUE@udev_udev_configure_printer_SOURCES = \
+ @UDEV_RULES_TRUE@	udev/udev-configure-printer.c
+ 
+ @UDEV_RULES_TRUE@udev_udev_configure_printer_LDADD = -lcups -ludev $(libusb_LIBS) $(GLIB_LIBS)
+ @UDEV_RULES_TRUE@udev_udev_configure_printer_CFLAGS = $(AM_CFLAGS) $(libusb_CFLAGS) $(GLIB_CFLAGS)
+-@UDEV_RULES_TRUE@udevhelperdir = $(sysconfdir)/udev
+-@UDEV_RULES_TRUE@udevhelper_SCRIPTS = \
++@UDEV_RULES_TRUE@udev_SCRIPTS = \
+ @UDEV_RULES_TRUE@	udev/udev-add-printer
+ 
+ @HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@systemdsystemunit_DATA = \
+@@ -831,12 +830,14 @@ install-printerdriver: $(top_builddir)/c
+ 	cd $(top_builddir) && $(SHELL) ./config.status $@
+ dbus/scp-dbus-service: $(top_builddir)/config.status $(top_srcdir)/dbus/scp-dbus-service.in
+ 	cd $(top_builddir) && $(SHELL) ./config.status $@
+-install-udevhelperPROGRAMS: $(udevhelper_PROGRAMS)
++udev/configure-printer@.service: $(top_builddir)/config.status $(top_srcdir)/udev/configure-printer@.service.in
++	cd $(top_builddir) && $(SHELL) ./config.status $@
++install-udevPROGRAMS: $(udev_PROGRAMS)
+ 	@$(NORMAL_INSTALL)
+-	@list='$(udevhelper_PROGRAMS)'; test -n "$(udevhelperdir)" || list=; \
++	@list='$(udev_PROGRAMS)'; test -n "$(udevdir)" || list=; \
+ 	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(udevhelperdir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(udevhelperdir)" || exit 1; \
++	  echo " $(MKDIR_P) '$(DESTDIR)$(udevdir)'"; \
++	  $(MKDIR_P) "$(DESTDIR)$(udevdir)" || exit 1; \
+ 	fi; \
+ 	for p in $$list; do echo "$$p $$p"; done | \
+ 	sed 's/$(EXEEXT)$$//' | \
+@@ -855,24 +856,24 @@ install-udevhelperPROGRAMS: $(udevhelper
+ 	while read type dir files; do \
+ 	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+ 	    test -z "$$files" || { \
+-	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(udevhelperdir)$$dir'"; \
+-	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(udevhelperdir)$$dir" || exit $$?; \
++	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(udevdir)$$dir'"; \
++	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(udevdir)$$dir" || exit $$?; \
+ 	    } \
+ 	; done
+ 
+-uninstall-udevhelperPROGRAMS:
++uninstall-udevPROGRAMS:
+ 	@$(NORMAL_UNINSTALL)
+-	@list='$(udevhelper_PROGRAMS)'; test -n "$(udevhelperdir)" || list=; \
++	@list='$(udev_PROGRAMS)'; test -n "$(udevdir)" || list=; \
+ 	files=`for p in $$list; do echo "$$p"; done | \
+ 	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
+ 	      -e 's/$$/$(EXEEXT)/' \
+ 	`; \
+ 	test -n "$$list" || exit 0; \
+-	echo " ( cd '$(DESTDIR)$(udevhelperdir)' && rm -f" $$files ")"; \
+-	cd "$(DESTDIR)$(udevhelperdir)" && rm -f $$files
++	echo " ( cd '$(DESTDIR)$(udevdir)' && rm -f" $$files ")"; \
++	cd "$(DESTDIR)$(udevdir)" && rm -f $$files
+ 
+-clean-udevhelperPROGRAMS:
+-	-test -z "$(udevhelper_PROGRAMS)" || rm -f $(udevhelper_PROGRAMS)
++clean-udevPROGRAMS:
++	-test -z "$(udev_PROGRAMS)" || rm -f $(udev_PROGRAMS)
+ udev/$(am__dirstamp):
+ 	@$(MKDIR_P) udev
+ 	@: > udev/$(am__dirstamp)
+@@ -962,12 +963,12 @@ uninstall-nobase_pkgdataSCRIPTS:
+ 	files=`$(am__nobase_strip) \
+ 	       -e 'h;s,.*/,,;$(transform);x;s|[^/]*$$||;G;s,\n,,'`; \
+ 	dir='$(DESTDIR)$(pkgdatadir)'; $(am__uninstall_files_from_dir)
+-install-udevhelperSCRIPTS: $(udevhelper_SCRIPTS)
++install-udevSCRIPTS: $(udev_SCRIPTS)
+ 	@$(NORMAL_INSTALL)
+-	@list='$(udevhelper_SCRIPTS)'; test -n "$(udevhelperdir)" || list=; \
++	@list='$(udev_SCRIPTS)'; test -n "$(udevdir)" || list=; \
+ 	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(udevhelperdir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(udevhelperdir)" || exit 1; \
++	  echo " $(MKDIR_P) '$(DESTDIR)$(udevdir)'"; \
++	  $(MKDIR_P) "$(DESTDIR)$(udevdir)" || exit 1; \
+ 	fi; \
+ 	for p in $$list; do \
+ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+@@ -986,17 +987,17 @@ install-udevhelperSCRIPTS: $(udevhelper_
+ 	while read type dir files; do \
+ 	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+ 	     test -z "$$files" || { \
+-	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(udevhelperdir)$$dir'"; \
+-	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(udevhelperdir)$$dir" || exit $$?; \
++	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(udevdir)$$dir'"; \
++	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(udevdir)$$dir" || exit $$?; \
+ 	     } \
+ 	; done
+ 
+-uninstall-udevhelperSCRIPTS:
++uninstall-udevSCRIPTS:
+ 	@$(NORMAL_UNINSTALL)
+-	@list='$(udevhelper_SCRIPTS)'; test -n "$(udevhelperdir)" || exit 0; \
++	@list='$(udev_SCRIPTS)'; test -n "$(udevdir)" || exit 0; \
+ 	files=`for p in $$list; do echo "$$p"; done | \
+ 	       sed -e 's,.*/,,;$(transform)'`; \
+-	dir='$(DESTDIR)$(udevhelperdir)'; $(am__uninstall_files_from_dir)
++	dir='$(DESTDIR)$(udevdir)'; $(am__uninstall_files_from_dir)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+@@ -1695,7 +1696,7 @@ check: check-recursive
+ all-am: Makefile $(PROGRAMS) $(SCRIPTS) $(MANS) $(DATA) all-local
+ installdirs: installdirs-recursive
+ installdirs-am:
+-	for dir in "$(DESTDIR)$(udevhelperdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(udevhelperdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(cupshelpersdir)" "$(DESTDIR)$(dbusdir)" "$(DESTDIR)$(dbusinterfacesdir)" "$(DESTDIR)$(dbusservicesdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(systemdsystemunitdir)" "$(DESTDIR)$(udevrulesdir)"; do \
++	for dir in "$(DESTDIR)$(udevdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(udevdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(cupshelpersdir)" "$(DESTDIR)$(dbusdir)" "$(DESTDIR)$(dbusinterfacesdir)" "$(DESTDIR)$(dbusservicesdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(systemdsystemunitdir)" "$(DESTDIR)$(udevrulesdir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: install-recursive
+@@ -1737,8 +1738,7 @@ maintainer-clean-generic:
+ 	@echo "it deletes files that may require special tools to rebuild."
+ clean: clean-recursive
+ 
+-clean-am: clean-generic clean-local clean-udevhelperPROGRAMS \
+-	mostlyclean-am
++clean-am: clean-generic clean-local clean-udevPROGRAMS mostlyclean-am
+ 
+ distclean: distclean-recursive
+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+@@ -1761,8 +1761,7 @@ install-data-am: install-cupshelpersDATA
+ 	install-dbusinterfacesDATA install-dbusservicesDATA \
+ 	install-desktopDATA install-man install-nobase_pkgdataDATA \
+ 	install-nobase_pkgdataSCRIPTS install-systemdsystemunitDATA \
+-	install-udevhelperPROGRAMS install-udevhelperSCRIPTS \
+-	install-udevrulesDATA
++	install-udevPROGRAMS install-udevSCRIPTS install-udevrulesDATA
+ 
+ install-dvi: install-dvi-recursive
+ 
+@@ -1814,8 +1813,8 @@ uninstall-am: uninstall-binSCRIPTS unins
+ 	uninstall-dbusservicesDATA uninstall-desktopDATA \
+ 	uninstall-local uninstall-man uninstall-nobase_pkgdataDATA \
+ 	uninstall-nobase_pkgdataSCRIPTS \
+-	uninstall-systemdsystemunitDATA uninstall-udevhelperPROGRAMS \
+-	uninstall-udevhelperSCRIPTS uninstall-udevrulesDATA
++	uninstall-systemdsystemunitDATA uninstall-udevPROGRAMS \
++	uninstall-udevSCRIPTS uninstall-udevrulesDATA
+ 
+ uninstall-man: uninstall-man1
+ 
+@@ -1823,7 +1822,7 @@ uninstall-man: uninstall-man1
+ 
+ .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
+ 	am--refresh check check-TESTS check-am clean clean-cscope \
+-	clean-generic clean-local clean-udevhelperPROGRAMS cscope \
++	clean-generic clean-local clean-udevPROGRAMS cscope \
+ 	cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
+ 	dist-gzip dist-hook dist-lzip dist-shar dist-tarZ dist-xz \
+ 	dist-zip distcheck distclean distclean-compile \
+@@ -1838,8 +1837,8 @@ uninstall-man: uninstall-man1
+ 	install-man install-man1 install-nobase_pkgdataDATA \
+ 	install-nobase_pkgdataSCRIPTS install-pdf install-pdf-am \
+ 	install-ps install-ps-am install-strip \
+-	install-systemdsystemunitDATA install-udevhelperPROGRAMS \
+-	install-udevhelperSCRIPTS install-udevrulesDATA installcheck \
++	install-systemdsystemunitDATA install-udevPROGRAMS \
++	install-udevSCRIPTS install-udevrulesDATA installcheck \
+ 	installcheck-am installdirs installdirs-am maintainer-clean \
+ 	maintainer-clean-generic mostlyclean mostlyclean-compile \
+ 	mostlyclean-generic pdf pdf-am ps ps-am recheck tags tags-am \
+@@ -1849,8 +1848,8 @@ uninstall-man: uninstall-man1
+ 	uninstall-desktopDATA uninstall-local uninstall-man \
+ 	uninstall-man1 uninstall-nobase_pkgdataDATA \
+ 	uninstall-nobase_pkgdataSCRIPTS \
+-	uninstall-systemdsystemunitDATA uninstall-udevhelperPROGRAMS \
+-	uninstall-udevhelperSCRIPTS uninstall-udevrulesDATA
++	uninstall-systemdsystemunitDATA uninstall-udevPROGRAMS \
++	uninstall-udevSCRIPTS uninstall-udevrulesDATA
+ 
+ 
+ ### Automake hooks for Distutils.
+@@ -1922,9 +1921,7 @@ clean-local:
  		done;						\
  	fi
  	rm -f .stamp-distutils-in-builddir
+-
+-@HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@%.service: %.service.in
+-@HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@	$(AM_V_GEN)sed -e 's,@udevhelperdir\@,$(udevhelperdir),g' $< > $@
 +	rm -f .stamp-man-pages-built
  
- @HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@%.service: %.service.in
- @HAVE_SYSTEMD_TRUE@@UDEV_RULES_TRUE@	$(AM_V_GEN)sed -e 's,@udevhelperdir\@,$(udevhelperdir),g' $< > $@
-@@ -1951,8 +1952,11 @@ uninstall-desktopDATA:
+ install-desktopDATA: $(desktop_DATA)
+ 	mkdir -p $(DESTDIR)$(desktopdir)
+@@ -1951,8 +1948,11 @@ uninstall-desktopDATA:
  @INTLTOOL_DESKTOP_RULE@
  
  # The man pages are generated from DocBook XML.
@@ -46,3 +361,94 @@ diff -up system-config-printer-1.4.3/Makefile.in.smp-mflags system-config-printe
  
  html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
  	rm -rf html
+diff -up system-config-printer-1.4.3/configure.smp-mflags system-config-printer-1.4.3/configure
+--- system-config-printer-1.4.3/configure.smp-mflags	2013-12-06 14:59:20.179596863 +0000
++++ system-config-printer-1.4.3/configure	2013-12-06 14:59:26.900630797 +0000
+@@ -595,6 +595,8 @@ libusb_LIBS
+ libusb_CFLAGS
+ libudev_LIBS
+ libudev_CFLAGS
++udevrulesdir
++udevdir
+ UDEV_RULES_FALSE
+ UDEV_RULES_TRUE
+ GLIB_LIBS
+@@ -770,6 +772,7 @@ with_libiconv_prefix
+ with_libintl_prefix
+ with_desktop_vendor
+ with_udev_rules
++with_udevdir
+ with_systemdsystemunitdir
+ '
+       ac_precious_vars='build_alias
+@@ -1431,6 +1434,7 @@ Optional Packages:
+                           desktop-file-install [default=]
+   --with-udev-rules       Enable automatic USB print queue configuration
+                           [default=no]
++  --with-udevdir=DIR      Directory for udev helper programs
+   --with-systemdsystemunitdir=DIR
+                           Directory for systemd service files
+ 
+@@ -7156,7 +7160,22 @@ else
+ fi
+ 
+ 
+-if test x$with_udev_rules != xno; then
++
++# Check whether --with-udevdir was given.
++if test "${with_udevdir+set}" = set; then :
++  withval=$with_udevdir;
++else
++  with_udevdir=$($PKG_CONFIG --variable=udevdir udev)
++fi
++
++if test "x$with_udevdir" != xno; then
++	udevdir=$with_udevdir
++
++	udevrulesdir=$with_udevdir/rules.d
++
++fi
++
++if test "x$with_udev_rules" != xno -a "x$with_udevdir" != xno; then
+ 
+ pkg_failed=no
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libudev" >&5
+@@ -7300,9 +7319,10 @@ $as_echo "yes" >&6; }
+ 	has_libusb=yes
+ fi
+    if test x$has_glib == xno -o \
++           x$has_udev == xno -o \
+            x$has_libudev == xno -o \
+-           x$has_libusb == xno; then
+-      as_fn_error $? "Missing libraries" "$LINENO" 5
++           x$has_libusb == xno ; then
++      as_fn_error $? "Missing packages" "$LINENO" 5
+    fi
+ 
+    if test "x$CC" != xcc; then
+@@ -7575,7 +7595,7 @@ fi
+ 
+ 
+ ALL_LINGUAS="ar as bg bn_IN bn br bs ca cs cy da de el en_GB es et fa fi fr gu he hi hr hu hy id is it ja ka kn ko lo lv mai mk ml mr ms my nb nds nl nn or pa pl pt_BR pt ro ru si sk sl sr@latin sr sv ta te th tr uk vi zh_CN zh_TW"
+-ac_config_files="$ac_config_files Makefile po/Makefile.in system-config-printer system-config-printer-applet install-printerdriver dbus/scp-dbus-service"
++ac_config_files="$ac_config_files Makefile po/Makefile.in system-config-printer system-config-printer-applet install-printerdriver dbus/scp-dbus-service udev/configure-printer@.service"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -8345,6 +8365,7 @@ do
+     "system-config-printer-applet") CONFIG_FILES="$CONFIG_FILES system-config-printer-applet" ;;
+     "install-printerdriver") CONFIG_FILES="$CONFIG_FILES install-printerdriver" ;;
+     "dbus/scp-dbus-service") CONFIG_FILES="$CONFIG_FILES dbus/scp-dbus-service" ;;
++    "udev/configure-printer@.service") CONFIG_FILES="$CONFIG_FILES udev/configure-printer@.service" ;;
+     "po/stamp-it") CONFIG_COMMANDS="$CONFIG_COMMANDS po/stamp-it" ;;
+ 
+   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+diff -up system-config-printer-1.4.3/udev/configure-printer@.service.in.smp-mflags system-config-printer-1.4.3/udev/configure-printer@.service.in
+--- system-config-printer-1.4.3/udev/configure-printer@.service.in.smp-mflags	2013-02-19 16:18:36.000000000 +0000
++++ system-config-printer-1.4.3/udev/configure-printer@.service.in	2013-12-06 14:59:09.089540885 +0000
+@@ -4,4 +4,4 @@ Requires=cups.socket
+ After=cups.socket
+ 
+ [Service]
+-ExecStart=@udevhelperdir@/udev-configure-printer add "%i"
++ExecStart=@udevdir@/udev-configure-printer add "%i"
