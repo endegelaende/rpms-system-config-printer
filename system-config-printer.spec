@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -75,7 +75,7 @@ printers.
 
 %build
 %configure --with-udev-rules
-make
+make %{?_smp_mflags}
 
 %install
 make DESTDIR=%buildroot install \
@@ -173,6 +173,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-6
+- Use _smp_mflags for consistency's sake.
+
 * Thu Dec  5 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-5
 - Actually run make in the %%build section.
 
