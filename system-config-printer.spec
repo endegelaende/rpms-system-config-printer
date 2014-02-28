@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -76,6 +76,8 @@ printers.
 
 # Fixed makefile to work with _smp_mflags (patch from upstream).
 %patch3 -p1 -b .smp-mflags
+
+sed -i.cflags-override -e '/^CFLAGS/d' Makefile.{am,in}
 
 %build
 %configure --with-udev-rules
@@ -175,6 +177,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Feb 28 2014 Tim Waugh <twaugh@redhat.com> 1.4.3-8
+- Don't override CFLAGS in Makefile.am.
+
 * Fri Dec  6 2013 Tim Waugh <twaugh@redhat.com> 1.4.3-7
 - Include upstream Makefile fixes for udev directories.
 
