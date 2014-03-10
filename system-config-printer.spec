@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.3
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -14,7 +14,8 @@ BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gettext-devel
 BuildRequires: intltool
-BuildRequires: libusb1-devel, glib2-devel
+BuildRequires: libusb1-devel
+BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: xmlto
 BuildRequires: systemd-units, systemd-devel
 
@@ -177,6 +178,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Mar 10 2014 Jiri Popelka <jpopelka@redhat.com> - 1.4.3-9
+- BuildRequires: pkgconfig(glib-2.0) instead of glib2-devel
+
 * Fri Feb 28 2014 Tim Waugh <twaugh@redhat.com> 1.4.3-8
 - Don't override CFLAGS in Makefile.am.
 
