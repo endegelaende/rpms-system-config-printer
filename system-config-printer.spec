@@ -1,7 +1,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -20,7 +20,7 @@ BuildRequires: systemd-units, systemd-devel
 
 Requires: gobject-introspection%{?_isa}
 Requires: pygobject3-base%{?_isa}
-Requires: gtk2%{?_isa}
+Requires: gtk3%{?_isa}
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: dbus-python%{?_isa}
@@ -45,7 +45,7 @@ Requires: python
 Requires: python-cups >= 1.9.60
 Requires: gobject-introspection
 Requires: pygobject3-base
-Requires: gtk2
+Requires: gtk3
 Requires: dbus-python
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
@@ -175,6 +175,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu May 22 2014 Jiri Popelka <jpopelka@redhat.com> - 1.4.4-3
+- 1.4.x requires gtk3 instead of gtk2 (#1099611)
+
 * Thu May  1 2014 Tim Waugh <twaugh@redhat.com> 1.4.4-2
 - Prevent the D-Bus service from freezing by disabling openprinting
   driver downloads in that service (bug #1052203).
