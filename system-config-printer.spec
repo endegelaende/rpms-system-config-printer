@@ -1,13 +1,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.4.4
-Release: 4%{?dist}
+Version: 1.4.5
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-openprinting-freeze.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -70,10 +69,6 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
-
-# Prevent the D-Bus service from freezing by disabling openprinting
-# driver downloads in that service (bug #1052203).
-%patch2 -p1 -b .openprinting-freeze
 
 sed -i.cflags-override -e '/^CFLAGS/d' Makefile.{am,in}
 
@@ -175,6 +170,14 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jul  4 2014 Tim Waugh <twaugh@redhat.com> 1.4.5-1
+- 1.4.5:
+  - Some codec fixes (bug #968142, bug #1023968, bug #1094037).
+  - Traceback fixes (bug #982071, bug #1090479, bug #1105229).
+  - IPv6 address entry fix (bug #1074245).
+  - Auth info saving improvement (bug #1089029).
+  - Use LockButton for fewer auth dialogs (bug #714820).
+
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.4-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
