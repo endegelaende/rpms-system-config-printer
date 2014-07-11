@@ -1,12 +1,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.4.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
+Patch2: system-config-printer-permission.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -69,6 +70,9 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
+
+# Handle failure when cups-pk-helper not installed (bug #1118836).
+%patch2 -p1 -b .permission
 
 sed -i.cflags-override -e '/^CFLAGS/d' Makefile.{am,in}
 
@@ -170,6 +174,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jul 11 2014 Tim Waugh <twaugh@redhat.com> 1.4.5-2
+- Handle failure when cups-pk-helper not installed (bug #1118836).
+
 * Fri Jul  4 2014 Tim Waugh <twaugh@redhat.com> 1.4.5-1
 - 1.4.5:
   - Some codec fixes (bug #968142, bug #1023968, bug #1094037).
