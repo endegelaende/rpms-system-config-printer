@@ -1,14 +1,15 @@
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.4.5
-Release: 3%{?dist}
+Version: 1.5.0
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-permission.patch
-Patch3: system-config-printer-retrieve.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -18,6 +19,7 @@ BuildRequires: libusb1-devel
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: xmlto
 BuildRequires: systemd-units, systemd-devel
+BuildRequires: python3-devel
 
 Requires: gobject-introspection%{?_isa}
 Requires: pygobject3-base%{?_isa}
@@ -42,7 +44,6 @@ the user to configure a CUPS print server.
 %package libs
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
-Requires: python
 Requires: python-cups >= 1.9.60
 Requires: gobject-introspection
 Requires: pygobject3-base
@@ -72,14 +73,6 @@ printers.
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
 
-# Handle failure when cups-pk-helper not installed (bug #1118836).
-%patch2 -p1 -b .permission
-
-# Fix job retrieval (bug #1119222).
-%patch3 -p1 -b .retrieve
-
-sed -i.cflags-override -e '/^CFLAGS/d' Makefile.{am,in}
-
 %build
 %configure --with-udev-rules
 make %{?_smp_mflags}
@@ -89,6 +82,11 @@ make DESTDIR=%buildroot install
 
 %{__mkdir_p} %buildroot%{_localstatedir}/run/udev-configure-printer
 touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
+
+# Manually invoke the python byte compile macro for each path that
+# needs byte compilation
+%py_byte_compile %{__python3} %%{buildroot}%{python3_sitelib}/cupshelpers
+%py_byte_compile %{__python3} %%{buildroot}%{datadir}/system-config-printer
 
 %find_lang system-config-printer
 
@@ -131,15 +129,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/timedops.py*
 %dir %{_sysconfdir}/cupshelpers
 %config(noreplace) %{_sysconfdir}/cupshelpers/preferreddrivers.xml
-%dir %{python_sitelib}/cupshelpers
-%{python_sitelib}/cupshelpers/__init__.py*
-%{python_sitelib}/cupshelpers/config.py*
-%{python_sitelib}/cupshelpers/cupshelpers.py*
-%{python_sitelib}/cupshelpers/installdriver.py*
-%{python_sitelib}/cupshelpers/openprinting.py*
-%{python_sitelib}/cupshelpers/ppds.py*
-%{python_sitelib}/cupshelpers/xmldriverprefs.py*
-%{python_sitelib}/*.egg-info
+%{python3_sitelib}/cupshelpers
+%{python3_sitelib}/*.egg-info
 
 %files udev
 %{_prefix}/lib/udev/rules.d/*.rules
@@ -178,6 +169,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Jul 17 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-1
+- 1.5.0 (now Python3).
+
 * Mon Jul 14 2014 Tim Waugh <twaugh@redhat.com> 1.4.5-3
 - Fix job retrieval (bug #1119222).
 
