@@ -4,7 +4,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -26,7 +26,7 @@ Requires: pygobject3-base%{?_isa}
 Requires: gtk3%{?_isa}
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
-Requires: dbus-python%{?_isa}
+Requires: python3-dbus%{?_isa}
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
@@ -44,11 +44,11 @@ the user to configure a CUPS print server.
 %package libs
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
-Requires: python-cups >= 1.9.60
+Requires: python3-cups >= 1.9.60
 Requires: gobject-introspection
 Requires: pygobject3-base
 Requires: gtk3
-Requires: dbus-python
+Requires: python3-dbus%{?_isa}
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
 
@@ -169,6 +169,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Sat Jul 19 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-2
+- Require python3 bindings for cups and dbus (bug #1121177).
+
 * Thu Jul 17 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-1
 - 1.5.0 (now Python3).
 
