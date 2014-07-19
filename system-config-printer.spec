@@ -48,7 +48,7 @@ Requires: python3-cups >= 1.9.60
 Requires: gobject-introspection
 Requires: pygobject3-base
 Requires: gtk3
-Requires: python3-dbus%{?_isa}
+Requires: python3-dbus
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
 
