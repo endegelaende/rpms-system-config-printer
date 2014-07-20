@@ -4,7 +4,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -45,6 +45,7 @@ the user to configure a CUPS print server.
 Summary: Libraries and shared code for printer administration tool
 Group: System Environment/Base
 Requires: python3-cups >= 1.9.60
+Requires: python3-pycurl
 Requires: gobject-introspection
 Requires: pygobject3-base
 Requires: gtk3
@@ -169,6 +170,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Sun Jul 20 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-3
+- Also require python3 bindings for pycurl (bug #1121177).
+
 * Sat Jul 19 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-2
 - Require python3 bindings for cups and dbus (bug #1121177).
 
