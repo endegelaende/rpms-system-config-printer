@@ -4,7 +4,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -56,6 +56,14 @@ Obsoletes: %{name}-libs < 1.3.12-10
 %description libs
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
+
+%package applet
+Summary: Print job notification applet
+Group: System Environment/Base
+Requires: %{name}-libs
+
+%description applet
+Print job notification applet.
 
 %package udev
 Summary: Rules for udev for automatic configuration of USB printers
@@ -133,6 +141,12 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{python3_sitelib}/cupshelpers
 %{python3_sitelib}/*.egg-info
 
+%files applet
+%{_bindir}/%{name}-applet
+%{_datadir}/%{name}/applet.py*
+%{_sysconfdir}/xdg/autostart/print-applet.desktop
+%{_mandir}/man1/%{name}-applet.1*
+
 %files udev
 %{_prefix}/lib/udev/rules.d/*.rules
 %{_prefix}/lib/udev/udev-*-printer
@@ -143,7 +157,6 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %files
 %doc ChangeLog README
 %{_bindir}/%{name}
-%{_bindir}/%{name}-applet
 %{_bindir}/install-printerdriver
 %{_datadir}/%{name}/check-device-ids.py*
 %{_datadir}/%{name}/HIG.py*
@@ -152,7 +165,6 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/system-config-printer.py*
 %{_datadir}/%{name}/ToolbarSearchEntry.py*
 %{_datadir}/%{name}/userdefault.py*
-%{_datadir}/%{name}/applet.py*
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/install-printerdriver.py*
@@ -162,14 +174,16 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %dir %{_datadir}/%{name}/ui
 %{_datadir}/%{name}/ui/*.ui
 %{_datadir}/applications/system-config-printer.desktop
-%{_sysconfdir}/xdg/autostart/print-applet.desktop
-%{_mandir}/man1/*
+%{_mandir}/man1/%{name}.1*
 
 %post
 /bin/rm -f /var/cache/foomatic/foomatic.pickle
 exit 0
 
 %changelog
+* Thu Jul 24 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-4
+- The applet is now in its own sub-package.
+
 * Sun Jul 20 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-3
 - Also require python3 bindings for pycurl (bug #1121177).
 
