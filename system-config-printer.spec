@@ -4,7 +4,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -21,8 +21,7 @@ BuildRequires: xmlto
 BuildRequires: systemd-units, systemd-devel
 BuildRequires: python3-devel
 
-Requires: gobject-introspection%{?_isa}
-Requires: pygobject3-base%{?_isa}
+Requires: python3-gobject%{?_isa}
 Requires: gtk3%{?_isa}
 Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
@@ -32,7 +31,7 @@ Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
 Requires: libnotify%{?_isa}
 Requires: libgnome-keyring%{?_isa}
-Requires: pycairo%{?_isa}
+Requires: python3-cairo%{?_isa}
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -47,7 +46,7 @@ Group: System Environment/Base
 Requires: python3-cups >= 1.9.60
 Requires: python3-pycurl
 Requires: gobject-introspection
-Requires: pygobject3-base
+Requires: python3-gobject
 Requires: gtk3
 Requires: python3-dbus
 BuildArch: noarch
@@ -181,6 +180,11 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jul 25 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-5
+- More python3 dependency changes:
+  - pygobject3-base -> python3-gobject
+  - pycairo -> python3-cairo
+
 * Thu Jul 24 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-4
 - The applet is now in its own sub-package.
 
