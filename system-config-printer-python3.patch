@@ -1,0 +1,9 @@
+diff -up system-config-printer-1.5.0/udev/udev-add-printer.python3 system-config-printer-1.5.0/udev/udev-add-printer
+--- system-config-printer-1.5.0/udev/udev-add-printer.python3	2014-02-18 14:43:34.000000000 +0000
++++ system-config-printer-1.5.0/udev/udev-add-printer	2014-08-03 15:02:02.407041071 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python -s
++#!/usr/bin/python3 -s
+ 
+ ## udev-add-printer
+ 
