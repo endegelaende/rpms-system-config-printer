@@ -1,10 +1,13 @@
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
+# Enable hardened build, as the udev part runs with privilege.
+%define _hardened_build 1
+
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -184,6 +187,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Aug 15 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-7
+- Enable hardened build, as the udev part runs with privilege.
+
 * Sun Aug  3 2014 Tim Waugh <twaugh@redhat.com> 1.5.0-6
 - Explicitly use /usr/bin/python3 in udev-add-printer (bug #1126149).
 
