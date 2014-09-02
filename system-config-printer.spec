@@ -6,14 +6,13 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.0
-Release: 8%{?dist}
+Version: 1.5.1
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-python3.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -84,9 +83,6 @@ printers.
 
 # Don't start the applet in GNOME.
 %patch1 -p1 -b .no-applet-in-gnome
-
-# Explicitly use /usr/bin/python3 in udev-add-printer (bug #1126149).
-%patch2 -p1 -b .python3
 
 %build
 %configure --with-udev-rules
@@ -187,6 +183,11 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Sep  2 2014 Tim Waugh <twaugh@redhat.com> - 1.5.1-1
+- 1.5.1, with some Python3 fixes (bug #1136470),
+  udev-configure-printer fixes, and a fix for a D-Bus service
+  hang (bug #1116756).
+
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5.0-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
