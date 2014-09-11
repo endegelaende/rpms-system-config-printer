@@ -7,13 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-no-applet-in-gnome.patch
 Patch2: system-config-printer-lock.patch
+Patch3: system-config-printer-python3.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -87,6 +88,9 @@ printers.
 
 # Take the gdk lock before entering gtk_main() (bug #1052203 comment #24).
 %patch2 -p1 -b .lock
+
+# Python3 fixes from upstream.
+%patch3 -p1 -b .python3
 
 %build
 %configure --with-udev-rules
@@ -187,6 +191,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Sep 11 2014 Tim Waugh <twaugh@redhat.com> - 1.5.1-3
+- Python3 fixes from upstream.
+
 * Sat Sep  6 2014 Tim Waugh <twaugh@redhat.com> - 1.5.1-2
 - Take the gdk lock before entering gtk_main() (bug #1052203 comment #24).
 
