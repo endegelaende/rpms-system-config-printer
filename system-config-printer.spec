@@ -6,15 +6,12 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.1
-Release: 3%{?dist}
+Version: 1.5.2
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
-Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-lock.patch
-Patch3: system-config-printer-python3.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -83,15 +80,6 @@ printers.
 %prep
 %setup -q
 
-# Don't start the applet in GNOME.
-%patch1 -p1 -b .no-applet-in-gnome
-
-# Take the gdk lock before entering gtk_main() (bug #1052203 comment #24).
-%patch2 -p1 -b .lock
-
-# Python3 fixes from upstream.
-%patch3 -p1 -b .python3
-
 %build
 %configure --with-udev-rules
 make %{?_smp_mflags}
@@ -135,6 +123,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/newprinter.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
+%{_datadir}/%{name}/OpenPrintingRequest.py*
 %{_datadir}/%{name}/PhysicalDevice.py*
 %{_datadir}/%{name}/ppdcache.py*
 %{_datadir}/%{name}/ppdippstr.py*
@@ -191,6 +180,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Oct 10 2014 Tim Waugh <twaugh@redhat.com> - 1.5.2-1
+- 1.5.2.
+
 * Thu Sep 11 2014 Tim Waugh <twaugh@redhat.com> - 1.5.1-3
 - Python3 fixes from upstream.
 
