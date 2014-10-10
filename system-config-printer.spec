@@ -7,11 +7,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
+Patch1: system-config-printer-python3.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -79,6 +80,9 @@ printers.
 
 %prep
 %setup -q
+
+# Use items() instead of iteritems() with Python 3 dicts (bug #1151457).
+%patch1 -p1 -b .python3
 
 %build
 %configure --with-udev-rules
@@ -180,6 +184,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Oct 10 2014 Tim Waugh <twaugh@redhat.com> - 1.5.2-2
+- Use items() instead of iteritems() with Python 3 dicts (bug #1151457).
+
 * Fri Oct 10 2014 Tim Waugh <twaugh@redhat.com> - 1.5.2-1
 - 1.5.2.
 
