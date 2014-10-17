@@ -1,14 +1,11 @@
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.4.5
-Release: 3%{?dist}
+Version: 1.4.6
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.4/%{name}-%{version}.tar.xz
-Patch1: system-config-printer-no-applet-in-gnome.patch
-Patch2: system-config-printer-permission.patch
-Patch3: system-config-printer-retrieve.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -69,17 +66,6 @@ printers.
 %prep
 %setup -q
 
-# Don't start the applet in GNOME.
-%patch1 -p1 -b .no-applet-in-gnome
-
-# Handle failure when cups-pk-helper not installed (bug #1118836).
-%patch2 -p1 -b .permission
-
-# Fix job retrieval (bug #1119222).
-%patch3 -p1 -b .retrieve
-
-sed -i.cflags-override -e '/^CFLAGS/d' Makefile.{am,in}
-
 %build
 %configure --with-udev-rules
 make %{?_smp_mflags}
@@ -118,6 +104,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/newprinter.py*
 %{_datadir}/%{name}/options.py*
 %{_datadir}/%{name}/optionwidgets.py*
+%{_datadir}/%{name}/OpenPrintingRequest.py*
 %{_datadir}/%{name}/PhysicalDevice.py*
 %{_datadir}/%{name}/ppdcache.py*
 %{_datadir}/%{name}/ppdippstr.py*
@@ -171,6 +158,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/ui/*.ui
 %{_datadir}/applications/system-config-printer.desktop
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
+%{_datadir}/appdata/*.appdata.xml
 %{_mandir}/man1/*
 
 %post
@@ -178,6 +166,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Oct 17 2014 Tim Waugh <twaugh@redhat.com> 1.4.6-1
+- 1.4.6.
+
 * Mon Jul 14 2014 Tim Waugh <twaugh@redhat.com> 1.4.5-3
 - Fix job retrieval (bug #1119222).
 
