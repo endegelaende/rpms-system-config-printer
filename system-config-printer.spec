@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.3
+Version: 1.5.4
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -181,6 +181,16 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Nov  4 2014 Tim Waugh <twaugh@redhat.com> - 1.5.4-1
+- 1.5.4:
+  - Extract hostname from hp:/net/...?hostname= URIs when grouping by
+    physical device (bug #1154686).
+  - Tell user how to retrieve journal entries as root in
+    troubleshooter (bug #1157253).
+  - Codec fix for AuthDialog.get_auth_info (bug #1060453).
+  - Catch IPPError when writing server settings (bug #1159584).
+  - Several other fixes.
+
 * Fri Oct 17 2014 Tim Waugh <twaugh@redhat.com> - 1.5.3-1
 - 1.5.3.
 
