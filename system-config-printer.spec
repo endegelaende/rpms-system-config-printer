@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.4
+Version: 1.5.5
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -29,7 +29,6 @@ Requires: desktop-file-utils >= 0.2.92
 Requires: dbus-x11
 Requires: python3-dbus%{?_isa}
 Requires: system-config-printer-libs = %{version}-%{release}
-Requires: gnome-icon-theme
 Requires: desktop-notification-daemon
 Requires: libnotify%{?_isa}
 Requires: libgnome-keyring%{?_isa}
@@ -51,6 +50,7 @@ Requires: gobject-introspection
 Requires: python3-gobject
 Requires: gtk3
 Requires: python3-dbus
+Requires: python3-requests
 BuildArch: noarch
 Obsoletes: %{name}-libs < 1.3.12-10
 
@@ -181,6 +181,14 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Feb  6 2015 Tim Waugh <twaugh@redhat.com> - 1.5.5-1
+- 1.5.5:
+  - No longer requires gnome-icon-theme (bug #1163928).
+  - Fixed race condition when fetching devices (bug #1176443).
+  - Fixed typo preventing retrieve/reprint from working.
+  - Driver installation fixes.
+  - Various other fixes.
+
 * Tue Nov  4 2014 Tim Waugh <twaugh@redhat.com> - 1.5.4-1
 - 1.5.4:
   - Extract hostname from hp:/net/...?hostname= URIs when grouping by
