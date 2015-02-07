@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -33,6 +33,7 @@ Requires: desktop-notification-daemon
 Requires: libnotify%{?_isa}
 Requires: libgnome-keyring%{?_isa}
 Requires: python3-cairo%{?_isa}
+Requires: python3-firewall
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -181,6 +182,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Sat Feb  7 2015 Tim Waugh <twaugh@redhat.com> - 1.5.5-2
+- Requires python3-firewall.
+
 * Fri Feb  6 2015 Tim Waugh <twaugh@redhat.com> - 1.5.5-1
 - 1.5.5:
   - No longer requires gnome-icon-theme (bug #1163928).
