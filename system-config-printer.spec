@@ -6,8 +6,8 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.5
-Release: 2%{?dist}
+Version: 1.5.6
+Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -120,6 +120,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/gui.py*
 %{_datadir}/%{name}/installpackage.py*
 %{_datadir}/%{name}/jobviewer.py*
+%{_datadir}/%{name}/killtimer.py*
 %{_datadir}/%{name}/monitor.py*
 %{_datadir}/%{name}/newprinter.py*
 %{_datadir}/%{name}/options.py*
@@ -182,6 +183,20 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Mar 17 2015 Tim Waugh <twaugh@redhat.com> - 1.5.6-1
+- 1.5.6:
+  - Don't show traceback messages for missing probe helpers (bug #1194101).
+  - Don't try writing bytecache when running udev-add-printer
+    (bug #1196183).
+  - Don't try decoding already-decoded Unicode (bug #1195974).
+  - Fixes for CMD matching (bug #1177978, bug #1171874).
+  - Fixed 'Apply' sensitivity when downloading driver (trac #238).
+  - Avoid deprecated things.
+  - Handle missing 'functionality' field in returned data for driver.
+  - Some fixes for the New Printer dialog.
+  - Don't install an OpenPrinting driver if the license is not
+    accepted (trac #240).
+
 * Sat Feb  7 2015 Tim Waugh <twaugh@redhat.com> - 1.5.5-2
 - Requires python3-firewall.
 
