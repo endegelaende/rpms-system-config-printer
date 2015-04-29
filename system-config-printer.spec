@@ -6,7 +6,7 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.6
+Version: 1.5.7
 Release: 1%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
@@ -183,6 +183,13 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Apr 29 2015 Tim Waugh <twaugh@redhat.com> - 1.5.7-1
+- 1.5.7:
+  - Increase bus settle time for usb_modeswitch devices (bug #1206808).
+  - Set use_underline=True for previously-stock buttons (bug #1210859).
+  - Fixed traceback (bug #1213136).
+  - Fixes for appdata file.
+
 * Tue Mar 17 2015 Tim Waugh <twaugh@redhat.com> - 1.5.6-1
 - 1.5.6:
   - Don't show traceback messages for missing probe helpers (bug #1194101).
