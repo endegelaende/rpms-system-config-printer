@@ -2,7 +2,7 @@
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
 # Enable hardened build, as the udev part runs with privilege.
-%define _hardened_build 1
+%global _hardened_build 1
 
 Summary: A printer administration tool
 Name: system-config-printer
