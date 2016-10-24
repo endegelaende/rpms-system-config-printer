@@ -7,13 +7,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.7
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
 Source0: http://cyberelk.net/tim/data/system-config-printer/1.5/%{name}-%{version}.tar.xz
 Patch1: system-config-printer-shbang.patch
 Patch2: system-config-printer-device-sorting.patch
+Patch3: system-config-printer-minorerrors.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -89,6 +90,9 @@ printers.
 
 # Fixed device sorting (bug #1210733).
 %patch2 -p1 -b .device-sorting
+
+# Fixed minor errors (bug #1354606)
+%patch3 -p1 -b .minorerrors
 
 %build
 %configure --with-udev-rules
@@ -192,6 +196,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Oct 24 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.7-10
+- fixing minor errors
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5.7-9
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
