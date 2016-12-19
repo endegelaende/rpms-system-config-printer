@@ -7,7 +7,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.7
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2+
 URL: http://cyberelk.net/tim/software/system-config-printer/
 Group: System Environment/Base
@@ -196,6 +196,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.5.7-11
+- Rebuild for Python 3.6
+
 * Mon Oct 24 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.7-10
 - fixing minor errors
 
