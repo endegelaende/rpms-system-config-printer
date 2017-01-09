@@ -4,17 +4,16 @@
 # Enable hardened build, as the udev part runs with privilege.
 %global _hardened_build 1
 
+%global username zdohnal
+
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.7
-Release: 11%{?dist}
+Version: 1.5.9
+Release: 1%{?dist}
 License: GPLv2+
-URL: http://cyberelk.net/tim/software/system-config-printer/
+URL: https://github.com/%{username}/%{name}
 Group: System Environment/Base
-Source0: http://cyberelk.net/tim/data/system-config-printer/1.5/%{name}-%{version}.tar.xz
-Patch1: system-config-printer-shbang.patch
-Patch2: system-config-printer-device-sorting.patch
-Patch3: system-config-printer-minorerrors.patch
+Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -85,15 +84,6 @@ printers.
 %prep
 %setup -q
 
-# Fixed shbang line in udev-add-printer (trac #244).
-%patch1 -p1 -b .shbang
-
-# Fixed device sorting (bug #1210733).
-%patch2 -p1 -b .device-sorting
-
-# Fixed minor errors (bug #1354606)
-%patch3 -p1 -b .minorerrors
-
 %build
 %configure --with-udev-rules
 make %{?_smp_mflags}
@@ -112,7 +102,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %find_lang system-config-printer
 
 %files libs -f system-config-printer.lang
-%doc COPYING
+%license COPYING
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.NewPrinterNotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.PrinterDriversInstaller.conf
 %{_datadir}/dbus-1/interfaces/*.xml
@@ -169,7 +159,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_unitdir}/configure-printer@.service
 
 %files
-%doc ChangeLog README
+%doc ChangeLog NEWS ABOUT-NLS AUTHORS ChangeLog-OLD
+%license COPYING
 %{_bindir}/%{name}
 %{_bindir}/install-printerdriver
 %{_datadir}/%{name}/check-device-ids.py*
@@ -196,6 +187,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Jan 09 2017 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.9-1
+- version 1.5.9
+
 * Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 1.5.7-11
 - Rebuild for Python 3.6
 
