@@ -9,11 +9,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Group: System Environment/Base
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+
+Patch01: system-config-printer-1.5.9-bz1419175.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -83,6 +85,7 @@ printers.
 
 %prep
 %setup -q
+%patch01 -p1 -b .bz1419175
 
 %build
 %configure --with-udev-rules
@@ -187,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Mar 08 2017 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.9-3
+- 1419175 - [control-center] cannot add network printer 
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
