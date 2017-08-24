@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.9
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Group: System Environment/Base
@@ -90,6 +90,7 @@ printers.
 %patch02 -p1 -b .keyring-workaround
 
 %build
+aclocal
 %configure --with-udev-rules
 make %{?_smp_mflags}
 
@@ -192,6 +193,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Aug 24 2017 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.9-7
+- 1484681 - s-c-p fails to build with automake 1.15.1 - regenerate aclocal.m4
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.9-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
