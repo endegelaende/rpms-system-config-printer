@@ -8,15 +8,15 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.9
-Release: 7%{?dist}
+Version: 1.5.11
+Release: 1%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Group: System Environment/Base
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
-Patch01: system-config-printer-1.5.9-bz1419175.patch
-Patch02: system-config-printer-1.5.9-keyring-workaround.patch
+#Patch01: system-config-printer-1.5.9-bz1419175.patch
+#Patch02: system-config-printer-1.5.9-keyring-workaround.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -86,8 +86,8 @@ printers.
 
 %prep
 %setup -q
-%patch01 -p1 -b .bz1419175
-%patch02 -p1 -b .keyring-workaround
+#%%patch01 -p1 -b .bz1419175
+#%%patch02 -p1 -b .keyring-workaround
 
 %build
 aclocal
@@ -185,7 +185,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %dir %{_datadir}/%{name}/ui
 %{_datadir}/%{name}/ui/*.ui
 %{_datadir}/applications/system-config-printer.desktop
-%{_datadir}/appdata/*.appdata.xml
+%{_datadir}/metainfo/%{name}.appdata.xml
 %{_mandir}/man1/%{name}.1*
 
 %post
@@ -193,6 +193,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jan 19 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-1
+- 1.5.11
+
 * Thu Aug 24 2017 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.9-7
 - 1484681 - s-c-p fails to build with automake 1.15.1 - regenerate aclocal.m4
 
