@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Group: System Environment/Base
@@ -25,7 +25,8 @@ BuildRequires: intltool
 BuildRequires: libusb1-devel
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: xmlto
-BuildRequires: systemd-units, systemd-devel
+BuildRequires: systemd
+BuildRequires: systemd-devel
 BuildRequires: python3-devel
 
 Requires: python3-gobject%{?_isa}
@@ -39,9 +40,7 @@ Requires: libnotify%{?_isa}
 Requires: libgnome-keyring%{?_isa}
 Requires: python3-cairo%{?_isa}
 Requires: python3-firewall
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+%{?systemd_requires}
 
 %description
 system-config-printer is a graphical user interface that allows
@@ -193,6 +192,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Jan 30 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-2
+- removal of systemd-units
+
 * Fri Jan 19 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-1
 - 1.5.11
 
