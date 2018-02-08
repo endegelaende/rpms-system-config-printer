@@ -9,10 +9,9 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
-Group: System Environment/Base
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 #Patch01: system-config-printer-1.5.9-bz1419175.patch
@@ -50,7 +49,6 @@ the user to configure a CUPS print server.
 
 %package libs
 Summary: Libraries and shared code for printer administration tool
-Group: System Environment/Base
 Requires: python3-cups >= 1.9.60
 Requires: python3-pycurl
 Requires: gobject-introspection
@@ -68,7 +66,6 @@ the configuration tool.
 
 %package applet
 Summary: Print job notification applet
-Group: System Environment/Base
 Requires: %{name}-libs
 
 %description applet
@@ -76,7 +73,6 @@ Print job notification applet.
 
 %package udev
 Summary: Rules for udev for automatic configuration of USB printers
-Group: System Environment/Base
 Requires: system-config-printer-libs = %{version}-%{release}
 Obsoletes: hal-cups-utils < 0.6.20
 Provides: hal-cups-utils = 0.6.20
@@ -194,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Feb 08 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-4
+- remove old stuff
+
 * Tue Feb 06 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-3
 - s-c-p gives warnings "Fail to load module" on server - add Requires: for them
 
