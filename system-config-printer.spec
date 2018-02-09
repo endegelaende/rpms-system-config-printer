@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -190,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.5.11-5
+- Escape macros in %%changelog
+
 * Thu Feb 08 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-4
 - remove old stuff
 
@@ -811,7 +814,7 @@ exit 0
 - Grabbing focus for editing breaks it (bug #650995).
 
 * Tue Jan 18 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-2
-- Allow %, ( and ) characters in dnssd URI (bug #669820).
+- Allow %%, ( and ) characters in dnssd URI (bug #669820).
 
 * Mon Jan 17 2011 Jiri Popelka <jpopelka@redhat.com> 1.2.96-1
 - 1.2.96:
