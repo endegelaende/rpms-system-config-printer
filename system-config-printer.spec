@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -188,6 +188,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Feb 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-7
+- remove old patches, already in upstream
+
 * Thu Feb 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-6
 - upstream merge request #93 - fix constructing file dialog
 
