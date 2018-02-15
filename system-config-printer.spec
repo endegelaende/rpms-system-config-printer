@@ -9,13 +9,12 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
-#Patch01: system-config-printer-1.5.9-bz1419175.patch
-#Patch02: system-config-printer-1.5.9-keyring-workaround.patch
+Patch01: system-config-printer-authdialog.patch
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -83,8 +82,7 @@ printers.
 
 %prep
 %setup -q
-#%%patch01 -p1 -b .bz1419175
-#%%patch02 -p1 -b .keyring-workaround
+%patch01 -p1 -b .authdialog
 
 %build
 aclocal
@@ -190,6 +188,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Feb 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-6
+- upstream merge request #93 - fix constructing file dialog
+
 * Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.5.11-5
 - Escape macros in %%changelog
 
