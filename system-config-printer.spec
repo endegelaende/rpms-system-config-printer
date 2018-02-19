@@ -9,12 +9,16 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 Patch01: system-config-printer-authdialog.patch
+
+# gcc is no longer in buildroot by default
+# gcc is needed for udev-configure-printer.c
+BuildRequires: gcc
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -188,6 +192,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Feb 19 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-8
+- gcc is no longer in buildroot by default
+
 * Thu Feb 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-7
 - remove old patches, already in upstream
 
