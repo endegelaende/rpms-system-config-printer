@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -39,7 +39,6 @@ Requires: python3-dbus%{?_isa}
 Requires: system-config-printer-libs = %{version}-%{release}
 Requires: desktop-notification-daemon
 Requires: libnotify%{?_isa}
-Requires: libgnome-keyring%{?_isa}
 Requires: python3-cairo%{?_isa}
 Requires: python3-firewall
 Requires: libcanberra-gtk3
@@ -89,7 +88,6 @@ printers.
 %patch01 -p1 -b .authdialog
 
 %build
-aclocal
 %configure --with-udev-rules
 make %{?_smp_mflags}
 
@@ -192,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Fri Jun 08 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-9
+- remove bogus requiremnt of libgnome-keyring - it uses libsecret since 1.5.10
+
 * Mon Feb 19 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-8
 - gcc is no longer in buildroot by default
 
