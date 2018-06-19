@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -190,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 1.5.11-10
+- Rebuilt for Python 3.7
+
 * Fri Jun 08 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-9
 - remove bogus requiremnt of libgnome-keyring - it uses libsecret since 1.5.10
 
