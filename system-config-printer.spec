@@ -9,10 +9,10 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 11%{?dist}
+Release: 12%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
-Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 Patch01: system-config-printer-authdialog.patch
 
@@ -190,6 +190,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Sep 27 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-12
+- fix source url
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.11-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
