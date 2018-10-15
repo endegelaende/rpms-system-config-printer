@@ -9,12 +9,22 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
+# all upstream patches, remove with new release
 Patch01: system-config-printer-authdialog.patch
+Patch02: 0001-Use-ValueError-instead-of-ImportError-to-catch-excep.patch
+Patch03: 0001-Require-proper-version-of-GDK-and-GTK-in-scp-dbus-se.patch
+Patch04: 0001-Set-programe-name-for-scp-dbus-service-as-well.patch
+Patch05: 0001-require-Gtk-and-Gdk-version-3.0-in-asyncpk1.py.patch
+Patch06: 0001-encoding-Modified-to-use-utf-8-in-fdopen.patch
+Patch07: 0001-Fallback-to-using-LC_CTYPE-if-LC_MESSAGES-is-empty-a.patch
+Patch08: 0001-define-classes-for-Secret-only-when-libsecret-is-ins.patch
+Patch09: 0001-Fix-typo-in-debugprint-call-https-github.com-zdohnal.patch
+Patch10: 0001-Fix-TypeError-raised-by-debugprint-call.patch
 
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
@@ -86,6 +96,15 @@ printers.
 %prep
 %setup -q
 %patch01 -p1 -b .authdialog
+%patch02 -p1 -b .upstream0
+%patch03 -p1 -b .upstream1
+%patch04 -p1 -b .upstream2
+%patch05 -p1 -b .upstream3
+%patch06 -p1 -b .upstream4
+%patch07 -p1 -b .upstream5
+%patch08 -p1 -b .upstream6
+%patch09 -p1 -b .upstream7
+%patch10 -p1 -b .upstream8
 
 %build
 %configure --with-udev-rules
@@ -190,6 +209,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Oct 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-13
+- backport several upstream patches
+
 * Thu Sep 27 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-12
 - fix source url
 
