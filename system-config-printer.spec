@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 13%{?dist}
+Release: 14%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -25,6 +25,7 @@ Patch07: 0001-Fallback-to-using-LC_CTYPE-if-LC_MESSAGES-is-empty-a.patch
 Patch08: 0001-define-classes-for-Secret-only-when-libsecret-is-ins.patch
 Patch09: 0001-Fix-typo-in-debugprint-call-https-github.com-zdohnal.patch
 Patch10: 0001-Fix-TypeError-raised-by-debugprint-call.patch
+Patch11: 0001-dbus-remove-deprecated-at_console-statement.patch
 
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
@@ -95,6 +96,7 @@ printers.
 
 %prep
 %setup -q
+# all backported from upstream
 %patch01 -p1 -b .authdialog
 %patch02 -p1 -b .upstream0
 %patch03 -p1 -b .upstream1
@@ -105,6 +107,7 @@ printers.
 %patch08 -p1 -b .upstream6
 %patch09 -p1 -b .upstream7
 %patch10 -p1 -b .upstream8
+%patch11 -p1 -b .deprecate-at-console
 
 %build
 %configure --with-udev-rules
@@ -205,10 +208,13 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_mandir}/man1/%{name}.1*
 
 %post
-/bin/rm -f /var/cache/foomatic/foomatic.pickle
+%{_bindir}/rm -f /var/cache/foomatic/foomatic.pickle
 exit 0
 
 %changelog
+* Fri Nov 09 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-14
+- deprecate at_console statement
+
 * Mon Oct 15 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-13
 - backport several upstream patches
 
