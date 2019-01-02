@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 14%{?dist}
+Release: 15%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -53,7 +53,6 @@ Requires: libnotify%{?_isa}
 Requires: python3-cairo%{?_isa}
 Requires: python3-firewall
 Requires: libcanberra-gtk3
-Requires: PackageKit-gtk3-module
 %{?systemd_requires}
 
 %description
@@ -212,6 +211,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Jan 02 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-15
+- remove packagekit-gtk3-module dependency
+
 * Fri Nov 09 2018 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-14
 - deprecate at_console statement
 
