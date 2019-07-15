@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 17%{?dist}
+Release: 18%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -120,8 +120,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 # Manually invoke the python byte compile macro for each path that
 # needs byte compilation
-%py_byte_compile %{__python3} %%{buildroot}%{python3_sitelib}/cupshelpers
-%py_byte_compile %{__python3} %%{buildroot}%{datadir}/system-config-printer
+%py_byte_compile %{__python3} %{buildroot}/%{_datadir}/system-config-printer
 
 %find_lang system-config-printer
 
@@ -133,6 +132,17 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/dbus-1/services/*.service
 %{_bindir}/scp-dbus-service
 %dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/__pycache__
+%{_datadir}/%{name}/__pycache__/*
+%exclude %{_datadir}/%{name}/__pycache__/check-device-ids*
+%exclude %{_datadir}/%{name}/__pycache__/HIG*
+%exclude %{_datadir}/%{name}/__pycache__/SearchCriterion*
+%exclude %{_datadir}/%{name}/__pycache__/serversettings*
+%exclude %{_datadir}/%{name}/__pycache__/system-config-printer*
+%exclude %{_datadir}/%{name}/__pycache__/ToolbarSearchEntry*
+%exclude %{_datadir}/%{name}/__pycache__/userdefault*
+%exclude %{_datadir}/%{name}/__pycache__/install-printerdriver*
+%exclude %{_datadir}/%{name}/__pycache__/applet*
 %{_datadir}/%{name}/asyncconn.py*
 %{_datadir}/%{name}/asyncipp.py*
 %{_datadir}/%{name}/asyncpk1.py*
@@ -171,6 +181,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %files applet
 %{_bindir}/%{name}-applet
+%{_datadir}/%{name}/__pycache__/applet*
 %{_datadir}/%{name}/applet.py*
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/%{name}-applet.1*
@@ -187,6 +198,14 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %license COPYING
 %{_bindir}/%{name}
 %{_bindir}/install-printerdriver
+%{_datadir}/%{name}/__pycache__/check-device-ids*
+%{_datadir}/%{name}/__pycache__/HIG*
+%{_datadir}/%{name}/__pycache__/SearchCriterion*
+%{_datadir}/%{name}/__pycache__/serversettings*
+%{_datadir}/%{name}/__pycache__/system-config-printer*
+%{_datadir}/%{name}/__pycache__/ToolbarSearchEntry*
+%{_datadir}/%{name}/__pycache__/userdefault*
+%{_datadir}/%{name}/__pycache__/install-printerdriver*
 %{_datadir}/%{name}/check-device-ids.py*
 %{_datadir}/%{name}/HIG.py*
 %{_datadir}/%{name}/SearchCriterion.py*
@@ -198,6 +217,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/install-printerdriver.py*
 %dir %{_datadir}/%{name}/xml
+%dir %{_datadir}/%{name}/xml/__pycache__
+%{_datadir}/%{name}/xml/__pycache__/*
 %{_datadir}/%{name}/xml/*.rng
 %{_datadir}/%{name}/xml/validate.py*
 %dir %{_datadir}/%{name}/ui
@@ -211,6 +232,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Mon Jul 15 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-18
+- 1729453 - system-config-printer does not ship byte-compiled Python files
+
 * Wed May 29 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-17
 - upstream was moved to OpenPrinting
 
