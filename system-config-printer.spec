@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.11
-Release: 20%{?dist}
+Release: 21%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -61,6 +61,7 @@ the user to configure a CUPS print server.
 
 %package libs
 Summary: Libraries and shared code for printer administration tool
+Requires: libnotify
 Requires: python3-cups >= 1.9.60
 Requires: python3-pycurl
 Requires: gobject-introspection
@@ -232,6 +233,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Aug 27 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.11-21
+- require libnotify - there can be cases where it is not brought by any other packages
+
 * Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 1.5.11-20
 - Rebuilt for Python 3.8
 
