@@ -9,12 +9,13 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.12
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 # all upstream patches, remove with new release
+Patch01: 0001-udev-configure-printer-Add-checks-for-NULL.patch
 
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
@@ -86,6 +87,7 @@ printers.
 %prep
 %setup -q
 # all backported from upstream
+%patch01 -p1 -b .udev-configure-segfault
 
 %build
 %configure --with-udev-rules
@@ -211,6 +213,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Oct 29 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-2
+- 1765915 - abrt in udev-configure-printer
+
 * Tue Oct 01 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-1
 - 1.5.12
 
