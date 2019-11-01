@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.12
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -213,6 +213,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Oct 31 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-3
+- whole fix for #1765915
+
 * Tue Oct 29 2019 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-2
 - 1765915 - abrt in udev-configure-printer
 
