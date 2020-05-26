@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.12
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -213,6 +213,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 1.5.12-5
+- Rebuilt for Python 3.9
+
 * Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.12-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
