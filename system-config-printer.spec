@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.12
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
@@ -91,10 +91,10 @@ printers.
 
 %build
 %configure --with-udev-rules
-make %{?_smp_mflags}
+%make_build
 
 %install
-make DESTDIR=%buildroot install
+%make_install
 
 %{__mkdir_p} %buildroot%{_localstatedir}/run/udev-configure-printer
 touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
@@ -213,6 +213,10 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Jul 14 2020 Tom Stellard <tstellar@redhat.com> - 1.5.12-6
+- Use make macros
+- https://fedoraproject.org/wiki/Changes/UseMakeBuildInstallMacro
+
 * Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 1.5.12-5
 - Rebuilt for Python 3.9
 
