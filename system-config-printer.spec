@@ -9,13 +9,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.12
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 # all upstream patches, remove with new release
 Patch01: 0001-udev-configure-printer-Add-checks-for-NULL.patch
+Patch02: system-config-printer-getchildren-removed.patch
 
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
@@ -88,6 +89,7 @@ printers.
 %setup -q
 # all backported from upstream
 %patch01 -p1 -b .udev-configure-segfault
+%patch02 -p1 -b .getchildren-removed
 
 %build
 %configure --with-udev-rules
@@ -213,6 +215,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Wed Jul 22 2020 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-7
+- python3.9 - xml module removed elem.getchildren() method, use list(elem)
+
 * Tue Jul 14 2020 Tom Stellard <tstellar@redhat.com> - 1.5.12-6
 - Use make macros
 - https://fedoraproject.org/wiki/Changes/UseMakeBuildInstallMacro
