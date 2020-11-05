@@ -8,20 +8,22 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.12
-Release: 9%{?dist}
+Version: 1.5.13
+Release: 1%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
-Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # all upstream patches, remove with new release
-Patch01: 0001-udev-configure-printer-Add-checks-for-NULL.patch
-Patch02: system-config-printer-getchildren-removed.patch
-Patch03: 0001-isAlive-is-removed-use-is_alive.patch
+
 
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
 BuildRequires: gcc
+# for autosetup
+BuildRequires: git-core
+# uses make
+BuildRequires: make
 
 BuildRequires: cups-devel >= 1.2
 BuildRequires: desktop-file-utils >= 0.2.92
@@ -87,11 +89,7 @@ The udev rules and helper programs for automatically configuring USB
 printers.
 
 %prep
-%setup -q
-# all backported from upstream
-%patch01 -p1 -b .udev-configure-segfault
-%patch02 -p1 -b .getchildren-removed
-%patch03 -p1 -b .isAlive-removed
+%autosetup -S git
 
 %build
 %configure --with-udev-rules
@@ -217,6 +215,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Thu Nov 05 2020 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.13-1
+- 1.15.13
+
 * Mon Oct 05 2020 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.12-9
 - 1884866 - s-c-p: isAlive() is removed, use is_alive()
 
