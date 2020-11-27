@@ -1,0 +1,33 @@
+diff --git a/xml/preferreddrivers.xml b/xml/preferreddrivers.xml
+index 68269bf..004f61e 100644
+--- a/xml/preferreddrivers.xml
++++ b/xml/preferreddrivers.xml
+@@ -163,6 +163,10 @@
+       <ppdname match=".*splix"/>
+     </drivertype>
+ 
++    <drivertype name="dlw400">
++      <ppdname match="drv:///sample.drv/dymo.ppd" />
++    </drivertype>
++
+     <drivertype name="turboprint">
+       <ppdname match=".*turboprint"/>
+     </drivertype>
+@@ -293,6 +297,17 @@
+       </avoid>
+     </printer>
+ 
++    <printer>
++      <make-and-model match="DYMO LabelWriter 400" />
++      <deviceid>
++        <field name="MFG" match="DYMO" />
++        <field name="MDL" match="LabelWriter 400" />
++      </deviceid>
++      <drivers>
++        <drivertype>dlw400</drivertype>
++      </drivers>
++    </printer>
++
+     <printer>
+       <!-- For all printers -->
+       <drivers>
