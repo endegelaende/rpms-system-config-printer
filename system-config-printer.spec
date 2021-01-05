@@ -9,13 +9,14 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.13
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # all upstream patches, remove with new release
 Patch1: scp-dymo400.patch
+Patch2: 0001-asyncpk1.py-Dont-require-the-exact-Gdk-version-179.patch
 
 
 # gcc is no longer in buildroot by default
@@ -216,6 +217,9 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 exit 0
 
 %changelog
+* Tue Jan 05 2021 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.13-3
+- 1750156 - hangs on selection of change PPD (Make and Model)
+
 * Fri Nov 27 2020 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.13-2
 - set preferred driver for Dymo LabelWriter 400
 

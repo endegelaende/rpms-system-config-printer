@@ -1,0 +1,27 @@
+From aa6500531326c4895f70f238a75f4537fe3532db Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Tue, 5 Jan 2021 13:22:52 +0100
+Subject: [PATCH] asyncpk1.py: Dont require the exact Gdk version #179
+
+It works around the freeze during changing printer driver, but it will generate a warning.
+The proper fix is to refactor threading code in s-c-p to follow GTK 3 standards.
+---
+ NEWS        | 1 +
+ asyncpk1.py | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/asyncpk1.py b/asyncpk1.py
+index 849c995f..156b5f49 100644
+--- a/asyncpk1.py
++++ b/asyncpk1.py
+@@ -22,7 +22,6 @@ import cups
+ import dbus
+ from functools import reduce
+ try:
+-    gi.require_version('Gdk', '3.0')
+     from gi.repository import Gdk
+     gi.require_version('Gtk', '3.0')
+     from gi.repository import Gtk
+-- 
+2.26.2
+
