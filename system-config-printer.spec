@@ -8,15 +8,13 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.13
-Release: 3%{?dist}
+Version: 1.5.15
+Release: 1%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # all upstream patches, remove with new release
-Patch1: scp-dymo400.patch
-Patch2: 0001-asyncpk1.py-Dont-require-the-exact-Gdk-version-179.patch
 
 
 # gcc is no longer in buildroot by default
@@ -67,24 +65,23 @@ Requires: python3-dbus
 Requires: python3-requests
 Suggests: python3-smbc
 BuildArch: noarch
-Obsoletes: %{name}-libs < 1.3.12-10
 
 %description libs
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
 
+%if 0%{?rhel} <= 8 || 0%{?fedora}
 %package applet
 Summary: Print job notification applet
 Requires: %{name}-libs
 
 %description applet
 Print job notification applet.
+%endif
 
 %package udev
 Summary: Rules for udev for automatic configuration of USB printers
 Requires: system-config-printer-libs = %{version}-%{release}
-Obsoletes: hal-cups-utils < 0.6.20
-Provides: hal-cups-utils = 0.6.20
 
 %description udev
 The udev rules and helper programs for automatically configuring USB
@@ -109,7 +106,42 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %find_lang system-config-printer
 
+%if 0%{?rhel} > 8
+rm -rf %{buildroot}%{_bindir}/%{name}-applet \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/applet* \
+       %{buildroot}%{_datadir}/%{name}/applet.py* \
+       %{buildroot}%{_sysconfdir}/xdg/autostart/print-applet.desktop \
+       %{buildroot}%{_mandir}/man1/%{name}-applet.1* \
+       %{buildroot}%{_bindir}/%{name} \
+       %{buildroot}%{_bindir}/install-printerdriver \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/check-device-ids* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/HIG* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/SearchCriterion* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/serversettings* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/system-config-printer* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/ToolbarSearchEntry* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/userdefault* \
+       %{buildroot}%{_datadir}/%{name}/__pycache__/install-printerdriver* \
+       %{buildroot}%{_datadir}/%{name}/check-device-ids.py* \
+       %{buildroot}%{_datadir}/%{name}/HIG.py* \
+       %{buildroot}%{_datadir}/%{name}/SearchCriterion.py* \
+       %{buildroot}%{_datadir}/%{name}/serversettings.py* \
+       %{buildroot}%{_datadir}/%{name}/system-config-printer.py* \
+       %{buildroot}%{_datadir}/%{name}/ToolbarSearchEntry.py* \
+       %{buildroot}%{_datadir}/%{name}/userdefault.py* \
+       %{buildroot}%{_datadir}/%{name}/troubleshoot \
+       %{buildroot}%{_datadir}/%{name}/icons \
+       %{buildroot}%{_datadir}/%{name}/install-printerdriver.py* \
+       %{buildroot}%{_datadir}/%{name}/xml/__pycache__ \
+       %{buildroot}%{_datadir}/%{name}/xml/validate.py* \
+       %{buildroot}%{_datadir}/%{name}/ui \
+       %{buildroot}%{_datadir}/applications/system-config-printer.desktop \
+       %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml \
+       %{buildroot}%{_mandir}/man1/%{name}.1* \
+%endif
+
 %files libs -f system-config-printer.lang
+%doc ChangeLog NEWS ABOUT-NLS AUTHORS ChangeLog-OLD
 %license COPYING
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.NewPrinterNotification.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.PrinterDriversInstaller.conf
@@ -117,7 +149,6 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/dbus-1/services/*.service
 %{_bindir}/scp-dbus-service
 %dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/__pycache__
 %{_datadir}/%{name}/__pycache__/*
 %exclude %{_datadir}/%{name}/__pycache__/check-device-ids*
 %exclude %{_datadir}/%{name}/__pycache__/HIG*
@@ -159,17 +190,22 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/smburi.py*
 %{_datadir}/%{name}/statereason.py*
 %{_datadir}/%{name}/timedops.py*
+%dir %{_datadir}/%{name}/__pycache__
+%dir %{_datadir}/%{name}/xml
+%{_datadir}/%{name}/xml/*.rng
 %dir %{_sysconfdir}/cupshelpers
 %config(noreplace) %{_sysconfdir}/cupshelpers/preferreddrivers.xml
 %{python3_sitelib}/cupshelpers
 %{python3_sitelib}/*.egg-info
 
+%if 0%{?rhel} <= 8 || 0%{?fedora}
 %files applet
 %{_bindir}/%{name}-applet
 %{_datadir}/%{name}/__pycache__/applet*
 %{_datadir}/%{name}/applet.py*
 %{_sysconfdir}/xdg/autostart/print-applet.desktop
 %{_mandir}/man1/%{name}-applet.1*
+%endif
 
 %files udev
 %{_prefix}/lib/udev/rules.d/*.rules
@@ -178,6 +214,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_unitdir}/configure-printer@.service
 
+%if 0%{?rhel} <= 8 || 0%{?fedora}
 %files
 %doc ChangeLog NEWS ABOUT-NLS AUTHORS ChangeLog-OLD
 %license COPYING
@@ -201,10 +238,8 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_datadir}/%{name}/troubleshoot
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/install-printerdriver.py*
-%dir %{_datadir}/%{name}/xml
 %dir %{_datadir}/%{name}/xml/__pycache__
 %{_datadir}/%{name}/xml/__pycache__/*
-%{_datadir}/%{name}/xml/*.rng
 %{_datadir}/%{name}/xml/validate.py*
 %dir %{_datadir}/%{name}/ui
 %{_datadir}/%{name}/ui/*.ui
@@ -215,8 +250,12 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 %post
 %{_bindir}/rm -f /var/cache/foomatic/foomatic.pickle
 exit 0
+%endif
 
 %changelog
+* Thu Jan 14 2021 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.15-1
+- 1.5.15, apply eln changes
+
 * Tue Jan 05 2021 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.13-3
 - 1750156 - hangs on selection of change PPD (Make and Model)
 
