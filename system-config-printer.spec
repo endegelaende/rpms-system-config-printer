@@ -56,6 +56,10 @@ the user to configure a CUPS print server.
 
 %package libs
 Summary: Libraries and shared code for printer administration tool
+# PackageKit can bring you a popup window if some package in the repo provides a driver
+# for your printer
+Recommends: PackageKit
+Recommends: PackageKit-glib
 Requires: libnotify
 Requires: python3-cups >= 1.9.60
 Requires: python3-pycurl
@@ -256,6 +260,7 @@ exit 0
 %changelog
 * Mon Sep 06 2021 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.15-5
 - fix issues reported by Coverity scan
+- add a weak dependency on PackageKit for scp-libs
 
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.15-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
