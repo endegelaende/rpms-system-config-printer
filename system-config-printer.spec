@@ -9,7 +9,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.15
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
@@ -258,6 +258,9 @@ exit 0
 %endif
 
 %changelog
+* Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.15-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Mon Sep 06 2021 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.15-5
 - fix issues reported by Coverity scan
 - add a weak dependency on PackageKit for scp-libs
