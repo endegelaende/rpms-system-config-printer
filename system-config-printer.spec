@@ -8,47 +8,70 @@
 
 Summary: A printer administration tool
 Name: system-config-printer
-Version: 1.5.15
-Release: 6%{?dist}
+Version: 1.5.16
+Release: 1%{?dist}
 License: GPLv2+
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # all upstream patches, remove with new release
-Patch01: scp-covscan.patch
 
 
+# needed for macro AM_GNU_GETTEXT in configure.ac
+BuildRequires: autoconf-archive
+# uses CUPS API functions
+BuildRequires: cups-devel >= 1.2
+# we install a desktop file
+BuildRequires: desktop-file-utils >= 0.2.92
 # gcc is no longer in buildroot by default
 # gcc is needed for udev-configure-printer.c
 BuildRequires: gcc
+# for translations
+BuildRequires: gettext-devel
 # for autosetup
 BuildRequires: git-core
+# for translations
+BuildRequires: intltool
+# automatic printer setup tool, which uses udev, is only for USB printers
+# we need libusb API to communicate
+BuildRequires: libusb1-devel
 # uses make
 BuildRequires: make
-
-BuildRequires: cups-devel >= 1.2
-BuildRequires: desktop-file-utils >= 0.2.92
-BuildRequires: gettext-devel
-BuildRequires: intltool
-BuildRequires: libusb1-devel
+# GNOME library for GUI
 BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: xmlto
+# for python3 API
+BuildRequires: python3-devel
+# for automatic USB printer setup tool - udev-configure-printer
 BuildRequires: systemd
 BuildRequires: systemd-devel
-BuildRequires: python3-devel
+# for generating manual
+BuildRequires: xmlto
 
-Requires: python3-gobject%{?_isa}
-Requires: gtk3%{?_isa}
-Requires: desktop-file-utils >= 0.2.92
+
+# for dBUS support in scp-dbus-service
 Requires: dbus-x11
-Requires: python3-dbus%{?_isa}
-Requires: system-config-printer-libs = %{version}-%{release}
+# for desktop file
+Requires: desktop-file-utils >= 0.2.92
+# for system notifications
 Requires: desktop-notification-daemon
-Requires: libnotify%{?_isa}
-Requires: python3-cairo%{?_isa}
-Requires: python3-firewall
+# for GUI, the app is written in gtk3
+Requires: gtk3%{?_isa}
+# for GUI to prevent warning during the startup
 Requires: libcanberra-gtk3
+# for notifications
+Requires: libnotify%{?_isa}
+# for GUI
+Requires: python3-cairo%{?_isa}
+# for dBUS python API
+Requires: python3-dbus%{?_isa}
+# the app can adjust firewalld, so we need firewall API in Python
+Requires: python3-firewall
+# for GUI
+Requires: python3-gobject%{?_isa}
+# runtime systemd requires for udev-configure-printer service
 %{?systemd_requires}
+# we use classes define in our library
+Requires: system-config-printer-libs = %{version}-%{release}
 
 %description
 system-config-printer is a graphical user interface that allows
@@ -60,14 +83,23 @@ Summary: Libraries and shared code for printer administration tool
 # for your printer
 Recommends: PackageKit
 Recommends: PackageKit-glib
-Requires: libnotify
-Requires: python3-cups >= 1.9.60
-Requires: python3-pycurl
+
+# for GUI
 Requires: gobject-introspection
-Requires: python3-gobject
+# written in GTK3
 Requires: gtk3
+# for notifications
+Requires: libnotify
+# s-c-p classes uses Python CUPS API
+Requires: python3-cups >= 1.9.60
+# the libs subpackage contains scp-dbus-service, so we need dBUS API in Python here
 Requires: python3-dbus
-Requires: python3-requests
+# for GUI
+Requires: python3-gobject
+# the app can download printer data from database with CURL
+Requires: python3-pycurl
+
+# s-c-p has a plug-in support for Samba, if the relevant package is installed
 Suggests: python3-smbc
 BuildArch: noarch
 
@@ -258,6 +290,9 @@ exit 0
 %endif
 
 %changelog
+* Mon May 23 2022 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.16-1
+- 1.5.16
+
 * Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.15-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
