@@ -8,18 +8,6 @@ Subject: [PATCH] Fix debugprint() in options.py (fixes #291)
  options.py | 2 +-
  2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/NEWS b/NEWS
-index a6438482..910e4696 100644
---- a/NEWS
-+++ b/NEWS
-@@ -1,3 +1,7 @@
-+1.5.19 changes
-+--------------
-+- Fix `debugprint()` call in options.py (Issue #291)
-+
- 1.5.18 changes
- --------------
- - Add <launchable/> into the .appdata.xml file (#269)
 diff --git a/options.py b/options.py
 index d756f98d..d7c236de 100644
 --- a/options.py
