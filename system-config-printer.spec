@@ -42,7 +42,7 @@ BuildRequires: make
 BuildRequires: pkgconfig(glib-2.0)
 # for python3 API
 BuildRequires: python3-devel
-BuildRequires: python3-setuptools
+#BuildRequires: python3-setuptools
 # for automatic USB printer setup tool - udev-configure-printer
 BuildRequires: systemd
 BuildRequires: systemd-devel
