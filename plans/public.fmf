@@ -1,0 +1,6 @@
+summary: Test plan that runs all tests from cups tests repo.
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/system-config-printer.git
+execute:
+    how: tmt
