@@ -3,7 +3,7 @@ discover:
   - name: rhel
     how: fmf
     filter: 'tier: 1'
-    url: git://pkgs.devel.redhat.com/tests/system-config-printer
+    url: https://pkgs.devel.redhat.com/git/tests/system-config-printer
 execute:
     how: tmt
 adjust:
