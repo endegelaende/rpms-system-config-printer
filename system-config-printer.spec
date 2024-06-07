@@ -6,7 +6,7 @@
 Summary: A printer administration tool
 Name: system-config-printer
 Version: 1.5.18
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/%{username}/%{name}
 Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
@@ -291,6 +291,9 @@ exit 0
 %endif
 
 %changelog
+* Fri Jun 07 2024 Python Maint <python-maint@redhat.com> - 1.5.18-10
+- Rebuilt for Python 3.13
+
 * Wed Mar 20 2024 Zdenek Dohnal <zdohnal@redhat.com> - 1.5.18-9
 - fix possible udev service failure if USB device is already handled
 
